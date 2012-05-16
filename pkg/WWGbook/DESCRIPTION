@@ -1,8 +1,8 @@
 Package: WWGbook
-Version: 1.0.2
-Date: 2012-03-26
-Author: Shu Chen, Andrzej Galecki <agalecki@umich.edu>
-Maintainer: Shu Chen <chenshu@umich.edu>
+Version: 1.0.3
+Date: 2012-05-16
+Author: Andrzej Galecki <agalecki@umich.edu>, Shu Chen <chenshu@umich.edu>
+Maintainer: Andrzej Galecki <agalecki@umich.edu>
 Title: Datasets and scripts for WWGbook.
 Description: Datasets and scripts for "Linear Mixed Models: A Practical Guide Using
         Statistical Software" book by Brady West, Kathy Welch, Andrzej Galecki, 
