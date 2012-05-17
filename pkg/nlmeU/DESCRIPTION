@@ -1,0 +1,13 @@
+Package: nlmeU
+Version: 0.0.25
+Date: 2012-05-05
+Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski <>, Shu Chen  <chenshu@umich.edu>
+Maintainer: Andrzej Galecki <agalecki@umich.edu>
+Title: Datasets and utility functions for Galecki and Burzykowski book 2012.
+Description: 
+Depends: nlme, reshape, R (>= 2.10.1)
+LinkingTo: nlme
+Suggests: reshape, lattice
+License: GPL (version 2 or later)
+URL:  http://www-personal.umich.edu/~agalecki/
+LazyData: yes
