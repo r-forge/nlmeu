@@ -30,12 +30,12 @@ tapply(vsae, age.f, mean, na.rm=TRUE)
 tapply(vsae, age.f, min, na.rm=TRUE)
 # VSAE maximum values at each AGE
 tapply(vsae, age.f, max, na.rm=TRUE)
-
+detach(autism)                          # <----------------  ADDED
 
 #### Figure 6.1: Observed VSAE values plotted against age for children in each SICD group. 
 
 library(lattice)  # Load the library for trellis graphics.
-#trellis.device(color=F) # Make sure color is turned off.
+#trellis.device(color=F) # Make sure color is turned off.  # <----------- CHANGE IT
 
 # Load the nlme library, which is required for the 
 # plots below as well as for subsequent models.
@@ -47,6 +47,11 @@ outer = ~ sicdegp.f, data = autism.updated)
 plot(autism.g1, display = "childid", outer = TRUE, aspect = 2, key = FALSE, xlab = "Age (Years)", ylab = "VSAE", 
 main = "Individual Data by SICD Group") 
 
+
+xyplot(vsae ~ age | sicdegp.f,                       # Simplified syntax
+       groups= childid, 
+       data=autism.updated, type = "l", aspect = 2, grid = TRUE)   
+
 #### Figure 6.2: Mean Profiles of VSAE values for children in each SICD group. 
 
 autism.g2 <- groupedData(vsae ~ age | sicdegp.f, 
@@ -55,6 +60,23 @@ order.groups = F, data = autism.updated)
 plot(autism.g2, display = "sicdegp", aspect = 2, key = FALSE, 
 xlab = "Age (Years)", ylab = "VSAE", 
 main = "Mean Profiles by SICD Group")
+
+myPanel <- function(x,y, subscripts, groups, ...){
+   print("start")
+   panel.xyplot(x,y, ...)
+   print(x)
+   print(y)
+   print(groups)
+   print(subscripts)
+    tapply(y
+   panel.xyplot(x[1], mean(y), type="l", ...)
+}
+xyplot(vsae ~ age | sicdegp.f,                       # Simplified syntax
+       groups= childid, 
+       data=autism.updated, aspect = 2, grid = TRUE,
+       panel =myPanel)   
+
+
 
 ###############################
 #      Models Fitted          #
