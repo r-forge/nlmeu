@@ -1,0 +1,15 @@
+citHeader("To cite the package in publications use:")
+
+citEntry(entry ="Book",
+         title = "Linear Mixed Effects Models: A Step by Step Approach",
+         author = personList(as.person("A. Galecki"), 
+                             as.person("T. Burzykowski")),
+	 publisher = "Springer",
+         edition = "First",
+         year         = "2012",
+         note         = "ISBN",
+         url          = "http://www-personal.umich.edu/~agalecki/",        
+         textVersion = 
+         paste("A. Galecki, T.Burzykowski, Springer, 2012. 
+ISBN-xx???")
+)
