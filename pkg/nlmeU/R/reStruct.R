@@ -310,7 +310,8 @@ logLik.reStruct <-
   object
 }
 
-model.matrix.reStruct <-
+### Inactivated: May 2012
+model.matrix.reStruct.Inactivated <-
   function(object, data, contrast = NULL, ...)
 {
   if (is.null(form <- formula(object, asList = TRUE))) {
