@@ -7,7 +7,7 @@ Maintainer: Andrzej Galecki <agalecki@umich.edu>
 Title: Datasets and functions for Galecki and Burzykowski book 2012. Builds on nlme package.
 Description: 
 Depends: R (>= 2.14.0)
-Suggests:  lattice, reshape, lme4, nlme, testthat
+Suggests: reshape, lme4, nlme, testthat
 License: GPL (version 2 or later)
 URL:  http://www-personal.umich.edu/~agalecki/
 LazyData: yes
