@@ -38,5 +38,5 @@ vcov.gls <- function (object, ...) object$varBeta
 vcov.lme <- function (object, ...) object$varFix
 
 .onUnload <- function(libpath)
-    library.dynam.unload("nlme", libpath)
+    library.dynam.unload("nlmeU", libpath)
 
