@@ -9,47 +9,23 @@
 sigma <-  function(object, ...) UseMethod("sigma")
 
 sigma.default <- function(object) object$sigma
-"sigma<-" <-  function(object, ..., value) UseMethod("sigma<-")
 
-"sigma<-.lme" <- function(object, xverbose = list(), ..., value){
- 
-  xverbos <- XverboseControl()[["sigma<-.lme"]]
-  if (!missing(xverbose)) xverbos <- xverbose[["sigma<-.lme"]]
-  Xverbose(1, "'sigma<-.lme' STARTS", xverbose=xverbos)
-  
-  sigma0 <- object$sigma 
-  Xverbose(2, sigma0, xverbose=xverbos)  
-  val <- value * value
-  sc  <- sqrt(val)/sigma0  
-  object$sigma <- sqrt(val)
-  resids <- object$residuals
-  resids <- resids * sc  
-  std <- attr(resids,"std")*sc
-  attr(object$residuals,"std") <- std
-  
-  Xverbose(3, object$sigma, xverbose=xverbos)
-  Xverbose(4, sc, xverbose=xverbos)
-  attr(object$fixDF, "varFixFact") <- 
-      sc*attr(object$fixDF, "varFixFact") # Rescaled for anova
-  Xverbose(5, vcov(object)*sc*sc, xverbose=xverbos)
-
-   object$varFix  <- object$varFix*sc*sc  # vcov rescaled  
-   Xverbose(1, "'sigma<-.lme' EXITS", xverbose=xverbos)
-   object
-}
 
 XverboseControl <- function(
   logLik1 = numeric(),
- `sigma<-.lme` = numeric()
- 
+  simulateY.lme = numeric(), 
+  print.Pwr =numeric(),
+  Pwr.lme = numeric()
+  
 ){
-# xcontrl <- XverboseControl(`sigma<-.lme` = 1:900)
+# xcontrl <- XverboseControl(Pwr.lme = 1:900)
 list(
-  logLik1       = logLik1,
-  `sigma<-.lme` = eval(`sigma<-.lme`)
+  logLik1        = logLik1,
+  simulateY.lme  = simulateY.lme,
+  print.Pwr  = numeric(),
+  Pwr.lme  = Pwr.lme
 )
 }
-
 
 Xverbose <- function(xv,object, xverbose= numeric()) {
 #cat ("xverbose starts \n")
@@ -65,7 +41,7 @@ if (tmp <= 1)    a <- "-"
 
 # a <- paste(a,"> ",sep="")
 # a <-""
-if (length(object)==0){
+if (length(object)==0 && !is.null(object)){
   cat(a, xv, ": Object", as.character(substitute(object)), " has length 0 and is of mode:",  mode(object), "\n", sep=" ")
   return(2)
 }

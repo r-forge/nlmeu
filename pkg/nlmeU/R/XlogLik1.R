@@ -58,9 +58,9 @@ logLik1 <- function(modfit, dt1, dtInit=NULL, xverbose = list()){
     }
     
     
-    
+   
     if (!is.null(dtInit)){
-    #cat("?2")
+        Xverbose(222, "IF dtInit", xverbose=xverbos)
         idxInit      <- c(1:nrow(dtInit))            # Indices for dtInit
         vecR         <- vecR[-idxInit]
     }                                               # Diagonal of R_i matrix
