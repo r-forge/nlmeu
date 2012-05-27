@@ -1,0 +1,156 @@
+### R code from vignette source 'D:/RbookX/RnwNlmeU/Ch5.Rnw'
+
+###################################################
+### code chunk number 1: Ch5.Rnw:4-6
+###################################################
+options(width=65, digits=5)
+sessionInfo()
+
+
+###################################################
+### code chunk number 2: R5.1
+###################################################
+y ~ x1                       # Univariate linear regression 
+formula(y ~ x1)              # ... equivalent specification
+y ~ 1 + x1                   # Explicit indication for intercept  
+y ~ 0 + x1                   # No intercept  
+y ~ f1 + x1                  # ANCOVA with main effects only 
+y ~ f1 + x1 + f1:x1          # Main effects and ...
+                             # ... factor by numeric interaction   
+y ~ f1 + f2 + f1:f2          # Main effects and ...
+                             # ... f1 by f2 two way interaction 
+y ~ f1 + f1:f3               # f3 nested within f1  
+y ~ x1 + f1 + f2 +           # Main effects and ... 
+       x1:f1+ x1:f2 + f1:f2  # ... two-way interactions 
+
+
+###################################################
+### code chunk number 3: R5.2
+###################################################
+y ~ f1*f2               # ANOVA with two-way interaction
+y ~ f1 + f3 %in% f1     # f3 nested within f1 
+y ~ f1/f3               # ... equivalent specification
+y ~ (x1+f1+f2)^2        # Up to 2nd order interactions
+y ~ x1 - 1              # Intercept omitted 
+
+
+###################################################
+### code chunk number 4: R5.3a
+###################################################
+y ~ sqrt(x1) + x2             # Square root transformation of x1
+y ~ ordered(x1, breaks)+      # Ordered factor created and ...
+            poly(x1,2)        # ...second degree polynomial added
+y  ~ poly(x1,x2,2)            # Bivariate quadratic surface ...
+                              # ... for x1 and x2
+log(y) ~ bs(x1, df=3)         # log transform for y modeled ... 
+                              # ... by using B-spline for x1
+
+
+###################################################
+### code chunk number 5: R5.3b
+###################################################
+y ~ f1*bs(x1, df=3) -1        # Factor by spline interaction ... 
+                              # ... with intercept omitted
+y ~ f1*log(x1) /(f2+f3)
+
+
+###################################################
+### code chunk number 6: R5.3c
+###################################################
+form2   <- y ~ I(x1 + 100/x2) # I() function 
+update(form2, . ~ . + x3)     # x3 predictor added to form2	
+update(form2, . ~ . -1)       # Intercept omitted from form2
+
+
+###################################################
+### code chunk number 7: R5.4a
+###################################################
+formA <- y ~ f1*f2            # Formula A                   
+termsA <- terms(formA)        # Object of class terms
+names(attributes(termsA))     # Names of attributes
+labels(termsA)                # Terms; interaction after main effect
+attr(termsA,"order")          # Interaction order for each term
+attr(termsA,"intercept")      # Intercept present?
+attr(termsA,"variables")      # Variable names
+
+
+###################################################
+### code chunk number 8: R5.4b
+###################################################
+formB <- update(formA, . ~ . - f1:f2 -1)          # Formula B
+termsB <- terms(formB)
+labels(termsB)                # Terms of formula B
+attr(termsB,"intercept")      # Intercept omitted
+
+
+###################################################
+### code chunk number 9: R5.5
+###################################################
+form1 <- formula(               # *** Formula  ***
+  visual52 ~                    # Dependent variable 
+  log(line0) +                  # Continuous explanatory variable
+  factor(lesion) +              # Factor with 4 levels
+  treat.f*log(visual24) +       # Crossing of two variables
+  poly(visual0,2))              # Polynomial of 2nd degree
+armd240.mf1 <-                  # *** Model frame ***
+   model.frame(form1,           # Formula
+      data=armd240,             # Data frame
+      subset = !(subject %in% c(1,2)), # Exclude two subjects   
+      na.action= na.exclude,    # Dealing with missing data
+      SubjectId = subject)      # Identifier of data records
+class(armd240.mf1)           
+dim(armd240)                    # Data frame dimensions
+dim(armd240.mf1)                # Model frame dimensions
+names(armd240.mf1)              # Components of the model frame
+head(armd240.mf1, n=4)          # First four records
+
+
+###################################################
+### code chunk number 10: R5.6
+###################################################
+terms.mf1 <- attr(armd240.mf1,"terms")    # Terms attribute
+class(terms.mf1)
+names(attributes(terms.mf1))              # Names of attributes
+attr(terms.mf1,"dataClasses")             # dataClasses attribute
+attr(terms.mf1,"predvars")                # predvars attribute
+labels(terms.mf1)                         # Component names
+
+
+###################################################
+### code chunk number 11: R5.7
+###################################################
+Xmtx <-  model.matrix(form1, armd240.mf1)      # Design matrix
+dim(Xmtx)                                      # No rows and cols
+colnames(Xmtx)                                 # Col names
+head(Xmtx,n=4)                                 # First 4 rows
+names(attributes(Xmtx))                        # Attribute names
+attr(Xmtx,"assign")                            # Cols to terms map
+attr(Xmtx,"contrasts")                         # Contrasts attribute
+
+
+###################################################
+### code chunk number 12: R5.8
+###################################################
+contr.treatment(3)         # Default base level = 1 
+contr.treatment(3, base=3) # base level = 3
+contr.sum(3)
+contr.helmert(3)           # Helmert contrasts 
+contr.poly(3, scores=c(1,5,7))
+
+
+###################################################
+### code chunk number 13: R5.9
+###################################################
+options()$contrasts          # Default contrasts
+lesion.f <- factor(armd240$lesion)   # Factor created
+str(lesion.f)                # Structure
+names(attributes(lesion.f))  # Names of factor attributes
+levels(lesion.f)             # Levels 
+contrasts(lesion.f)          # Contrasts extracted
+lesion2.f <- C(lesion.f,contr.sum(4))  # New contrasts using C()
+names(attributes(lesion2.f))           # Names of factor attributes
+contrasts(lesion2.f)                   # Contrasts extracted
+lesion2a.f <- lesion.f       # lesion2a.f created with the use of... 
+contrasts(lesion2a.f) <- contr.sum(4) # ... "contrasts <- " syntax
+
+
