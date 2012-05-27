@@ -1,3 +1,5 @@
+
+mixed_EM <- NULL; rm(mixed_EM); # trick to avoid notes: no visible binding for global variable ...
 "missPat" <- function(...)
 {    args  <- as.list(substitute(list(...)))[-1]
      args.t <- paste("miss.frame$",args,sep="",collapse=",")
