@@ -1,0 +1,10 @@
+
+
+=>  Version 0.25-x  (May 2012)
+ - Builds on nlme package
+ - Xverbose() and XverboseControl() redesigned
+ - Auxiliary functions: missPat(), Xverbose(), XverboseControl(), exported
+ - Generic: logLik1(), simulateY(),  sigma and Pwr exported
+ - S3methods: logLik1.lme(), Pwr.lme(), sigma.default(), simulateY.lme(), print.Pwr() added
+ - No pdKronecker()
+ 
