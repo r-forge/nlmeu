@@ -1,0 +1,2 @@
+export(write.Rd)
+S3method(write.Rd.data.frame)  # Writes skeleton documentation for data frame
