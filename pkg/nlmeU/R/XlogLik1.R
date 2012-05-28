@@ -1,4 +1,6 @@
-logLik1 <- function(modfit, dt1, dtInit=NULL, xverbose = list()){
+logLik1 <-  function(object, ...) UseMethod("LogLik1")
+
+logLik1.lme <- function(modfit, dt1, dtInit=NULL, xverbose = list()){
   # Calculates profile likelihood (with beta profiled out) for *one* subject
   # Data with *one* level of grouping
   # correlation component in modelStruct not allowed
@@ -6,7 +8,7 @@ logLik1 <- function(modfit, dt1, dtInit=NULL, xverbose = list()){
 
   xverbos <- XverboseControl()[["logLik1"]]
   if (!missing(xverbose)) xverbos <- xverbose[["logLik1"]]
-  Xverbose(1, "logLik1 STARTS   <=####", xverbose=xverbos)
+  Xverbose(1, "logLik1.lme STARTS   <=####", xverbose=xverbos)
   
 
     m            <- modfit$modelStruct                 # Model structure
@@ -80,6 +82,6 @@ logLik1 <- function(modfit, dt1, dtInit=NULL, xverbose = list()){
     n            <- nrow(dt1)                 # No. of obs for subject
     lLik         <- n*log(2*pi) + log(det(V)) + 
                     t(r) %*% solve(V) %*% r
-    Xverbose(1, "logLik1 ENDS   <=######", xverbose=xverbos)               
+    Xverbose(1, "logLik1.lme ENDS   <=######", xverbose=xverbos)               
     return(-0.5 * as.numeric(lLik))
 }

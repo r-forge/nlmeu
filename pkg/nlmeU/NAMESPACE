@@ -481,11 +481,13 @@ S3method(varWeights, varFunc)
 S3method(vcov, gls)
 S3method(vcov, lme)
 ####  nlmeU specific (auxiliary)
-export(missPat, Xverbose,logLik1, sigma, Pwr, simulateY)
+export(missPat, Xverbose, XverboseControl)
+export(logLik1, Pwr, sigma, simulateY) # generic functions
+S3method(logLik1,lme)
 S3method(Pwr,lme)
 S3method(sigma,default)
 S3method(simulateY, lme)  # simulate.lme
-S3method(print,Pwr)
+S3method(print, Pwr)
 ### pdKronecker specific 
 #export(pdKronecker)
 #importFrom(reshape,melt)
