@@ -4,7 +4,7 @@ Date: $Date$
 Revision: $Revision$
 Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski <>, Shu Chen  <chenshu@umich.edu>
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
-Title: Datasets and functions for Galecki and Burzykowski book 2012. Builds on nlme package.
+Title: Datasets and auxiliary functions for Galecki and Burzykowski book 2012. Builds on nlme package.
 Description: 
 Depends: R (>= 2.14.0)
 Suggests: reshape, lme4, nlme, testthat
