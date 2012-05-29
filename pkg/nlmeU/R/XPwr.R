@@ -1,6 +1,6 @@
 Pwr <-  function(object, ...) UseMethod("Pwr")
 
-Pwr.lme <- function (object, type = c("sequential", "marginal"), 
+Pwr.lme <- function (object, ..., type = c("sequential", "marginal"), 
     Terms, L, verbose = FALSE, sigma, ddf= numeric(0), alpha=0.05,
     altB = NULL, xverbose = list()
 ) 
@@ -8,30 +8,6 @@ Pwr.lme <- function (object, type = c("sequential", "marginal"),
 # Arguments: object: one object only
 # adjustSigma set to FALSE. Explore adjustSigma argument if missing(sigma) adjust object$sigma
 # altB name
-
-sigmaTolme <- function(object, value){ 
- ### Use this function only with Pwr(), because it  corrupts lme.object
-  Xverbose(1001, "sigmaTolme STARTS", xverbose=xverbos)
-  sigma0 <- object$sigma 
-  Xverbose(1002, sigma0, xverbose=xverbos)  
-  val <- value * value
-  sc  <- sqrt(val)/sigma0  
-  object$sigma <- sqrt(val)
-  resids <- object$residuals
-  resids <- resids * sc  
-  std <- attr(resids,"std")*sc
-  attr(object$residuals,"std") <- std
-  
-  Xverbose(1003, object$sigma, xverbose=xverbos)
-  Xverbose(1004, sc, xverbose=xverbos)
-  attr(object$fixDF, "varFixFact") <- 
-      sc*attr(object$fixDF, "varFixFact") # Rescaled for anova
-  Xverbose(1005, vcov(object)*sc*sc, xverbose=xverbos)
-
-   object$varFix  <- object$varFix*sc*sc  # vcov rescaled  
-   Xverbose(1001, "sigmaTolme ENDS", xverbose=xverbos)
-   object
-}
 
 xverbos <- XverboseControl()[["Pwr.lme"]]
   if (!missing(xverbose)) xverbos <- xverbose[["Pwr.lme"]]

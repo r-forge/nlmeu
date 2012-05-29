@@ -1,6 +1,6 @@
 simulateY <- function(object, nsim = 1, seed = NULL, ...) UseMethod("simulateY")
 
-simulateY.lme <- function (object, nsim =1, seed = as.integer(runif(1, 0, .Machine$integer.max)), 
+simulateY.lme <- function (object, nsim =1, seed = as.integer(runif(1, 0, .Machine$integer.max)), ...,
   verbose = FALSE, sigma, xverbose = list(), ...) 
 {
 # Data with one level of grouping only.
@@ -12,7 +12,7 @@ if (!inherits(object, "lme"))  stop("Object must inherit from class \"lme\" ")
 
 Xverbose(110, missing(sigma), xverbose=xverbos)
 
-if (!missing(sigma)) sigma(object) <- sigma
+if (!missing(sigma))  object <- sigmaTolme(object, sigma) # sigma(object) <- sigma
 
    groups <- object$groups[[1]]
 Xverbose(120, str(groups), xverbose=xverbos)
@@ -60,4 +60,28 @@ for (i in 1:length(dimN)) resAll <- rbind(resAll, res[[i]])
 Xverbose(2, "resAll ENDS***", xverbose=xverbos)
 Xverbose(1, "simulateY.lme ENDS   <=####", xverbose=xverbos)
 return(resAll + fitd0)
+}
+
+sigmaTolme <- function(object, value){ 
+ ### Use this function only with Pwr() and simulateY(), because it  corrupts lme.object
+  Xverbose(1, "sigmaTolme STARTS", xverbose=xverbos)
+  sigma0 <- object$sigma 
+  Xverbose(2, sigma0, xverbose=xverbos)  
+  val <- value * value
+  sc  <- sqrt(val)/sigma0  
+  object$sigma <- sqrt(val)
+  resids <- object$residuals
+  resids <- resids * sc  
+  std <- attr(resids,"std")*sc
+  attr(object$residuals,"std") <- std
+  
+  Xverbose(3, object$sigma, xverbose=xverbos)
+  Xverbose(4, sc, xverbose=xverbos)
+  attr(object$fixDF, "varFixFact") <- 
+      sc*attr(object$fixDF, "varFixFact") # Rescaled for anova
+  Xverbose(5, vcov(object)*sc*sc, xverbose=xverbos)
+
+   object$varFix  <- object$varFix*sc*sc  # vcov rescaled  
+   Xverbose(1, "sigmaTolme ENDS", xverbose=xverbos)
+   object
 }
