@@ -1,7 +1,7 @@
 simulateY <- function(object, nsim = 1, seed = NULL, ...) UseMethod("simulateY")
 
 simulateY.lme <- function (object, nsim =1, seed = as.integer(runif(1, 0, .Machine$integer.max)), ...,
-  verbose = FALSE, sigma, xverbose = list(), ...) 
+  verbose = FALSE, sigma, xverbose = list()) 
 {
 # Data with one level of grouping only.
   xverbos <- XverboseControl()[["logLik1"]]
