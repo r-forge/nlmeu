@@ -9,7 +9,7 @@
 }
 sigma <-  function(object, ...) UseMethod("sigma")
 
-sigma.default <- function(object) object$sigma
+sigma.default <- function(object, ...) object$sigma
 
 
 XverboseControl <- function(

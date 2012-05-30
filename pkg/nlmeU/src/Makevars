@@ -6,4 +6,4 @@ PKG_CFLAGS=$(C_VISIBILITY)
 ## default 'nlme.dll' does not work in Namespace registration for R <= 2.14.x
 #all: nlme.dll
 #nlme.dll: $(OBJECTS)
-	$(SHLIB_LINK) -o $@ $(OBJECTS) $(ALL_LIBS)
+#	$(SHLIB_LINK) -o $@ $(OBJECTS) $(ALL_LIBS)
