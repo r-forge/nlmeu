@@ -6,7 +6,8 @@ Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski <>, Shu Chen  <
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
 Title: Datasets and auxiliary functions for Galecki and Burzykowski book 2012. Builds on nlme package.
 Description: 
-Depends: R (>= 2.11.1)
+Depends: nlme, R (>= 2.14.2)
+LinkinTo: nlme
 Suggests: reshape, lme4, nlme, testthat
 License: GPL (version 2 or later)
 URL:  http://www-personal.umich.edu/~agalecki/
