@@ -1,0 +1,273 @@
+STUDY		VERS_1.1.0
+
+MODEL
+COMPDEF
+  CALCINTS		150
+  MAXITER		49
+  ABS_DATAWT	0
+  MDL_VARIANCE	0
+  INTGRTR		Rosenbrock
+  INTGRTR_ERR_ON	1
+  INTGRTR_ERR	1.00000000e-003
+  USE_FWD_DERIV	0
+  CONV_CRIT		1.00000000e-003
+  LAMBDA		1.00000000e+001
+  SUMMARY_RESULTS	2
+COMPART		q1
+  REF		Cp1
+  EXPER		Exper
+  XCOORD	488
+  YCOORD	354
+COMPART		q2
+  REF		Cp2
+  EXPER		Exper
+  XCOORD	690
+  YCOORD	357
+COMPART		q3
+  REF		Y?
+  EXPER		Exper
+  XCOORD	271
+  YCOORD	354
+COMPART		q4
+  REF		G-h
+  EXPER		Exper
+  XCOORD	116
+  YCOORD	347
+  FFTYPE	EQ
+  FFEQ		q4.FF = ((beta *(G-h) +SRb) + abs(SRb + beta*(G-h)))/2
+COMPART		q5
+  REF		dg/dt
+  EXPER		Exper
+  XCOORD	494
+  YCOORD	114
+  FFTYPE	EQ
+  FFEQ		q5.FF = derivata
+COMPART		5
+  REF		dg/dt
+  EXPER		MODEL
+  XCOORD	494
+  YCOORD	114
+COMPART		4
+  REF		G-h
+  EXPER		MODEL
+  XCOORD	116
+  YCOORD	347
+COMPART		3
+  REF		Y?
+  EXPER		MODEL
+  XCOORD	271
+  YCOORD	354
+COMPART		2
+  REF		Cp2
+  EXPER		MODEL
+  XCOORD	690
+  YCOORD	357
+COMPART		1
+  REF		Cp1
+  EXPER		MODEL
+  XCOORD	488
+  YCOORD	354
+XFER		k(2,1)
+  UNITS		mass/time
+  EXPER		Exper
+  FROM		q1
+  TO		q2
+  EQ		flux(2,1) = k(2,1) * q1
+  EQ		k(2,1) = A1 + B1 -k(1,2) - k(0,1)
+XFER		k(1,2)
+  UNITS		mass/time
+  EXPER		Exper
+  FROM		q2
+  TO		q1
+  EQ		flux(1,2) = k(1,2) * q2
+  EQ		k(1,2) = FRA*B1 + (1-FRA)*A1
+XFER		k(1,3)
+  UNITS		mass/time
+  EXPER		Exper
+  FROM		q3
+  TO		q1
+  EQ		flux(1,3) = k(1,3) * q3
+  EQ		k(1,3) =1
+XFER		k(3,4)
+  UNITS		mass/time
+  EXPER		Exper
+  FROM		q4
+  TO		q3
+  EQ		flux(3,4) = k(3,4) * q4
+  EQ		k(3,4) = alpha
+XFER		k(1,5)
+  UNITS		mass/time
+  EXPER		Exper
+  FROM		q5
+  TO		q1
+  EQ		flux(1,5) = k(1,5) * q5
+  EQ		k(1,5) = K
+XFER		k(1,5)
+  EXPER		MODEL
+  FROM		5
+  TO		1
+XFER		k(3,4)
+  EXPER		MODEL
+  FROM		4
+  TO		3
+XFER		k(1,3)
+  EXPER		MODEL
+  FROM		3
+  TO		1
+XFER		k(1,2)
+  EXPER		MODEL
+  FROM		2
+  TO		1
+XFER		k(2,1)
+  EXPER		MODEL
+  FROM		1
+  TO		2
+LOSS		k(0,1)
+  UNITS		mass/time
+  EXPER		Exper
+  FROM		q1
+  EQ		flux(0,1) = k(0,1) * q1
+  EQ		k(0,1) = A1*B1/k(1,2)
+LOSS		k(0,3)
+  UNITS		mass/time
+  EXPER		Exper
+  FROM		q3
+  EQ		flux(0,3) = k(0,3) * q3
+  EQ		k(0,3) = alpha -1
+LOSS		k(0,3)
+  EXPER		MODEL
+  FROM		3
+LOSS		k(0,1)
+  EXPER		MODEL
+  FROM		1
+SAMPLE		s1
+  XCOORD	530
+  YCOORD	312
+  EXPER		Exper
+  INCLUDE	q1
+  LINK.TO	cp
+  EQ		s1 = q1 + cpss
+EXPERIMENT	MODEL
+  TYPE		MODEL
+  SUFFIX	0
+EXPERIMENT	Exper
+  TYPE		EXOGENOUS
+  SUFFIX	0
+EVENTLINE	t
+  UNITS		minutes
+  E.BEG		0.00000000e+000
+  E.FIN		3.00000000e+002
+GLOBL.EQ  # k(3,4) = alpha
+GLOBL.EQ  # k(0,3) = alpha-1
+GLOBL.EQ  # k(1,3) = 1
+GLOBL.EQ  # k(1,5) = K                   # 
+GLOBL.EQ  # q4.FF = ((beta *(G-h) +SRb) + abs(SRb + beta*(G-h)))/2
+GLOBL.EQ  # q5.FF = derivata
+GLOBL.EQ	# Formulas for kij (vanCauter, 1992)
+GLOBL.EQ	AB=0.14*age+29.16
+GLOBL.EQ	B1=0.69315/AB
+GLOBL.EQ	G=lin(glucosio)                # Glucose linear interpolation
+GLOBL.EQ	F=k(1,5)*q5.FF                 # Breda  Eq.6. F stands for  SR_d(t)
+GLOBL.EQ	#Kr=Km*(1-((G-h)/(GT-h)))
+GLOBL.EQ	#K=(Kr+abs(Kr))/2
+GLOBL.EQ  # Cpb is c-peptide secretion rate(?) in the basal state 
+GLOBL.EQ	SRb=k(0,1)*Cpb                 # Srb is (constant) insulin secrection rate in the basal state 
+GLOBL.EQ	SRn=(k(1,3)*q3+F)*Vc           # SRn:= Insulin secretion rate. ISR(t) in Eq.(13).
+GLOBL.EQ	d=lin(der)                     # der linear interpolation 
+GLOBL.EQ	derivata=d*((G-gss)+abs(G-gss))/(2*(G-gss))
+GLOBL.EQ	# Metabolic indices
+GLOBL.EQ	phis=beta/0.05551              # Phi_s: Static sensitivity to glucose (Breda Eq.8) 
+GLOBL.EQ	phib=k(0,1)*Cpb/(gss*0.05551)  # Could not find corresponding equation (?)
+GLOBL.EQ	phid=K/0.05551                 # Phi_d: Dynamic sensitivity to glucose
+GLOBL.EQ	#GT>Gmax
+GLOBL.EQ	#Phid=Km*(1-deltaG/(2*(GT-gss)))/0.05551
+GLOBL.EQ	#GT<Gmax
+GLOBL.EQ	#Phid=Km*(GT-gss)/(2*deltaG)/0.05551
+GLOBL.EQ	deltaG=peakG-gss
+GLOBL.EQ	Phitot=(phid*deltaG+phis*(aucG-h*T)+phib*gss*T)/aucG  # Could not find corresponding equation (?)
+GLOBL.EQ	PhitotOB=K*deltaG*18.016/(aucG-h*T)+phis              # Phi: Eq.(11) in Breda et al (2001)
+GLOBL.EQ  PhitotX = k(0,1) * (aucCp - Cpb*T)/(aucG - Gb*T)      # Phi: Eq. (12) in Breda et al. Please verify (?)
+GLOBL.EQ	A=beta*(G-h)+SRb                                      # Could not find corresponding equation (?)
+PARAM		K
+  VALUE		3.0e+001
+  LOWLIM	1.00000000e-002
+  HILIM		1.00000000e+003
+PARAM		alpha
+  VALUE		1.0e-001
+  LOWLIM	6.00000000e-003
+  HILIM		6.00000000e-001
+PARAM		beta
+  VALUE		1.0e+000
+  LOWLIM	6.00000000e-002
+  HILIM		6.00000000e+000
+PARAM		h
+  VALUE		1.0e+002
+  LOWLIM	9.00000000e+000
+  HILIM		9.00000000e+002
+NOTES		Convergence criterion relaxed
+
+Central derivative used~
+END
+STARTDATA
+## Data based on Fig. 2 from Breda et al (2001)
+#  Data prepared  using R. 
+#  t := Tm, glucosio := Gt, der := dGt , cp := cpm
+#  Smoothed glucosio used to calculate der (dG/dt) 
+#  
+
+# Steadystate glucose mg/100ml 
+CONST gss 75.60001                 # needs to be different from observed data
+# Peak value of glucose mg/100ml 
+CONST peakG 169.2 
+#Steadystate C-peptide pmol/L 
+CONST cpss 707.0 
+CONST Cpb  700
+# Subject's age 
+CONST age 43 
+# Constants for calculating C-peptide kij 
+# Normals: A1=0.140, FRA=0.76 
+# Obese : A1=0.152, FRA=0.78 
+CONST A1 0.152 
+CONST FRA 0.78
+## BSA = 0.007194*height^(0.725) * weight(0.425)
+## height= 168, weight =84.9 kg, BSA = 1.95 
+## Women:  Vc = 1.11*BSA + 2.04
+## Men:    Vc = 1.92*BSA + 0.64
+CONST Vc 4.205                        # Formula for women used
+CONST T 300
+# aucG calculated using trapezoidal rule for glucosio variable
+CONST aucG 35572  
+
+### Additional constants used to calculate integral equation (12)
+# aucCp calculated using trapezoidal rule for cp variable 
+CONST aucCp 473175
+CONST  Gb  99
+# Notes: Used SD 1, because negative values for derivative(?)
+#        Is FSD 0.1 OK(?)
+
+DATA 
+    t  glucosio der (SD 1)  cp (FSD 0.1)
+    0  99.0  0.60617732  700  
+   10 106.2  0.94778215  900
+   20 120.6  2.08269409 1250
+   30 144.0  2.06144149 1750
+   45 162.0  0.69875140 2100
+   60 169.2  0.18355291 2200
+   75 167.4 -0.35296305 2300
+   90 160.2 -0.57170070 2250
+  105 151.2 -0.60023414 2300
+  120 142.2 -0.62736273 2200
+  135 135.0 -0.13031495 2160
+  150 135.0 -0.29137746 2100
+  165 124.2 -0.86417520 1960
+  180 111.6 -0.93192173 1750
+  195  97.2 -0.80813788 1500
+  210  88.2 -0.51552677 1330
+  225  81.0 -0.36975506  950
+  240  77.4 -0.16545301  800
+  255  75.6 -0.04843292  750
+  270  75.6 -0.00081532  720
+  285  75.6  0.05169420  700
+  300  77.4  0.15403853  700
+END 
+ENDDATA
