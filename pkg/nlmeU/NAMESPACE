@@ -1,5 +1,5 @@
 ### Based on nlme Version: 3.1-103. Dated 2012-01-16. 
-#useDynLib(nlme, .registration=TRUE)
+useDynLib(nlme, .registration=TRUE)
 ## import(lattice)
 import(stats)
 importFrom(graphics, pairs, plot)
