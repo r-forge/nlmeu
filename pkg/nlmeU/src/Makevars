@@ -1,4 +1,3 @@
-# PKG_CFLAGS=$(C_VISIBILITY)
 
 #					Dear Emacs, treat me as -*- Makefile -*-
 PKG_LIBS=$(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
@@ -8,3 +7,4 @@ all: nlme.so
 nlme.so: $(OBJECTS)
 	$(SHLIB_LINK) -o $@ $(OBJECTS) $(ALL_LIBS)
 
+PKG_CFLAGS=$(C_VISIBILITY)

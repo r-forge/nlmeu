@@ -201,7 +201,6 @@ attr(ret,"rt") <- rt
 
 class(ret)  <- c("Pwr","data.frame")
 Xverbose(1, "Pwr.lme ENDS <=#######", xverbose=xverbos)
- 
 ret
 }
 

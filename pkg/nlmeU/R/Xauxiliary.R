@@ -34,9 +34,9 @@ Xverbose <- function(xv,object, xverbose= numeric()) {
  if (ret)  return(1)
 tmp <- max(ceiling(10/xv), 1)  # From 1 to 10
 
-if (tmp == 10)  a <- paste(paste(rep("#",   9, sep=""), collapse=""), "=>", collapse="", sep="")           # xv =1
-if (tmp == 5)   a <- paste(paste(rep("=", tmp, sep=""), collapse=""), ">", collapse="", sep="")          # xv =2
-if (tmp < 5)    a <- paste(paste(rep("-", tmp, sep=""), collapse=""), ">", collapse="", sep="")         # xv =3:9
+if (tmp == 10)  a <- paste(paste(rep("#",   9, sep=""), collapse=""), "=>", collapse="", sep="")     # xv =1
+if (tmp == 5)   a <- paste(paste(rep("=", tmp, sep=""), collapse=""), ">", collapse="", sep="")      # xv =2
+if (tmp < 5)    a <- paste(paste(rep("-", tmp, sep=""), collapse=""), ">", collapse="", sep="")      # xv =3:9
 if (tmp <= 1)    a <- "-"
 # if (tmp >  9) a <- paste(rep("#",9,sep=""), collapse="")
 

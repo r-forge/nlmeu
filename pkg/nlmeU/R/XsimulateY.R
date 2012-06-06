@@ -4,7 +4,7 @@ simulateY.lme <- function (object, nsim =1, seed = as.integer(runif(1, 0, .Machi
   verbose = FALSE, sigma, xverbose = list()) 
 {
 # Data with one level of grouping only.
-  xverbos <- XverboseControl()[["logLik1"]]
+  xverbos <- XverboseControl()[["simulateY.lme"]]
   if (!missing(xverbose)) xverbos <- xverbose[["simulateY.lme"]]
   Xverbose(1, "simulateY.lme STARTS   <=####", xverbose=xverbos)
  
@@ -62,8 +62,11 @@ Xverbose(1, "simulateY.lme ENDS   <=####", xverbose=xverbos)
 return(resAll + fitd0)
 }
 
-sigmaTolme <- function(object, value){ 
+sigmaTolme <- function(object, value, xverbose = list()){ 
  ### Use this function only with Pwr() and simulateY(), because it  corrupts lme.object
+  xverbos <- XverboseControl()[["sigmaTolme"]]
+  if (!missing(xverbose)) xverbos <- xverbose[["sigmaTolme"]]
+
   Xverbose(1, "sigmaTolme STARTS", xverbose=xverbos)
   sigma0 <- object$sigma 
   Xverbose(2, sigma0, xverbose=xverbos)  
