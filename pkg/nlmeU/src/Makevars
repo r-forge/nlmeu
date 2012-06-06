@@ -1,2 +1,5 @@
 PKG_CFLAGS=$(C_VISIBILITY)
 
+PKGB_PATH=‘echo ’library(nlme); cat(system.file("libs", package="nlme"))’ | "${R_HOME}/bin/R" --vanilla --slave‘
+
+PKG_LIBS=-L"$(PKGB_PATH)" -rpath "$(PKGB_PATH)" -lnlme
