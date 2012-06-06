@@ -1,5 +1,10 @@
-PKG_CFLAGS=$(C_VISIBILITY)
+# PKG_CFLAGS=$(C_VISIBILITY)
 
-PKGB_PATH=‘echo ’library(nlme); cat(system.file("libs", package="nlme"))’ | "${R_HOME}/bin/R" --vanilla --slave‘
+#					Dear Emacs, treat me as -*- Makefile -*-
+PKG_LIBS=$(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
 
-PKG_LIBS=-L"$(PKGB_PATH)" -rpath "$(PKGB_PATH)" -lnlme
+## default 'nlmeU.so' does not work in Namespace registration for R <= 2.14.x
+all: nlme.so
+nlme.so: $(OBJECTS)
+	$(SHLIB_LINK) -o $@ $(OBJECTS) $(ALL_LIBS)
+
