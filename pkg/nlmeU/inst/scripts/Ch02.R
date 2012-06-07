@@ -1,4 +1,3 @@
-### R code from vignette source 'D:/RbookX/RnwNlmeU/Ch2.Rnw'
 
 ###################################################
 ### code chunk number 1: Init
@@ -257,9 +256,9 @@ range(tab1)                                   # Range of counts
 
 
 ###################################################
-### code chunk number 24: Ch2Cleanup
+### code chunk number 24: Cleanup
 ###################################################
-rm(armd240.data, armd240, armd240.v5, armd240.v4)      # Data not needed
+rm(armd240.data, armd240, armd240.v5, armd240.v4)           # Data not needed
 rm(prt.fiber.data, prt.subjects.data, prt.fiber, prt.subjects, prt)
 rm(classroom, SIIdata) 
 rm(crossreg.data, fcat) 
@@ -267,5 +266,4 @@ rm(dataDir, rdaDir, auxDt)
 rm(treat.f, miss.pat, facs, lbls)
 rm(nms,nms1, nms2, nms2a, nms3a)
 rm(idx1, idx12, nItms, tab1, dtId)
-
 

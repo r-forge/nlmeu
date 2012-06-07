@@ -1,6 +1,5 @@
-data(armd, package = "nlmeU")
+library(nlmeU)
 lm3.form <- formula(visual ~ visual0 + time + treat.f) 
-
 fm16.5 <- 
    lme(lm3.form,             
        random = list(subject = pdDiag(~time)),       
