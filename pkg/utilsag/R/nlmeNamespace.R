@@ -16,7 +16,7 @@ MODIFY1.nlmeNs <-
 
 .onLoad <- function(libname, pkgname){
   packageStartupMessage("NOTE: Namespace of the nlme package has been temporarily modified!", appendLF = TRUE)  
-  "To reinstate it use detach(package:nlmeU) command.", appendLF = TRUE)  
+  packageStartupMessage("To reinstate it, use detach(package:nlmeU) command.", appendLF = TRUE)  
   print(libname)
   print(pkgname)
   MODIFY1.nlmeNs("model.matrix.reStruct", utilsag::model.matrix.reStruct.U) # Change utilsag to nlmeU later
