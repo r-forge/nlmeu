@@ -5,8 +5,7 @@ Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski <>, Shu Chen  <
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
 Title: Datasets and utility functions.
 Description: 
-Depends: R (>= 2.10.1)
-LinkingTo: nlme
+Depends: nlme, R (>= 2.10.1)
 Suggests: reshape, lattice
 License: GPL (version 2 or later)
 URL:  http://www-personal.umich.edu/~agalecki/
