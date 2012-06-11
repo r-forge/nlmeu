@@ -14,7 +14,7 @@ MODIFY1.nlmeNs <-
   lockBinding(nm, env) 
  }
 
-.onAttach <- function(libname, pkgname){
+onAttach <- function(libname, pkgname){
   packageStartupMessage("NOTE: Namespace of the nlme package has been temporarily modified!", appendLF = TRUE)  
   packageStartupMessage("To reinstate it, use detach(package:nlmeU) command.", appendLF = TRUE)  
   print(libname)
@@ -26,7 +26,7 @@ MODIFY1.nlmeNs <-
   #unloadNamespace("nlme") 
 }
 
-.Last.lib <- function(libpath) {
+Last.lib <- function(libpath) {
   print(libpath)
   unloadNamespace("nlme")
 }
