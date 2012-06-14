@@ -1,2 +1,6 @@
-export(write.Rd)
+# Generics for which we define new methods:
+# importFrom(nlme, model.matrix)
+
+export(write.Rd, modifyPackageNamespace)
+
 S3method(write.Rd, data.frame)  # Writes skeleton documentation for data frame

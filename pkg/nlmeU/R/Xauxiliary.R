@@ -23,15 +23,14 @@ XverboseControl <- function(
 list(
   logLik1        = logLik1,
   simulateY.lme  = simulateY.lme,
-  print.Pwr  = numeric(),
+  print.Pwr  = print.Pwr,
   Pwr.lme  = Pwr.lme
 )
 }
-
 Xverbose <- function(xv,object, xverbose= numeric()) {
 #cat ("xverbose starts \n")
  ret <- !(xv %in% xverbose) 
- if (ret)  return(1)
+ if (ret)  return()
 tmp <- max(ceiling(10/xv), 1)  # From 1 to 10
 
 if (tmp == 10)  a <- paste(paste(rep("#",   9, sep=""), collapse=""), "=>", collapse="", sep="")     # xv =1
@@ -65,3 +64,4 @@ print(object)
 #cat("xverbose ends \n")
 return()
 }
+
