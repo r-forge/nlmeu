@@ -1,13 +1,13 @@
 Package: utilsag
 Version: 0.0.1
 Date: 2012-05-15
-Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski <>, Shu Chen  <chenshu@umich.edu>
+Author: Andrzej Galecki <agalecki@umich.edu>
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
 Title: Datasets and utility functions.
 Description: 
-Depends: R (>= 2.10.1)
-Imports: nlme
-Suggests: reshape, lattice
+Depends: reshape, R (>= 2.10.1)
+Imports: stringr
+Suggests: lattice
 License: GPL (version 2 or later)
 URL:  http://www-personal.umich.edu/~agalecki/
 LazyData: yes
