@@ -3,11 +3,11 @@ logLik1 <-  function(object, ...) UseMethod("LogLik1")
 logLik1.lme <- function(modfit, dt1, dtInit=NULL, xverbose = list()){
   # Calculates profile likelihood (with beta profiled out) for *one* subject
   # Data with *one* level of grouping
-  # correlation component in modelStruct not allowed
+  # correlation component in modelStruct not implemented
   # Continue to work here, if dtInit ne NULL 
 
-  xverbos <- XverboseControl()[["logLik1"]]
-  if (!missing(xverbose)) xverbos <- xverbose[["logLik1"]]
+  xverbos <- do.call("nlmeUXverboseControl", args=list( ))[["logLik1.lme"]]
+  if (!missing(xverbose)) xverbos <- xverbose[["logLik1.lme"]]
   Xverbose(1, "logLik1.lme STARTS   <=####", xverbose=xverbos)
   
 

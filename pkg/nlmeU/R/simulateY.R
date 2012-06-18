@@ -4,7 +4,7 @@ simulateY.lme <- function (object, nsim =1, seed = as.integer(runif(1, 0, .Machi
   verbose = FALSE, sigma, xverbose = list()) 
 {
 # Data with one level of grouping only.
-  xverbos <- XverboseControl()[["simulateY.lme"]]
+  xverbos <- do.call("nlmeUXverboseControl", args=list())[["simulateY.lme"]]
   if (!missing(xverbose)) xverbos <- xverbose[["simulateY.lme"]]
   Xverbose(1, "simulateY.lme STARTS   <=####", xverbose=xverbos)
  

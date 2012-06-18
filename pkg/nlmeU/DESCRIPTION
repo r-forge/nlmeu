@@ -1,13 +1,13 @@
 Package: nlmeU
-Version: 0.26-0
+Version: 0.27-0
 Date: $Date$
 Revision: $Revision$
-Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski <>, Shu Chen  <chenshu@umich.edu>
+Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski <>
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
 Title: Datasets and auxiliary functions for Galecki and Burzykowski book 2012. 
-Description: Datasets and auxiliary functions for Galecki and Burzykowski book 2012.
-Depends: utilsag, R (>= 2.14.2)
-Suggests: reshape, lme4, nlme,testthat
+Description: Datasets and auxiliary functions for Galecki and Burzykowski book 2012 (under development)
+Depends: R (>= 2.14.2)
+Suggests: reshape, lme4, nlme, testthat
 License: GPL (version 2 or later)
 URL:  http://www-personal.umich.edu/~agalecki/
 LazyData: yes

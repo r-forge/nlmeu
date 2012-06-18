@@ -1,32 +1,15 @@
+# source("C:\\Users\\agalecki\\Google Drive\\MySoftware\\_rforgenlmeU\\pkg\\utilsag\\R\\auxiliary.R")
 
-"missPat" <- function(...)
-{    args  <- as.list(substitute(list(...)))[-1]
-     args.t <- paste("miss.frame$",args,sep="",collapse=",")
-     miss.frame <- as.data.frame(ifelse(is.na(data.frame(args)),"X","-"))
-     txt <- c("paste(", args.t, ",sep='')")
-     txt<-paste(txt,sep='')
-     eval(parse(text=txt))
-}
-sigma <-  function(object, ...) UseMethod("sigma")
-
-sigma.default <- function(object, ...) object$sigma
-
-
-XverboseControl <- function(
-  logLik1 = numeric(),
-  simulateY.lme = numeric(), 
-  print.Pwr =numeric(),
-  Pwr.lme = numeric()
-  
+utilsagXverboseControl <- function(
+read.SAAM2stu = numeric()
 ){
-# xcontrl <- XverboseControl(Pwr.lme = 1:900)
+# xcontrl <- utilsagXverboseControl(read.SAAM2stu = 1:900)
 list(
-  logLik1        = logLik1,
-  simulateY.lme  = simulateY.lme,
-  print.Pwr  = print.Pwr,
-  Pwr.lme  = Pwr.lme
+read.SAAM2stu = read.SAAM2stu
 )
 }
+
+###  Xverbose <- function(xv,object, xverbose= numeric()) {} # Place holder# source("C:\\Users\\agalecki\\Google Drive\\MySoftware\\_rforgenlmeU\\pkg\\utilsag\\R\\Xverbose.R")
 Xverbose <- function(xv,object, xverbose= numeric()) {
 #cat ("xverbose starts \n")
  ret <- !(xv %in% xverbose) 
@@ -64,4 +47,3 @@ print(object)
 #cat("xverbose ends \n")
 return()
 }
-

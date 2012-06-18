@@ -8,8 +8,7 @@ Pwr.lme <- function (object, ..., type = c("sequential", "marginal"),
 # Arguments: object: one object only
 # adjustSigma set to FALSE. Explore adjustSigma argument if missing(sigma) adjust object$sigma
 # altB name
-
-xverbos <- XverboseControl()[["Pwr.lme"]]
+  xverbos <- do.call("nlmeUXverboseControl", args=list())[["Pwr.lme"]]
   if (!missing(xverbose)) xverbos <- xverbose[["Pwr.lme"]]
   Xverbose(1, "Pwr.lme STARTS", xverbose=xverbos)
 

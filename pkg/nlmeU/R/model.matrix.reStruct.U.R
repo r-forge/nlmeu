@@ -1,9 +1,11 @@
 # .U Functions used to modify nlme namespace
 # Use MODIFY.nlme
 model.matrix.reStruct.U <-
-function (object, data, contrast = NULL, ...) 
+function (object, data, contrast = NULL, ..., xverbose=list()) 
 {
-    xverbose(800, "=====> model.matrix.reStruct STARTS")
+  xverbos <- do.call("nlmeUXverboseControl", args=list( ))[["model.matrix.reStruct.U"]]
+  if (!missing(xverbose)) xverbos <- xverbose[["model.matrix.reStruct.U"]]
+    Xverbose(1, "=====> model.matrix.reStruct.U STARTS", xverbose=xverbos)
     pdDef <- !(length(object) == 1 && inherits(object[[1]],"pdKronecker"))
 
     if (is.null(form <- formula(object, asList = TRUE))) {
@@ -82,6 +84,6 @@ function (object, data, contrast = NULL, ...)
     attr(val, "ncols") <- ncols
     attr(val, "contr") <- contr
     attr(val,"names")  <- NULL
-    xverbose(800, "=====> model.matrix.reStruct ENDS")
+    Xverbose(1, "=====> model.matrix.reStruct.U STARTS", xverbose=xverbos)
     val
 }
