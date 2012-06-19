@@ -1,4 +1,4 @@
-export(missPat, model.matrix.reStruct.U,)
+export(missPat, model.matrix.reStruct.U)
 # generic functions
 export(logLik1,  Pwr, sigma, simulateY)
 S3method(logLik1,lme)

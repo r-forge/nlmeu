@@ -1,4 +1,4 @@
-modify.nlmeNamespace(){
+modify.nlmeNamespace()<- function{
  cat("Namespace of nlme package will be modified \n")
  cat('To restore previous namespace use command: unloadNamespace("nlme") \n', sep="")
  readline("Press <Enter> to continue or <Esc> to abort \n")
