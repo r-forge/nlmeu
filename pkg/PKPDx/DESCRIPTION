@@ -1,0 +1,12 @@
+Package: PKPDa
+Version: 0.0.1
+Date: 2012-05-15
+Author: Andrzej Galecki <agalecki@umich.edu>
+Maintainer: Andrzej Galecki <agalecki@umich.edu>
+Title: Examples of PK/PD analysis.
+Description: 
+Depends: R (>= 2.10.1)
+Suggests: lattice
+License: GPL (version 2 or later)
+URL:  http://www-personal.umich.edu/~agalecki/
+LazyData: yes

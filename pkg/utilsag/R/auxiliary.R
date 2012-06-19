@@ -1,13 +1,13 @@
 # source("C:\\Users\\agalecki\\Google Drive\\MySoftware\\_rforgenlmeU\\pkg\\utilsag\\R\\auxiliary.R")
 
-utilsagXverboseControl <- function(
-read.SAAM2stu = numeric()
-){
+#utilsagXverboseControl <- function(
+#read.SAAM2stu = numeric()
+#){
 # xcontrl <- utilsagXverboseControl(read.SAAM2stu = 1:900)
-list(
-read.SAAM2stu = read.SAAM2stu
-)
-}
+#list(
+#read.SAAM2stu = read.SAAM2stu
+#)
+#}
 
 ###  Xverbose <- function(xv,object, xverbose= numeric()) {} # Place holder# source("C:\\Users\\agalecki\\Google Drive\\MySoftware\\_rforgenlmeU\\pkg\\utilsag\\R\\Xverbose.R")
 Xverbose <- function(xv,object, xverbose= numeric()) {
