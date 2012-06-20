@@ -4,10 +4,10 @@ write.Rd <- function(object, ...) UseMethod("write.Rd")
 #write.Rd(Orthodont, package="nlme")            # by default to working directory
 #write.Rd(Orthodont, package="nlme", dir.path = "") # To terminal
 write.Rd.data.frame <- function(object, ..., dir.path = getwd(), package=""){
- srch <- search()
- tmp <- paste("package:", package, collapse="", sep="")
- insrch <- tmp %in% srch
- if (!insrch) warning("Package ", package, " not in search path")
+ #srch <- search()
+ #tmp <- paste("package:", package, collapse="", sep="")
+ #insrch <- tmp %in% srch
+ #if (!insrch) warning("Package ", package, " not in search path")
  
  
  dfn <- as.character(substitute(object))
