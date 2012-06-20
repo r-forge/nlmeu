@@ -12,4 +12,4 @@ modify.nlmeNamespace <- function(){
  assign(nm, value, envir=env)
  assignInNamespace(nm, value, ns= ns, envir = env)    
  lockBinding(nm, env) 
-)
+}
