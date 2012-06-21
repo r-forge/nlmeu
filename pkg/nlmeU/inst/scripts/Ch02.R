@@ -13,30 +13,30 @@ sessionInfo()
 dataDir <- file.path(.Library, "nlmeU", "csvData")   # Directory in package
 fp   <- file.path(dataDir, "armd240.data.csv")       # .csv file path
 armd240.data <- read.csv(fp, header = TRUE)          # Loading data
-dim(armd240.data)                       # No. of rows and cols
-(nms <- names(armd240.data))            # Variables' names
-unique(sapply(armd240.data, class))     # Variables' classes
-str(armd240.data)                       # Data structure
-names(armd240.data) <- abbreviate(nms)  # Variables' names shortened
-head(armd240.data, 3)                   # First 3 records
-names(armd240.data) <- nms              # Variables' names reinstated
+dim(armd240.data)                                    # No. of rows and cols
+(nms <- names(armd240.data))                         # Variables' names
+unique(sapply(armd240.data, class))                  # Variables' classes
+str(armd240.data)                                    # Data structure
+names(armd240.data) <- abbreviate(nms)               # Variables' names shortened
+head(armd240.data, 3)                                # First 3 records
+names(armd240.data) <- nms                           # Variables' names reinstated
 
 
 ###################################################
 ### code chunk number 3: R2.2
 ###################################################
-data(armd240, package = "nlmeU")            # armd240 loaded
-str(armd240)                                # Structure of data
-(facs <- sapply(armd240, is.factor))        # Factors indicated 
-names(facs[facs == TRUE])                   # Factor names displayed                  
+data(armd.wide, package = "nlmeU")                   # armd data loaded
+str(armd.wide)                                       # Structure of data
+(facs <- sapply(armd.wide, is.factor))               # Factors indicated 
+names(facs[facs == TRUE])                            # Factor names displayed                  
 
 
 ###################################################
 ### code chunk number 4: R2.3a
 ###################################################
-attach(armd240.data)                  # Attach armd240.data
-treat.f <- factor(treat,              # Factor created 
-  labels = c("Placebo", "Active")     # 1 -> Placebo, 2 -> Active
+attach(armd240.data)                                 # Attach armd240.data
+treat.f <- factor(treat,                             # Factor created 
+  labels = c("Placebo", "Active")                    # 1 -> Placebo, 2 -> Active
 ) 
 levels(treat.f)
 str(treat.f)
@@ -45,38 +45,37 @@ str(treat.f)
 ###################################################
 ### code chunk number 5: R2.3b
 ###################################################
-library(nlmeU)                        # Package nlmeU loaded
-miss.pat <-                           # missPat() function from nlmeU
-    missPat(visual4, visual12, visual24, visual52) # missing patterms
-detach(package:nlmeU)                 # Package nlmeU detached
-length(miss.pat)                      # Vector length
-mode(miss.pat)                        # Vector mode
-miss.pat                              # Vector contents 
-detach(armd240.data)                  # Detach armd240.data
+miss.pat <-                                # missing patterns
+    nlmeU:::missPat(visual4, visual12, visual24, visual52)  
+length(miss.pat)                           # Vector length
+mode(miss.pat)                             # Vector mode
+miss.pat                                   # Vector contents 
+detach(armd240.data)                       # Detach armd240.data
 
 
 ###################################################
 ### code chunk number 6: R2.4
 ###################################################
-data(armd240.v5, package = "nlmeU")        # From nlmeU package
-head(armd240.v5)                           # First six records
-names(armd240.v5)                          # Variables' names
-dim(armd240.v5)                            # No. of rows and cols
-str(armd240.v5)                            # Data structure    
+data(armd0, package = "nlmeU")             # From nlmeU package
+dim(armd0)                                 # No. of rows and cols
+head(armd0)                                # First six records
+names(armd0)                               # Variables' names
+dim(armd0)                                 # No. of rows and cols
+str(armd0)                                 # Data structure    
 
 
 ###################################################
 ### code chunk number 7: R2.5
 ###################################################
-auxDt <- subset(armd240.v5, time > 0)     # Post-baseline measures
+auxDt <- subset(armd0, time > 0)          # Post-baseline measures
 dim(auxDt)                                # No. of rows & cols
 levels(auxDt$time.f)                      # Levels of treat.f
-armd240.v4 <- droplevels(auxDt)           # Drop unused levels   
-levels(armd240.v4$time.f)                 # Baseline level dropped
-armd240.v4 <- within(armd240.v4, {        # Contrasts assigned
+armd <- droplevels(auxDt)                 # Drop unused levels   
+levels(armd$time.f)                       # Baseline level dropped
+armd <- within(armd, {                    # Contrasts assigned
    contrasts(time.f) <- contr.poly(4, scores = c(4, 12, 24, 52))
 })
-head(armd240.v4)                          # First six records
+head(armd)                                # First six records
 
 
 ###################################################
@@ -212,7 +211,7 @@ nms3a <- names(gsummary(SIIdata,
                  inv = TRUE)
 )
 idx12 <- match(c(nms1, nms2), nms3a)
-nms3a[-idx12]                    # childid-specific
+nms3a[-idx12]                      # childid-specific
 
 
 ###################################################
@@ -238,7 +237,7 @@ summary(crossreg.data$scorec)         # Summary statistics for scorec
 ###################################################
 ### code chunk number 22: R2.15a
 ###################################################
-nItms  <- c(4, 6, 8, 5, 9, 6, 8, 6, 5)        # See Table \ref!tab:atot:targets?
+nItms  <- c(4, 6, 8, 5, 9, 6, 8, 6, 5)        # See Table 2.1
 (lbls <- paste("T", 1:9, "(", nItms, ")", sep = ""))
 fcat <- within(crossreg.data, {
         id <- factor(id)
@@ -258,7 +257,7 @@ range(tab1)                                   # Range of counts
 ###################################################
 ### code chunk number 24: Cleanup
 ###################################################
-rm(armd240.data, armd240, armd240.v5, armd240.v4)           # Data not needed
+rm(armd240.data, armd.wide, armd0, armd)           # Data not needed
 rm(prt.fiber.data, prt.subjects.data, prt.fiber, prt.subjects, prt)
 rm(classroom, SIIdata) 
 rm(crossreg.data, fcat) 
