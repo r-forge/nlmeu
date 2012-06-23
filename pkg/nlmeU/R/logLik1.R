@@ -1,37 +1,36 @@
 logLik1 <-  function(object, ...) UseMethod("LogLik1")
 
-logLik1.lme <- function(modfit, dt1, dtInit=NULL, xverbose = list()){
+logLik1.lme <- function(modfit, dt1, dtInit=NULL){
   # Calculates profile likelihood (with beta profiled out) for *one* subject
   # Data with *one* level of grouping
   # correlation component in modelStruct not implemented
   # Continue to work here, if dtInit ne NULL 
 
-  xverbos <- do.call("nlmeUXverboseControl", args=list( ))[["logLik1.lme"]]
-  if (!missing(xverbose)) xverbos <- xverbose[["logLik1.lme"]]
-  Xverbose(1, "logLik1.lme STARTS   <=####", xverbose=xverbos)
+   funNm <-  "logLik1.lme"
+   Xverbose(1, "logLik1.lme STARTS   <=####", funNm)
   
 
     m            <- modfit$modelStruct                 # Model structure
     sigma        <- modfit$sigma                       # sigma
-    Xverbose(111, sigma, xverbose=xverbos)
+    Xverbose(111, sigma, funNm)
    
-    Xverbose(2, "About D matrix", xverbose=xverbos)
+    Xverbose(2, "About D matrix", funNm)
  
     D            <- as.matrix(m$reStruct[[1]])         # "subject"
-    Xverbose(115, D, xverbose=xverbos)
+    Xverbose(115, D, funNm)
     D            <- D  * sigma^2                       # Matrix D 
-    Xverbose(116, D, xverbose=xverbos)
+    Xverbose(116, D, funNm)
    
-    Xverbose(2, "IF process $weights component =====", xverbose=xverbos)
+    Xverbose(2, "IF process $weights component =====", funNm)
     
     clw  <- modfit$call$weights
     vecR <- rep(sigma, nrow(dt1))                      
     if (length(clw)){
-    Xverbose(211, clw, xverbose=xverbos)
+    Xverbose(211, clw, funNm)
   
     if (inherits(eval(clw),"formula")) clw <- call("varFixed", clw) 
     clwl  <-  as.list(clw) 
-    Xverbose(212, clwl, xverbose=xverbos)
+    Xverbose(212, clwl, funNm)
  
     
     varFun <- as.character(clwl[[1]])                  # VarFun="varPower"
@@ -39,9 +38,9 @@ logLik1.lme <- function(modfit, dt1, dtInit=NULL, xverbose = list()){
     vf.coef      <- coef(varSt,                        # Variance function ...
                          unconstrained=FALSE)          # coef. extracted
  
-    Xverbose(221, vf.coef, xverbose=xverbos)
+    Xverbose(221, vf.coef, funNm)
     names(vf.coef) <- NULL
-    Xverbose(222, vf.coef, xverbose=xverbos)
+    Xverbose(222, vf.coef, funNm)
  
     #####varFun <- "varPower"
     #args   <- list(form = ~time)  ### <----
@@ -49,7 +48,7 @@ logLik1.lme <- function(modfit, dt1, dtInit=NULL, xverbose = list()){
     args    <- c(args, value = vf.coef) # Replace value? In some cases?
     vf      <- do.call(varFun, as.list(args))
     
-    Xverbose(2, "IF dtInit is not NULL  =====", xverbose=xverbos)
+    Xverbose(2, "IF dtInit is not NULL  =====", funNm)
     if (!is.null(dtInit)){
         dfAug    <- rbind(dtInit,dt1)
         vf.x     <- Initialize(vf, data=dfAug)}      # ... initialized
@@ -62,12 +61,12 @@ logLik1.lme <- function(modfit, dt1, dtInit=NULL, xverbose = list()){
     
    
     if (!is.null(dtInit)){
-        Xverbose(222, "IF dtInit", xverbose=xverbos)
+        Xverbose(222, "IF dtInit", funNm)
         idxInit      <- c(1:nrow(dtInit))            # Indices for dtInit
         vecR         <- vecR[-idxInit]
     }                                               # Diagonal of R_i matrix
     
-    Xverbose(2, "Wrap-up  =====", xverbose=xverbos)
+    Xverbose(2, "Wrap-up  =====", funNm)
     #return(zz)  # Continue to work here
     vecR2        <- vecR^2
     R            <- diag(vecR2, nrow=length(vecR))        # R_i matrix     
@@ -82,6 +81,6 @@ logLik1.lme <- function(modfit, dt1, dtInit=NULL, xverbose = list()){
     n            <- nrow(dt1)                 # No. of obs for subject
     lLik         <- n*log(2*pi) + log(det(V)) + 
                     t(r) %*% solve(V) %*% r
-    Xverbose(1, "logLik1.lme ENDS   <=######", xverbose=xverbos)               
+    Xverbose(1, "logLik1.lme ENDS   <=######", funNm)               
     return(-0.5 * as.numeric(lLik))
 }

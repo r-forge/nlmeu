@@ -1,17 +1,17 @@
 # .U Functions used to modify nlme namespace
 # Use MODIFY.nlme
 model.matrix.reStruct.U <-
-function (object, data, contrast = NULL, ..., xverbose=list()) 
+function (object, data, contrast = NULL, ...) 
 {
-  xverbos <- do.call("nlmeUXverboseControl", args=list( ))[["model.matrix.reStruct.U"]]
-  if (!missing(xverbose)) xverbos <- xverbose[["model.matrix.reStruct.U"]]
-    Xverbose(1, "=====> model.matrix.reStruct.U STARTS", xverbose=xverbos)
+    fnm <- "model.matrix.reStruct.U"
+    Xverbose(1, "model.matrix.reStruct.U STARTS XYZ", fnm)
     pdDef <- !(length(object) == 1 && inherits(object[[1]],"pdKronecker"))
 
     if (is.null(form <- formula(object, asList = TRUE))) {
         stop("Cannot extract model matrix without formula")
     }
     form1 <- asOneFormula(form)
+    Xverbose(20, form1, fnm)
     if (length(form1) > 0) {
         data <- model.frame(form1, data = data)
     }
@@ -19,25 +19,40 @@ function (object, data, contrast = NULL, ..., xverbose=list())
         data <- data.frame("(Intercept)" = rep(1, nrow(data)))
     }
 ###
+    Xverbose(30, str(data), fnm)
     any2list <- function(object, data, contrast) {       # <===
+        Xverbose(940, "-any2list in <model.matrix.reStruct.U> STARTS", fnm)
         form2list <- function(form, data, contrast) {    # <===
+        Xverbose(950, "form2list in <model.matrix.reStruct.U> STARTS", fnm)
+
             if (length(asOneFormula(form)) == 0) {
-                return(list("(Intercept)" = rep(1, dim(data)[1])))
+                tt1 <- list("(Intercept)" = rep(1, dim(data)[1]))
+                Xverbose(951, str(tt1), fnm)   
+                Xverbose(951, "tt1 returned from <form2list>. EXIT1.", fnm)   
+                return(tt1)
             }
-            as.data.frame(unclass(model.matrix(form, model.frame(form, 
+            tt2 <- as.data.frame(unclass(model.matrix(form, model.frame(form, 
                 data), contrast)))
+                 Xverbose(952, str(tt2), fnm)   
+                 Xverbose(952, "tt2 returned from <form2list>. EXIT2", fnm)  
+            tt2    
         }
+        Xverbose(941, "any2list in <model.matrix.reStruct.U> CONTINUES", fnm)      
         if (inherits(object, "formula")) {
-            return(form2list(object, data, contrast))
+            tt3 <- form2list(object, data, contrast)
+            Xverbose(953, str(tt3), fnm)   
+            Xverbose(953, "tt3 returned from <form2list>. EXIT3", fnm)  
+            return(tt3)
         }
         if (is.list(object)) {
             return(unlist(lapply(object, form2list, data = data, 
                 contrast = contrast), recursive = FALSE))
         }
+        Xverbose(940, "any2list in <model.matrix.reStruct.U> returns NULL", fnm)
         return(NULL)
     }
 ###
-
+    Xverbose(50, pdDef, fnm)
     if (pdDef){     # No pdKroneck
         value <- as.list(lapply(form, any2list, data = data, contrast = contrast))
         ncols <- as.vector(unlist(lapply(value, length)))
@@ -57,19 +72,16 @@ function (object, data, contrast = NULL, ..., xverbose=list())
     if (!pdDef){    # pdKroneck
 
        form2 <- formula(object, asList = FALSE)
-       xverbose(801,form2)
+       Xverbose(801, form2, fnm)
        form2name <- names(form2) 
-       xverbose(802,form2name)
+       Xverbose(802, form2name, fnm)
        form2 <- form2[[1]]
-       xverbose(803,form2)
+       Xverbose(803, form2, fnm)
        form  <- form2   ####  <- 
-       ###print(str(data))
        val <- model.matrix(form,data)
        ncols <- ncol(val)
        nams <- dimnames(val)[[2]]
-       xverbose(804,nams)
-       #cat("-> nams \n")
-       #print(nams)
+       Xverbose(804,nams, fnm)
        namsL <- list(nams)
        names(namsL) <- form2name 
        attr(val,"nams") <- namsL
@@ -84,6 +96,9 @@ function (object, data, contrast = NULL, ..., xverbose=list())
     attr(val, "ncols") <- ncols
     attr(val, "contr") <- contr
     attr(val,"names")  <- NULL
-    Xverbose(1, "=====> model.matrix.reStruct.U STARTS", xverbose=xverbos)
+    Xverbose(1, "model.matrix.reStruct.U ENDS", fnm)
     val
 }
+## unloadNamespace("nlme")
+## nlmeU:::modify.nlmeNamespace()
+## getS3method("model.matrix","reStruct")

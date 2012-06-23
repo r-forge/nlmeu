@@ -12,7 +12,7 @@ sessionInfo()
 ## dataDir <- file.path("C:", "temp")                # Data directory
 dataDir <- file.path(.Library, "nlmeU", "csvData")   # Directory in package
 fp   <- file.path(dataDir, "armd240.data.csv")       # .csv file path
-armd240.data <- read.csv(fp, header = TRUE)          # Loading data
+armd240.data <- read.csv(fp, header = TRUE)          # Loading csv data
 dim(armd240.data)                                    # No. of rows and cols
 (nms <- names(armd240.data))                         # Variables' names
 unique(sapply(armd240.data, class))                  # Variables' classes

@@ -174,5 +174,5 @@ write.Rd.data.frame <- function(object, ..., dir.path = getwd(), package=""){
  }
  #return()
 }
-write.Rd.data.frame(pk1dt, package="PKPDx")
+#write.Rd.data.frame(pk1dt, package="PKPDx")
 

@@ -1,7 +1,6 @@
-### R code from vignette source 'D:/RbookX/RnwNlmeU/Ch5.Rnw'
 
 ###################################################
-### code chunk number 1: Ch5.Rnw:4-6
+### code chunk number 1: Ch5
 ###################################################
 options(width=65, digits=5)
 sessionInfo()
@@ -86,29 +85,30 @@ attr(termsB,"intercept")      # Intercept omitted
 ###################################################
 ### code chunk number 9: R5.5
 ###################################################
+data(armd.wide, package = "nlmeU")
 form1 <- formula(               # *** Formula  ***
   visual52 ~                    # Dependent variable 
   log(line0) +                  # Continuous explanatory variable
   factor(lesion) +              # Factor with 4 levels
   treat.f*log(visual24) +       # Crossing of two variables
   poly(visual0,2))              # Polynomial of 2nd degree
-armd240.mf1 <-                  # *** Model frame ***
+armd.mf1 <-                     # *** Model frame ***
    model.frame(form1,           # Formula
-      data=armd240,             # Data frame
+      data=armd.wide,           # Data frame
       subset = !(subject %in% c(1,2)), # Exclude two subjects   
       na.action= na.exclude,    # Dealing with missing data
       SubjectId = subject)      # Identifier of data records
-class(armd240.mf1)           
-dim(armd240)                    # Data frame dimensions
-dim(armd240.mf1)                # Model frame dimensions
-names(armd240.mf1)              # Components of the model frame
-head(armd240.mf1, n=4)          # First four records
+class(armd.mf1)           
+dim(armd.wide)                  # Data frame dimensions
+dim(armd.mf1)                   # Model frame dimensions
+names(armd.mf1)                 # Components of the model frame
+head(armd.mf1, n=4)             # First four records
 
 
 ###################################################
 ### code chunk number 10: R5.6
 ###################################################
-terms.mf1 <- attr(armd240.mf1,"terms")    # Terms attribute
+terms.mf1 <- attr(armd.mf1,"terms")       # Terms attribute
 class(terms.mf1)
 names(attributes(terms.mf1))              # Names of attributes
 attr(terms.mf1,"dataClasses")             # dataClasses attribute
@@ -119,7 +119,7 @@ labels(terms.mf1)                         # Component names
 ###################################################
 ### code chunk number 11: R5.7
 ###################################################
-Xmtx <-  model.matrix(form1, armd240.mf1)      # Design matrix
+Xmtx <-  model.matrix(form1, armd.mf1)         # Design matrix
 dim(Xmtx)                                      # No rows and cols
 colnames(Xmtx)                                 # Col names
 head(Xmtx,n=4)                                 # First 4 rows
@@ -141,13 +141,13 @@ contr.poly(3, scores=c(1,5,7))
 ###################################################
 ### code chunk number 13: R5.9
 ###################################################
-options()$contrasts          # Default contrasts
-lesion.f <- factor(armd240$lesion)   # Factor created
-str(lesion.f)                # Structure
-names(attributes(lesion.f))  # Names of factor attributes
-levels(lesion.f)             # Levels 
-contrasts(lesion.f)          # Contrasts extracted
-lesion2.f <- C(lesion.f,contr.sum(4))  # New contrasts using C()
+options()$contrasts                    # Default contrasts
+lesion.f <- factor(armd.wide$lesion)   # Factor created
+str(lesion.f)                          # Structure
+names(attributes(lesion.f))            # Names of factor attributes
+levels(lesion.f)                       # Levels 
+contrasts(lesion.f)                    # Contrasts extracted
+lesion2.f <- C(lesion.f, contr.sum(4)) # New contrasts using C()
 names(attributes(lesion2.f))           # Names of factor attributes
 contrasts(lesion2.f)                   # Contrasts extracted
 lesion2a.f <- lesion.f       # lesion2a.f created with the use of... 

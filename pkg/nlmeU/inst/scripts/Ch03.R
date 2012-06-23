@@ -3,7 +3,7 @@
 ### code chunk: Init
 ###################################################
 
-ylims <- c(0,90) 
+ylims <- c(0, 90) 
 
 ###################################################
 ### code chunk: R3.1
@@ -179,10 +179,11 @@ cov2cor(varx)               # Corr mtx (alternative way)
 ### code chunk: Cleanup for ARMD study
 ###################################################
 rm(xlims,ylims) 
-rm(xy1, flst, tN, tMn, tMd, nms1,nms2)
+rm(xy1, flst, tN, tMn, tMd, nms1, nms2, res)
 rm(bw1, bw1a)
 rm(mnt.pat, armd.wide.mnt, armd.wide.mnt1)
-rm(myPanel, my.lowerPanel, my.upperPanel,  mySuperPanel, splom.object)
+rm(armd.wide, armd.wide.tmp, armd0, armd0.subset)
+rm(myPanel, my.lowerPanel, my.upperPanel,  mySuperPanel, splom.object, splom.form)
 rm(visual.x, varx)
 
 ###################################################
@@ -419,7 +420,7 @@ rm(auxDt, auxDt2, tmpDt)
 
 
 ###################################################
-### code chunk: R 13.8a
+### code chunk: R 3.18a
 ###################################################
 data(fcat, package = "nlmeU")
 (scM <- with(fcat, tapply(scorec, list(id, target), mean)))
@@ -427,7 +428,7 @@ data(fcat, package = "nlmeU")
 
 
 ###################################################
-### code chunk: R 13.8b
+### code chunk: R 3.18b
 ###################################################
 library(lattice)
 histogram(~scorec|target, 

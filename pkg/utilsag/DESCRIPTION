@@ -6,8 +6,8 @@ Maintainer: Andrzej Galecki <agalecki@umich.edu>
 Title: Datasets and utility functions.
 Description: 
 Depends: reshape, R (>= 2.10.1)
-Imports: stringr
-Suggests: lattice
+Imports: stringr, lattice
+Suggests: 
 License: GPL (version 2 or later)
 URL:  http://www-personal.umich.edu/~agalecki/
 LazyData: yes

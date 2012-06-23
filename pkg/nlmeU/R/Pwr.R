@@ -2,15 +2,13 @@ Pwr <-  function(object, ...) UseMethod("Pwr")
 
 Pwr.lme <- function (object, ..., type = c("sequential", "marginal"), 
     Terms, L, verbose = FALSE, sigma, ddf= numeric(0), alpha=0.05,
-    altB = NULL, xverbose = list()
-) 
+    altB = NULL) 
 {
 # Arguments: object: one object only
 # adjustSigma set to FALSE. Explore adjustSigma argument if missing(sigma) adjust object$sigma
 # altB name
-  xverbos <- do.call("nlmeUXverboseControl", args=list())[["Pwr.lme"]]
-  if (!missing(xverbose)) xverbos <- xverbose[["Pwr.lme"]]
-  Xverbose(1, "Pwr.lme STARTS", xverbose=xverbos)
+  funNm <- "Pwr.lme"
+  Xverbose(1, "Pwr.lme STARTS", funNm)
 
   Lmiss <- missing(L)      # More or less addressed
   #print(Terms)
@@ -25,7 +23,7 @@ if (!inherits(object, "lme")) {
 fixefNms <- names(fixef(object))
   
 if (!Tmiss && Lmiss){ # Based on Terms argument L matrix is created (assuming that L is missing)
-Xverbose(2, "IF 1 executed", xverbose=xverbos)
+Xverbose(2, "IF 1 executed", funNm)
 assign <- attr(object$fixDF, "assign")
 nTerms <- length(assign)
 nX <- length(unlist(assign))
@@ -36,7 +34,7 @@ colnames(L) <- cLnms
 
 
 if (!Tmiss || !Lmiss){  # Terms or L present cLnms
-Xverbose(2, "IF 2 executed", xverbose=xverbos)
+Xverbose(2, "IF 2 executed", funNm)
 #print("dimL 1")
 dimL <-  if (Lmiss) NULL else dim(L)             # Extract clNms from L argument
 #print("dimL 1a")
@@ -55,11 +53,11 @@ cLnms <- if (condt) names(L) else colnames(L)
 #print("anova0")
 
 if (!missing(sigma)){
- Xverbose(2, "IF sigmaTolme executed", xverbose=xverbos)
- object <- sigmaTolme(object,  value=sigma)
+ Xverbose(2, "IF sigmaTolme executed", funNm)
+ object <- nlmeU::sigmaTolme(object,  value=sigma)
 }
 
-Xverbose(2, "anova call", xverbose=xverbos)
+Xverbose(2, "anova call", funNm)
 # No Terms argument
 
 #print("anova")
@@ -87,7 +85,7 @@ rankL <- ndf
 
 
 if (!Lmiss && is.null(dimL))  {
-Xverbose(2, "IF 3 executed", xverbose=xverbos)
+Xverbose(2, "IF 3 executed", funNm)
    #print("if here 2")
    dim(L) <- c(1,length(L))  # L is matrix
    colnames(L) <- cLnms
@@ -96,7 +94,7 @@ Xverbose(2, "IF 3 executed", xverbose=xverbos)
 
 
 if (!is.null(altB) && (!Tmiss || !Lmiss)){ # START
-Xverbose(2, "IF 4 executed", xverbose=xverbos)
+Xverbose(2, "IF 4 executed", funNm)
   ### Go through altB
   altBdt <- as.data.frame(altB)
   altBnrow <- nrow(altBdt)
@@ -164,7 +162,7 @@ ret <- data.frame(x$numDF, ddf2, F0val, ncx, Power) #Fcrit omitted
    #print(str(x))
 
           if (!is.null(axL <- attr(x, "L"))) {  # L mtx specified
-           Xverbose(2, "IF 5 executed", xverbose=xverbos)        
+           Xverbose(2, "IF 5 executed", funNm)        
           if (!Tmiss) lab <- paste("Power calculations for effect(s):", 
                paste(Terms, collapse = ", "), "\n",
                " represented by linear combination: \n")
@@ -177,7 +175,7 @@ ret <- data.frame(x$numDF, ddf2, F0val, ncx, Power) #Fcrit omitted
             attr(ret,"L") <- L
           names(ret) <- varNames
           } else {   #  L not-specified. Effects tested one by one.
-         Xverbose(2, "ELSE 5 executed", xverbose=xverbos)       
+         Xverbose(2, "ELSE 5 executed", funNm)       
             # lab <- paste("Power calculations for effect(s):", Terms,"\n")  
                    
            # print("?2")
@@ -199,7 +197,7 @@ attr(ret,"alpha") <- alpha
 attr(ret,"rt") <- rt
 
 class(ret)  <- c("Pwr","data.frame")
-Xverbose(1, "Pwr.lme ENDS <=#######", xverbose=xverbos)
+Xverbose(1, "Pwr.lme ENDS <=#######", funNm)
 ret
 }
 

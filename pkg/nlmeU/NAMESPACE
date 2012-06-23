@@ -1,4 +1,6 @@
 export(missPat, model.matrix.reStruct.U)
+export(Xverbose) 
+#export(modify.nlmeNamespace)
 # generic functions
 export(logLik1,  Pwr, sigma, simulateY)
 S3method(logLik1,lme)
@@ -8,7 +10,6 @@ S3method(simulateY, lme)
 S3method(print, Pwr)
 
 #---  Not exported
-# nlmeUXverboseControl, Xverbose 
 
 ### pdKronecker specific 
 #export(pdKronecker)

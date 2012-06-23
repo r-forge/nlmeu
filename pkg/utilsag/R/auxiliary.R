@@ -1,17 +1,45 @@
 # source("C:\\Users\\agalecki\\Google Drive\\MySoftware\\_rforgenlmeU\\pkg\\utilsag\\R\\auxiliary.R")
 
-#utilsagXverboseControl <- function(
-#read.SAAM2stu = numeric()
-#){
-# xcontrl <- utilsagXverboseControl(read.SAAM2stu = 1:900)
-#list(
-#read.SAAM2stu = read.SAAM2stu
-#)
-#}
+.XverboseControl <- function(){
+list(
+ testedFunction = numeric(),
+ model.matrix.reStruct.U = numeric()  # REMOVE this line later
+)}
 
-###  Xverbose <- function(xv,object, xverbose= numeric()) {} # Place holder# source("C:\\Users\\agalecki\\Google Drive\\MySoftware\\_rforgenlmeU\\pkg\\utilsag\\R\\Xverbose.R")
-Xverbose <- function(xv,object, xverbose= numeric()) {
-#cat ("xverbose starts \n")
+XverboseControl <- function(...){
+   ### code borrowed  from lattice.options()
+    new <- list(...)
+    if (is.null(names(new)) && length(new) == 1 && is.list(new[[1]])) new <- new[[1]]
+    old <- .utilsagEnv$XverboseControl
+ 
+    ## if no args supplied, returns full options list
+    if (length(new) == 0) return(old)
+
+    nm <- names(new)
+    if (is.null(nm)) return(old[unlist(new)]) ## typically getting options, not setting
+    isNamed <- nm != "" ## typically all named when setting, but could have mix
+    if (any(!isNamed)) nm[!isNamed] <- unlist(new[!isNamed])
+
+    ## so now everything has non-"" names, but only the isNamed ones should be set
+    ## everything should be returned, however
+
+    retVal <- old[nm]
+    names(retVal) <- nm
+    nm <- nm[isNamed]
+
+    .utilsagEnv$XverboseControl <- lattice:::updateList(old, new[nm])
+
+    ## return changed entries invisibly
+    invisible(retVal)
+}
+
+Xverbose <- function(xv, object, funNm) {
+  #cat ("xverbose starts \n")
+  xvcntrl <-  XverboseControl()
+  xvnms <- names(xvcntrl)
+  if (!(funNm %in% funNm)) return()
+  xverbose <- xvcntrl[[funNm]]
+
  ret <- !(xv %in% xverbose) 
  if (ret)  return()
 tmp <- max(ceiling(10/xv), 1)  # From 1 to 10
