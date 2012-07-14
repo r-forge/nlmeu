@@ -1,43 +1,23 @@
-# source("C:\\Users\\agalecki\\Google Drive\\MySoftware\\_rforgenlmeU\\pkg\\utilsag\\R\\auxiliary.R")
 
-.XverboseControl <- function(){
+XverboseControl <- function(){
+## Function returns very tentative list for Xverbose
 list(
  testedFunction = numeric(),
- model.matrix.reStruct.U = numeric()  # REMOVE this line later
+ modifyPackageNamespace = 101:151,
+ lme.formula.U = 1:999
 )}
 
-XverboseControl <- function(...){
-   ### code borrowed  from lattice.options()
-    new <- list(...)
-    if (is.null(names(new)) && length(new) == 1 && is.list(new[[1]])) new <- new[[1]]
-    old <- .utilsagEnv$XverboseControl
- 
-    ## if no args supplied, returns full options list
-    if (length(new) == 0) return(old)
-
-    nm <- names(new)
-    if (is.null(nm)) return(old[unlist(new)]) ## typically getting options, not setting
-    isNamed <- nm != "" ## typically all named when setting, but could have mix
-    if (any(!isNamed)) nm[!isNamed] <- unlist(new[!isNamed])
-
-    ## so now everything has non-"" names, but only the isNamed ones should be set
-    ## everything should be returned, however
-
-    retVal <- old[nm]
-    names(retVal) <- nm
-    nm <- nm[isNamed]
-
-    .utilsagEnv$XverboseControl <- lattice:::updateList(old, new[nm])
-
-    ## return changed entries invisibly
-    invisible(retVal)
-}
-
 Xverbose <- function(xv, object, funNm) {
-  #cat ("xverbose starts \n")
-  xvcntrl <-  XverboseControl()
-  xvnms <- names(xvcntrl)
-  if (!(funNm %in% funNm)) return()
+### funNm needs to be defined inside the function
+### Example of using Xverbose function
+## Xv <- list(fun1 = 1:999, fun2 = 1:11)
+## str(Xv)
+## options(Xverbose = Xv)
+## options(Xverbose = NULL) # To turn off Xverbose
+  onms <- names(options())            
+      
+  if (!("Xverbose" %in% onms)) return()
+  xvcntrl <- options()$Xverbose
   xverbose <- xvcntrl[[funNm]]
 
  ret <- !(xv %in% xverbose) 

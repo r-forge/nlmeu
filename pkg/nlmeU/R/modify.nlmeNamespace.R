@@ -1,8 +1,14 @@
 modify.nlmeNamespace <- function(fun = nlme::lme, 
         modifyList = list("model.matrix.reStruct" = model.matrix.reStruct.U) ){
- print("here")       
+##  Syntax: modify.nlmeNamespace() 
+##  library(nlme)
+##  ....
+##  detach(package:nlme)
+##  unloadNamespace("nlme")
+ 
  funNm <- "modify.nlmeNamespace"
  Xverbose(1, "modify.nlmeNamespace STARTS =======", funNm)
+ if ("package:nlme" %in% search()) detach("package:nlme")
  cat("Namespace of nlme package will be modified \n")
  cat('To restore previous namespace use command: unloadNamespace("nlme") \n', sep="")
  readline("Press <Enter> to continue or <Esc> to abort \n")
@@ -22,4 +28,3 @@ modify.nlmeNamespace <- function(fun = nlme::lme,
  Xverbose(1, "modify.nlmeNamespace ENDS =======", funNm)
  return(invisible())
  }
-## modify.nlmeNamespace()

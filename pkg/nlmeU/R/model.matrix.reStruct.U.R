@@ -4,7 +4,7 @@ model.matrix.reStruct.U <-
 function (object, data, contrast = NULL, ...) 
 {
     fnm <- "model.matrix.reStruct.U"
-    Xverbose(1, "model.matrix.reStruct.U STARTS XYZ", fnm)
+    Xverbose(1, "model.matrix.reStruct.U STARTS", fnm)
     pdDef <- !(length(object) == 1 && inherits(object[[1]],"pdKronecker"))
 
     if (is.null(form <- formula(object, asList = TRUE))) {

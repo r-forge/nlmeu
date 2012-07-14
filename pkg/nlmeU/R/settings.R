@@ -1,12 +1,20 @@
 
-.XverboseControl <- function(){
-# xcontrl <- .XverboseInfo()
+
+Xverbose <- function(){   # Place holder
+## If needed, use utilsag:::Xverbose() instead
+}
+
+XverboseControl <- function(){
+## Function returns tentative list for Xverbose
+## options(Xverbose = XverboseControl())  to activate Xverbose
 list(
-  logLik1.lme  = numeric(),
-  model.matrix.reStruct.U = numeric(),
-  simulateY.lme  = numeric(),
-  Pwr.lme  = numeric()
+ testedFunction = 1:99,
+ model.matrix.reStruct = 1:999,
+ logLik1.lme = 1:999,
+ simulateY.lme  = 1:999,
+ Pwr.lme  = 1:999 
 )}
 
-Xverbose <- function(xv, object, fn){}
+
+
 
