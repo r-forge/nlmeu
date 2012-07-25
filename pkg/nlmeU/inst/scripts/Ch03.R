@@ -1,7 +1,13 @@
+
 ###################################################
+###
+### code chunk: Ch03Init
+###
 ### ARMD Trial: Visual acuity (Section 3.2)
-### code chunk: Init
+### 
 ###################################################
+options(width = 65, digits = 5, show.signif.stars = FALSE)
+sessionInfo()
 
 ylims <- c(0, 90) 
 
@@ -30,7 +36,6 @@ table(armd.wide$miss.pat)
 with(armd.wide, table(miss.pat))
 xtabs(~miss.pat, armd.wide)
 
-
 ###################################################
 ### code chunk: R3.3a
 ###################################################
@@ -39,7 +44,6 @@ flst <- list(time.f, treat.f)                    # "By" factors
 (tN <-                                           # Counts
   tapply(visual, flst,
          FUN = function(x) length(x[!is.na(x)])))
-
 
 ###################################################
 ### code chunk: R3.3b

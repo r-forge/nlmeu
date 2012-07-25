@@ -1,12 +1,12 @@
 
 
-Xverbose <- function(){   # Place holder
+Xverbose <- function(...){   # Place holder
 ## If needed, use utilsag:::Xverbose() instead
 }
 
-XverboseControl <- function(){
+nlmeU.XverboseControl <- function(){
 ## Function returns tentative list for Xverbose
-## options(Xverbose = XverboseControl())  to activate Xverbose
+## options(Xverbose = nlmeU.XverboseControl())  to activate Xverbose
 list(
  testedFunction = 1:99,
  model.matrix.reStruct = 1:999,

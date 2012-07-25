@@ -339,7 +339,7 @@ Names.pdKronecker <- function (object, asList = FALSE, ...)
       Names(object) <-  value
       class(object) <-  clss
       #xverbose(240, "-> After NextMethod")
-      Xxverbose(210, "===> Names<-.pdKronecker EXIT1",fnm)
+      Xverbose(210, "===> Names<-.pdKronecker EXIT1",fnm)
       #obj
       object
       }

@@ -1,4 +1,4 @@
-logLik1 <-  function(object, ...) UseMethod("LogLik1")
+logLik1 <-  function(object, ...) UseMethod("logLik1")
 
 logLik1.lme <- function(modfit, dt1, dtInit=NULL){
   # Calculates profile likelihood (with beta profiled out) for *one* subject

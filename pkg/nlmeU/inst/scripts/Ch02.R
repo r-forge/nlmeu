@@ -1,13 +1,13 @@
 
 ###################################################
-### code chunk number 1: Init
+### code chunk: Ch01init
 ###################################################
-options(width=65, digits=5)
+options(width=65, digits=5, show.signif.stars = FALSE )
 sessionInfo()
 
 
 ###################################################
-### code chunk number 2: R2.1
+### code chunk: R2.1
 ###################################################
 ## dataDir <- file.path("C:", "temp")                # Data directory
 dataDir <- file.path(.Library, "nlmeU", "csvData")   # Directory in package
@@ -23,7 +23,7 @@ names(armd240.data) <- nms                           # Variables' names reinstat
 
 
 ###################################################
-### code chunk number 3: R2.2
+### code chunk: R2.2
 ###################################################
 data(armd.wide, package = "nlmeU")                   # armd data loaded
 str(armd.wide)                                       # Structure of data
@@ -32,7 +32,7 @@ names(facs[facs == TRUE])                            # Factor names displayed
 
 
 ###################################################
-### code chunk number 4: R2.3a
+### code chunk: R2.3a
 ###################################################
 attach(armd240.data)                                 # Attach armd240.data
 treat.f <- factor(treat,                             # Factor created 
@@ -43,7 +43,7 @@ str(treat.f)
 
 
 ###################################################
-### code chunk number 5: R2.3b
+### code chunk: R2.3b
 ###################################################
 miss.pat <-                                # missing patterns
     nlmeU:::missPat(visual4, visual12, visual24, visual52)  
@@ -54,7 +54,7 @@ detach(armd240.data)                       # Detach armd240.data
 
 
 ###################################################
-### code chunk number 6: R2.4
+### code chunk: R2.4
 ###################################################
 data(armd0, package = "nlmeU")             # From nlmeU package
 dim(armd0)                                 # No. of rows and cols
@@ -65,7 +65,7 @@ str(armd0)                                 # Data structure
 
 
 ###################################################
-### code chunk number 7: R2.5
+### code chunk: R2.5
 ###################################################
 auxDt <- subset(armd0, time > 0)          # Post-baseline measures
 dim(auxDt)                                # No. of rows & cols
@@ -79,7 +79,7 @@ head(armd)                                # First six records
 
 
 ###################################################
-### code chunk number 8: R2.6a
+### code chunk: R2.6a
 ###################################################
 fp <- file.path(dataDir, "prt.subjects.data.csv")
 prt.subjects.data <- read.csv(fp, header = TRUE, as.is = TRUE) 
@@ -90,7 +90,7 @@ head(prt.subjects.data, 4)
 
 
 ###################################################
-### code chunk number 9: R2.6b
+### code chunk: R2.6b
 ###################################################
 fp <- file.path(dataDir, "prt.fiber.data.csv")
 prt.fiber.data <- read.csv(fp, header = TRUE) 
@@ -99,7 +99,7 @@ head(prt.fiber.data, 4)
 
 
 ###################################################
-### code chunk number 10: R2.7a
+### code chunk: R2.7a
 ###################################################
 prt.subjects <- within(prt.subjects.data,{
    id    <- factor(id)
@@ -114,7 +114,7 @@ str(prt.subjects)
 
 
 ###################################################
-### code chunk number 11: R2.7b
+### code chunk: R2.7b
 ###################################################
 prt.fiber  <- within(prt.fiber.data, {
    id      <- factor(id)
@@ -128,7 +128,7 @@ str(prt.fiber)
 
 
 ###################################################
-### code chunk number 12: R2.7c
+### code chunk: R2.7c
 ###################################################
 prt <- merge(prt.subjects, prt.fiber, sort=FALSE)
 dim(prt)
@@ -137,7 +137,7 @@ head(prt)
 
 
 ###################################################
-### code chunk number 13: R2.8
+### code chunk: R2.8
 ###################################################
 data(classroom, package = "WWGbook")
 dim(classroom)                       # Number of rows & variables
@@ -147,7 +147,7 @@ str(classroom)
 
 
 ###################################################
-### code chunk number 14: R2.9
+### code chunk: R2.9
 ###################################################
 SIIdata <- within(classroom, {
    sex <- factor(sex, 
@@ -163,7 +163,7 @@ str(SIIdata)
 
 
 ###################################################
-### code chunk number 15: R2.10
+### code chunk: R2.10
 ###################################################
 rdaDir <- file.path("C:", "temp")         # Dir path
 fp <- file.path(rdaDir, "SIIdata.Rdata")  # External file path
@@ -173,7 +173,7 @@ file.exists(fp)
 
 
 ###################################################
-### code chunk number 16: R2.11
+### code chunk: R2.11
 ###################################################
 data(SIIdata, package = "nlmeU")         # Load data
 dtId <- subset(SIIdata, select = c(schoolid, classid, childid))
@@ -186,7 +186,7 @@ names(gsummary(dtId, form = ~schoolid, inv = TRUE))
 
 
 ###################################################
-### code chunk number 17: R2.12a
+### code chunk: R2.12a
 ###################################################
 (nms1 <- names(gsummary(SIIdata,
     form = ~schoolid,              # schoolid-specific
@@ -194,7 +194,7 @@ names(gsummary(dtId, form = ~schoolid, inv = TRUE))
 
 
 ###################################################
-### code chunk number 18: R2.12b
+### code chunk: R2.12b
 ###################################################
 nms2a <- names(gsummary(SIIdata, 
     form = ~classid,               # classid- and schoolid-specific 
@@ -204,7 +204,7 @@ idx1  <- match(nms1, nms2a)
 
 
 ###################################################
-### code chunk number 19: R2.12c
+### code chunk: R2.12c
 ###################################################
 nms3a <- names(gsummary(SIIdata, 
                  form = ~childid,  # All
@@ -215,7 +215,7 @@ nms3a[-idx12]                      # childid-specific
 
 
 ###################################################
-### code chunk number 20: R2.13
+### code chunk: R2.13
 ###################################################
 fp <- file.path(dataDir, "crossreg.data.csv")
 crossreg.data <- read.csv(fp, header = TRUE) 
@@ -226,7 +226,7 @@ str(crossreg.data)                      # Data structure
 
 
 ###################################################
-### code chunk number 21: R2.14
+### code chunk: R2.14
 ###################################################
 unique(crossreg.data$target)          # Unique values for target
 (unique(crossreg.data$id))            # Unique values for id 
@@ -235,7 +235,7 @@ summary(crossreg.data$scorec)         # Summary statistics for scorec
 
 
 ###################################################
-### code chunk number 22: R2.15a
+### code chunk: R2.15a
 ###################################################
 nItms  <- c(4, 6, 8, 5, 9, 6, 8, 6, 5)        # See Table 2.1
 (lbls <- paste("T", 1:9, "(", nItms, ")", sep = ""))
@@ -247,7 +247,7 @@ str(fcat)
 
 
 ###################################################
-### code chunk number 23: R2.15b
+### code chunk: R2.15b
 ###################################################
 (tab1 <- xtabs(~ id + target, data = fcat))   # id by target table
 all(tab1 > 0)                                 # All counts > 0? 
@@ -255,7 +255,7 @@ range(tab1)                                   # Range of counts
 
 
 ###################################################
-### code chunk number 24: Cleanup
+### code chunk: Cleanup
 ###################################################
 rm(armd240.data, armd.wide, armd0, armd)           # Data not needed
 rm(prt.fiber.data, prt.subjects.data, prt.fiber, prt.subjects, prt)

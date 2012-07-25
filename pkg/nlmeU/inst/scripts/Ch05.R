@@ -1,13 +1,13 @@
 
 ###################################################
-### code chunk number 1: Ch5
+### code chunk: Ch05init
 ###################################################
-options(width=65, digits=5)
+options(width=65, digits=5, show.signif.stars = FALSE)
 sessionInfo()
 
 
 ###################################################
-### code chunk number 2: R5.1
+### code chunk: R5.1
 ###################################################
 y ~ x1                       # Univariate linear regression 
 formula(y ~ x1)              # ... equivalent specification
@@ -24,7 +24,7 @@ y ~ x1 + f1 + f2 +           # Main effects and ...
 
 
 ###################################################
-### code chunk number 3: R5.2
+### code chunk: R5.2
 ###################################################
 y ~ f1*f2               # ANOVA with two-way interaction
 y ~ f1 + f3 %in% f1     # f3 nested within f1 
@@ -34,7 +34,7 @@ y ~ x1 - 1              # Intercept omitted
 
 
 ###################################################
-### code chunk number 4: R5.3a
+### code chunk: R5.3a
 ###################################################
 y ~ sqrt(x1) + x2             # Square root transformation of x1
 y ~ ordered(x1, breaks)+      # Ordered factor created and ...
@@ -46,7 +46,7 @@ log(y) ~ bs(x1, df=3)         # log transform for y modeled ...
 
 
 ###################################################
-### code chunk number 5: R5.3b
+### code chunk: R5.3b
 ###################################################
 y ~ f1*bs(x1, df=3) -1        # Factor by spline interaction ... 
                               # ... with intercept omitted
@@ -54,7 +54,7 @@ y ~ f1*log(x1) /(f2+f3)
 
 
 ###################################################
-### code chunk number 6: R5.3c
+### code chunk: R5.3c
 ###################################################
 form2   <- y ~ I(x1 + 100/x2) # I() function 
 update(form2, . ~ . + x3)     # x3 predictor added to form2	
@@ -62,7 +62,7 @@ update(form2, . ~ . -1)       # Intercept omitted from form2
 
 
 ###################################################
-### code chunk number 7: R5.4a
+### code chunk: R5.4a
 ###################################################
 formA <- y ~ f1*f2            # Formula A                   
 termsA <- terms(formA)        # Object of class terms
@@ -74,7 +74,7 @@ attr(termsA,"variables")      # Variable names
 
 
 ###################################################
-### code chunk number 8: R5.4b
+### code chunk: R5.4b
 ###################################################
 formB <- update(formA, . ~ . - f1:f2 -1)          # Formula B
 termsB <- terms(formB)
@@ -83,7 +83,7 @@ attr(termsB,"intercept")      # Intercept omitted
 
 
 ###################################################
-### code chunk number 9: R5.5
+### code chunk: R5.5
 ###################################################
 data(armd.wide, package = "nlmeU")
 form1 <- formula(               # *** Formula  ***
@@ -94,19 +94,19 @@ form1 <- formula(               # *** Formula  ***
   poly(visual0,2))              # Polynomial of 2nd degree
 armd.mf1 <-                     # *** Model frame ***
    model.frame(form1,           # Formula
-      data=armd.wide,           # Data frame
+      data = armd.wide,         # Data frame
       subset = !(subject %in% c(1,2)), # Exclude two subjects   
-      na.action= na.exclude,    # Dealing with missing data
+      na.action = na.exclude,   # Dealing with missing data
       SubjectId = subject)      # Identifier of data records
 class(armd.mf1)           
 dim(armd.wide)                  # Data frame dimensions
 dim(armd.mf1)                   # Model frame dimensions
 names(armd.mf1)                 # Components of the model frame
-head(armd.mf1, n=4)             # First four records
+head(armd.mf1, n = 4)           # First four records
 
 
 ###################################################
-### code chunk number 10: R5.6
+### code chunk: R5.6
 ###################################################
 terms.mf1 <- attr(armd.mf1,"terms")       # Terms attribute
 class(terms.mf1)
@@ -117,7 +117,7 @@ labels(terms.mf1)                         # Component names
 
 
 ###################################################
-### code chunk number 11: R5.7
+### code chunk: R5.7
 ###################################################
 Xmtx <-  model.matrix(form1, armd.mf1)         # Design matrix
 dim(Xmtx)                                      # No rows and cols
@@ -129,7 +129,7 @@ attr(Xmtx,"contrasts")                         # Contrasts attribute
 
 
 ###################################################
-### code chunk number 12: R5.8
+### code chunk: R5.8
 ###################################################
 contr.treatment(3)         # Default base level = 1 
 contr.treatment(3, base=3) # base level = 3
@@ -139,7 +139,7 @@ contr.poly(3, scores=c(1,5,7))
 
 
 ###################################################
-### code chunk number 13: R5.9
+### code chunk: R5.9
 ###################################################
 options()$contrasts                    # Default contrasts
 lesion.f <- factor(armd.wide$lesion)   # Factor created

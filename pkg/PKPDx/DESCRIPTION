@@ -1,9 +1,10 @@
-Package: PKPDa
+Package: PKPDx
 Version: 0.0.1
-Date: 2012-05-15
+Date: $Date$
+Revision: $Revision$
 Author: Andrzej Galecki <agalecki@umich.edu>
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
-Title: Examples of PK/PD analysis.
+Title: Examples of PK/PD analysis for one subject using R, SAAM2
 Description: 
 Depends: R (>= 2.10.1)
 Suggests: lattice
