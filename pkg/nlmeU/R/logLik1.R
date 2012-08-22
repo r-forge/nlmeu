@@ -7,30 +7,29 @@ logLik1.lme <- function(modfit, dt1, dtInit=NULL){
   # Continue to work here, if dtInit ne NULL 
 
    funNm <-  "logLik1.lme"
-   Xverbose(1, "logLik1.lme STARTS   <=####", funNm)
+   .traceFunction(1, "logLik1.lme STARTS   <=####", funNm, tags= c("1","msg"))
   
-
     m            <- modfit$modelStruct                 # Model structure
     sigma        <- modfit$sigma                       # sigma
-    Xverbose(111, sigma, funNm)
+    .traceFunction(111, sigma, funNm)
    
-    Xverbose(2, "About D matrix", funNm)
+    .traceFunction(2, "About D matrix", funNm, tags = "msg")
  
     D            <- as.matrix(m$reStruct[[1]])         # "subject"
-    Xverbose(115, D, funNm)
+    .traceFunction(115, D, funNm)
     D            <- D  * sigma^2                       # Matrix D 
-    Xverbose(116, D, funNm)
+    .traceFunction(116, D, funNm)
    
-    Xverbose(2, "IF process $weights component =====", funNm)
+    .traceFunction(2, "IF process $weights component =====", funNm, tags=c("msg"))
     
     clw  <- modfit$call$weights
     vecR <- rep(sigma, nrow(dt1))                      
     if (length(clw)){
-    Xverbose(211, clw, funNm)
+    .traceFunction(211, clw, funNm)
   
     if (inherits(eval(clw),"formula")) clw <- call("varFixed", clw) 
     clwl  <-  as.list(clw) 
-    Xverbose(212, clwl, funNm)
+    .traceFunction(212, clwl, funNm)
  
     
     varFun <- as.character(clwl[[1]])                  # VarFun="varPower"
@@ -38,9 +37,9 @@ logLik1.lme <- function(modfit, dt1, dtInit=NULL){
     vf.coef      <- coef(varSt,                        # Variance function ...
                          unconstrained=FALSE)          # coef. extracted
  
-    Xverbose(221, vf.coef, funNm)
+    .traceFunction(221, vf.coef, funNm)
     names(vf.coef) <- NULL
-    Xverbose(222, vf.coef, funNm)
+    .traceFunction(222, vf.coef, funNm)
  
     #####varFun <- "varPower"
     #args   <- list(form = ~time)  ### <----
@@ -48,7 +47,7 @@ logLik1.lme <- function(modfit, dt1, dtInit=NULL){
     args    <- c(args, value = vf.coef) # Replace value? In some cases?
     vf      <- do.call(varFun, as.list(args))
     
-    Xverbose(2, "IF dtInit is not NULL  =====", funNm)
+    .traceFunction(2, "IF dtInit is not NULL  =====", funNm, tags= c("msg"))
     if (!is.null(dtInit)){
         dfAug    <- rbind(dtInit,dt1)
         vf.x     <- Initialize(vf, data=dfAug)}      # ... initialized
@@ -61,12 +60,12 @@ logLik1.lme <- function(modfit, dt1, dtInit=NULL){
     
    
     if (!is.null(dtInit)){
-        Xverbose(222, "IF dtInit", funNm)
+        .traceFunction(222, "IF dtInit", funNm)
         idxInit      <- c(1:nrow(dtInit))            # Indices for dtInit
         vecR         <- vecR[-idxInit]
     }                                               # Diagonal of R_i matrix
     
-    Xverbose(2, "Wrap-up  =====", funNm)
+    .traceFunction(2, "Wrap-up  =====", funNm, tags="msg")
     #return(zz)  # Continue to work here
     vecR2        <- vecR^2
     R            <- diag(vecR2, nrow=length(vecR))        # R_i matrix     
@@ -81,6 +80,6 @@ logLik1.lme <- function(modfit, dt1, dtInit=NULL){
     n            <- nrow(dt1)                 # No. of obs for subject
     lLik         <- n*log(2*pi) + log(det(V)) + 
                     t(r) %*% solve(V) %*% r
-    Xverbose(1, "logLik1.lme ENDS   <=######", funNm)               
+    .traceFunction(1, "logLik1.lme ENDS   <=######", funNm, tags=c("1","msg"))               
     return(-0.5 * as.numeric(lLik))
 }

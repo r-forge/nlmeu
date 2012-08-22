@@ -26,10 +26,10 @@ pdKronecker <- function (value = numeric(0),
    form = NULL, nam = NULL, data = sys.frame(sys.parent())) 
 {
     fnm <- "pdKronecker"
-    Xverbose(1,"=========> pdKronecker STARTS here", fnm)
+    .traceFunction(1,"=========> pdKronecker STARTS here", fnm, tags=c("1","msg"))
     object <- numeric(0)
     class(object) <- c("pdKronecker", "pdMat")
-    Xverbose(1,"--> pdKronecker ENDS here. Calls and returns result from pdConstruct()", fnm)
+    .traceFunction(1,"--> pdKronecker ENDS here. Calls and returns result from pdConstruct()", fnm, tags=c("1","msg"))
     pdConstruct(object, value, form, nam, data)
 }
 
@@ -94,9 +94,9 @@ function (object,
     pdClass = sapply(object,FUN=function(el) class(el)[1]) , ...) 
 {
     fnm <- "pdConstruct.pdKronecker"
-    Xverbose(1, "pdKronecker STARTS here", fnm)
+    .traceFunction(1, "pdKronecker STARTS here", fnm, tags = c("1","msg"))
 
-    Xverbose(5,"=> pdConstruct.pdKronecker arguments ")
+    .traceFunction(5,"=> pdConstruct.pdKronecker arguments ", tags = c("msg"))
  
 auxPrint <-function(x){
     cat("---> Arguments \n")
@@ -123,17 +123,17 @@ auxPrint <-function(x){
                 pdClass <- unlist(lapply(value, data.class))
         }
         if (isInitialized(value)) {
-            Xverbose(9001,"=========> pdConstruct.pdKronecker EXIT1", fnm)
+            .traceFunction(9001,"=========> pdConstruct.pdKronecker EXIT1", fnm, tags = c("1","msg"))
             return(pdConstruct(object, as.matrix(value), form, 
                 nam, data, pdClass))
         }
         else {
-            Xverbose(9001,"=========> pdConstruct.pdKronecker EXIT2", fnm)
+            .traceFunction(9001,"=========> pdConstruct.pdKronecker EXIT2", fnm, tags = c("1","msg"))
             return(pdConstruct(object, form = form, nam = nam, 
                 data = data, pdClass = pdClass))
         }
     }
-    Xverbose(9002, "AFTER if value inherits pdMat", fnm)
+    .traceFunction(9002, "AFTER if value inherits pdMat", fnm, tags = "msg")
     if (!is.null(form)) {
         if (data.class(form) != "list") {
             stop("\"form\" must be a list")
@@ -174,9 +174,9 @@ auxPrint <-function(x){
     }
 
     nB <- max(c(nF, nN, nP))
-    Xverbose(9002, "oVal created", fnm)
+    .traceFunction(9002, "oVal created", fnm,  tags="msg")
     oVal <- value
-    Xverbose(9009, oVal, fnm)   
+    .traceFunction(9009, oVal, fnm)   
     if (length(value) == 0 || is.matrix(value) || is.numeric(value)) {
         if (nB == 1) {
             stop("None of the arguments specify more than one block")
@@ -198,7 +198,7 @@ auxPrint <-function(x){
    if (nP == 1) {
         pdClass <- rep(pdClass, nB)
     }
-    Xverbose(9002, "object initiated", fnm)
+    .traceFunction(9002, "object initiated", fnm, tags = "msg")
     object <- vector("list", nB)
     namInterc <- rep(FALSE, nB)
     namCoef <- vector("list", nB)
@@ -255,7 +255,7 @@ auxPrint <-function(x){
         object[[i]] <- pdMat(value[[i]], form[[i]], nam[[i]], 
             data, pdClass[i])
     }
-    Xverbose(9002, "End of nB loop", fnm)
+    .traceFunction(9002, "End of nB loop", fnm, tags="msg")
     names(object) <- nmsObject   # added Nov.20, 2008
     if (!all(unlist(lapply(object, inherits, "pdMat")))) {
         stop("all elements in the argument must inherit from pdMat objects")
@@ -305,7 +305,7 @@ auxPrint <-function(x){
         if (length(oVal) && (is.matrix(oVal) || is.numeric(oVal))) {
             stop("Must give names when initializing from matrix or parameter")
         }
-        Xverbose(9001,"=========> pdConstruct.pdKronecker EXIT3", fnm)
+        .traceFunction(9001,"=========> pdConstruct.pdKronecker EXIT3", fnm, tags = c("1","msg"))
         return(object)
     }
     else {
@@ -346,12 +346,13 @@ auxPrint <-function(x){
                 coef(object) <- oVal
             }
         }
-        Xverbose(9001, "pdConstruct: Exit4 \n", fnm)
+        .traceFunction(9001, "pdConstruct: Exit4 \n", fnm, tags=c("1","msg"))
         names(object) <- nmsObject  # Added Nov.20, 2008
-        Xverbose(9000,"=========> pdConstruct.pdKronecker EXIT4", fnm)
+        .traceFunction(9000,"=========> pdConstruct.pdKronecker EXIT4", fnm, tags=c("1","msg"))
         return(object)
     }
 }
+
 
 
 

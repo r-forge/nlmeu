@@ -32,33 +32,35 @@ MODIFYns <-
   
   nm <- nms[el]
   fnm <- "modifyPackageNamespace"
-  Xverbose(101, " MODIFYns called from modifyPackageNamespace STARTS here", fnm)
-  Xverbose(102, nm, fnm)
-  Xverbose(103, cat(head(value), sep="\n"), fnm)
-  Xverbose(104, cat(tail(value), sep="\n"), fnm)
+  .traceFunction(101, " MODIFYns called from modifyPackageNamespace STARTS here", fnm, tags = c("1","msg"))
+  .traceFunction(102, nm, fnm)
+  .traceFunction(103, cat(head(value), sep="\n"), fnm)
+  .traceFunction(104, cat(tail(value), sep="\n"), fnm)
   ## ns: environment class, methods:= as.list(ns), 579 components/functions in nlme package.
   ## env:  579 components
   vnm <- deparse(substitute(value))
   ###cat(paste("{", nm, "} <- {", vnm, "} \n", sep=""))
-  Xverbose(111, pkgnm, fnm)
+  .traceFunction(111, pkgnm, fnm)
   ns  <- loadNamespace(pkgnm)  # "nlme"
   nsF <- as.character(capture.output(ns))
-  Xverbose(115, nsF, fnm) 
+  .traceFunction(115, nsF, fnm) 
   env <- environment(fun)
   envF <- as.character(capture.output(env))
-  Xverbose(121, envF, fnm)  
+  .traceFunction(121, envF, fnm)  
   unlockBinding(nm, env)
-  Xverbose(125, "Binding unlocked", fnm) 
+  .traceFunction(125, "Binding unlocked", fnm) 
   environment(nm) <- environment(value) <- env
-  Xverbose(130, "New values for env(nm), env(value)" , fnm) 
+  .traceFunction(130, "New values for env(nm), env(value)" , fnm) 
   assign(nm, value, envir=env)
   
-  Xverbose(135, "Assigned", fnm)
+  .traceFunction(135, "Assigned", fnm)
   assignInNamespace(nm, value, ns= ns, envir = env) 
-  Xverbose(140, "done assignInNamespace", fnm)
+  .traceFunction(140, "done assignInNamespace", fnm)
   lockBinding(nm, env) 
  }
   nms <- names(modifyList)
+  .traceFunction(1, " MODIFYns called from modifyPackageNamespace ENDS here", fnm, tags = c("1","msg"))
+
   sapply(as.list(1:length(modifyList)), MODIFYns)
 
   # print(tail(as.list(ns)[[nm]]))  

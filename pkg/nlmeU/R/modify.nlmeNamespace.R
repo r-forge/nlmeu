@@ -7,24 +7,24 @@ modify.nlmeNamespace <- function(fun = nlme::lme,
 ##  unloadNamespace("nlme")
  
  funNm <- "modify.nlmeNamespace"
- Xverbose(1, "modify.nlmeNamespace STARTS =======", funNm)
+ .traceFunction(1, "modify.nlmeNamespace STARTS =======", funNm, tags = c("1","msg"))
  if ("package:nlme" %in% search()) detach("package:nlme")
  cat("Namespace of nlme package will be modified \n")
  cat('To restore previous namespace use command: unloadNamespace("nlme") \n', sep="")
  readline("Press <Enter> to continue or <Esc> to abort \n")
  pkgnm <- "nlme"
  value <- modifyList[[1]]
- Xverbose(3, cat(head(capture.output(value)), sep="\n"), funNm)
+ .traceFunction(3, value, funNm, alt= cat(head(capture.output(value)), sep="\n"))
  nm <- "model.matrix.reStruct"
  ns  <- loadNamespace(pkgnm)  # "nlme"
  env <- environment(fun)
- Xverbose(5, cat(tail(capture.output(as.list(env)[[nm]])), sep = "\n"), funNm)
+ .traceFunction(5, as.list(env)[[nm]], funNm, alt = cat(tail(capture.output(as.list(env)[[nm]])), sep = "\n"))
  unlockBinding(nm, env)
  environment(nm) <- environment(value) <- env
  assign(nm, value, envir=env)
  assignInNamespace(nm, value, ns= ns, envir = env)    
  lockBinding(nm, env) 
- Xverbose(7, cat(tail(capture.output(as.list(env)[[nm]])), sep = "\n"), funNm)
- Xverbose(1, "modify.nlmeNamespace ENDS =======", funNm)
+ .traceFunction(7, as.list(env)[[nm]], funNm, alt = cat(tail(capture.output(as.list(env)[[nm]])), sep = "\n"))
+ .traceFunction(1, "modify.nlmeNamespace ENDS =======", funNm, tags =c("1", "msg"))
  return(invisible())
  }

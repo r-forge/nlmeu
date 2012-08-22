@@ -326,25 +326,25 @@ Names.pdKronecker <- function (object, asList = FALSE, ...)
 "Names<-.pdKronecker" <- function (object, ..., value) 
 {
     fnm <- "Names<-.pdKronecker"
-    Xverbose(210, "===> Names<-.pdKronecker starts here", fnm)
-    Xverbose(220, value, fnm)
+    .traceFunction(210, "===> Names<-.pdKronecker starts here", fnm, tags=c("1","msg"))
+    .traceFunction(220, value, fnm)
     tmp <- Names(object)
-    Xverbose(221, tmp, fnm)
-    Xverbose(222,"before if",fnm)
+    .traceFunction(221, tmp, fnm)
+    .traceFunction(222,"before if",fnm, tags = c("msg"))
     if (!is.null(Names(object))) { 
-      Xverbose(230, str(object),fnm)
-      Xverbose(240, "-> Before NextMethod", fnm)
+      .traceFunction(230, object, fnm, alt=capture.output(str(object)))
+      .traceFunction(240, "-> Before NextMethod", fnm, tags=c("msg"))
       clss <- class(object)   # Used instead 
       class(object) <- "pdMat"
       Names(object) <-  value
       class(object) <-  clss
-      #xverbose(240, "-> After NextMethod")
-      Xverbose(210, "===> Names<-.pdKronecker EXIT1",fnm)
+      #.traceFunction(240, "-> After NextMethod")
+      .traceFunction(210, "===> Names<-.pdKronecker EXIT1",fnm, tags=c("1","msg"))
       #obj
       object
       }
     else {
-     Xverbose(210, "===> Names<-.pdKronecker EXIT2", fnm)
+     .traceFunction(210, "===> Names<-.pdKronecker EXIT2", fnm, tags=c("1","msg"))
         object
     }
 }

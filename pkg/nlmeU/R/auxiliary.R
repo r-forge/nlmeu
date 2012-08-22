@@ -12,3 +12,5 @@ sigma <-  function(object, ...) UseMethod("sigma")
 
 sigma.default <- function(object, ...) object$sigma
 
+.traceFunction <- function(...) {  # Place holder
+}
