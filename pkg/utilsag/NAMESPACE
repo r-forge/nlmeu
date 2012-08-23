@@ -1,5 +1,5 @@
 export(modifyPackageNamespace)
-export(Xverbose, XverboseControl)
+export(.traceFunction, traceOptions, tracePrint, traceList)
 # Generics for which we define new methods:
 export(write.Rd)
 

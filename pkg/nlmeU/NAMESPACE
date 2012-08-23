@@ -1,8 +1,9 @@
 export(missPat, model.matrix.reStruct.U, .traceFunction)
-export(Xverbose) 
+#export(Xverbose) 
 #export(modify.nlmeNamespace)
 # generic functions
 export(logLik1,  Pwr, sigma, simulateY)
+
 S3method(logLik1,lme)
 S3method(Pwr,lme)
 S3method(sigma,default)
@@ -13,7 +14,8 @@ S3method(print, Pwr)
 
 ### pdKronecker specific 
 export(pdKronecker)
-importFrom(reshape,melt)
+#importFrom(reshape,melt)
+#importFrom(nlme,"coef<-","Names<-", "matrix<-")
 S3method("[", pdKronecker)
 S3method(coef, pdKronecker)
 S3method("coef<-", pdKronecker)
