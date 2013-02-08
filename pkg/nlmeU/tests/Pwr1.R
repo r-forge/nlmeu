@@ -1,3 +1,4 @@
+## See R20.14a
 library(nlme)
 library(nlmeU)
 lm3.form <- formula(visual ~ visual0 + time + treat.f) 

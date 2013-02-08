@@ -1,62 +1,58 @@
-library(utilsag)
+TracedFunction <- function(x){
+   funNm <- "TracedFunction" 
 
-TestedFunction <- function(x){
-   funNm <- "TestedFunction"  
-   .traceFunction(1, "TestedFunction STARTS here", funNm, tags = c("1","msg"))
-   .traceFunction(2, x, funNm)
-   .traceFunction(3, c(1,x), funNm)
+   hl <-  options()$traceR            # List
+   htrace <- hl[["TracedFunction"]]   # Function. Change Function name, after cutting and pasting!!!               
+   if (is.null(htrace)) htrace <- attr(hl, "default")
+   .traceR <- if (is.null(htrace))  function(id, xp , funNm, msg, lbl){ } else  htrace 
+   
+   .traceR(1, , funNm, "TracedFunction STARTS here")
+   .traceR(2, x, funNm)
+   .traceR(3, c(1,x), funNm)
+
     mtx <- diag(x,2)
-   .traceFunction(4, mtx, funNm, tags = c("mtx"), alt = capture.output(str(mtx)))
-   .traceFunction(5, list(x, mtx) , funNm, tags = c("list"))
-   .traceFunction(6, capture.output(str(mtx)), funNm, tags = c("mtx"))
+   .traceR(4, mtx, funNm)
+   .traceR(5, list(x, mtx), funNm)
+   .traceR(6, str(mtx), funNm, lbl="6a")
+   .traceR(6, capture.output(str(mtx)), funNm, lbl="6b")
+
     envx <- new.env()
     assign("Mtx", 2*mtx, env = envx)
-   .traceFunction(7, as.list(envx), funNm, tags ="env")
+   .traceR(70, as.list(envx), funNm, "Environment envx as list")
     z <- NULL
-   .traceFunction(8, z, funNm)
+   .traceR(80, z, funNm, lbl= "80a")
 
-   .traceFunction(9, capture.output(z), funNm)
+   .traceR(80, capture.output(z), funNm, lbl = "80b")
 
-   .traceFunction(1, "TestedFunction ENDS here", funNm, tags = c("1","msg"))
+   .traceR(1, ,funNm, "TracedFunction ENDS here")
    x
 }
 
 
 ## Ex1: Default settings
-trOps1 <- traceOptions()  # Default trace options
-options(trace = trOps1) 
-str(options()$trace)
+htrace <- list("TracedFunction" = utilsag:::traceDefault)
 
+options (traceR = htrace) 
+options()$traceR[["TracedFunction"]]
+TracedFunction(3)
+
+
+
+## Ex2: Default tracePrint1 for all functions
+htrace <- list()
+attr(htrace, "default") <- utilsag:::tracePrint1
+attr(htrace, "default")
+options (traceR=htrace) 
+TracedFunction(4)
+
+## Ex3: traceList 
+
+htrace <- list("TracedFunction" = utilsag:::traceList)
+
+options (traceR=htrace) 
 .traceList <- list()
-TestedFunction(3)
-.traceList
+TracedFunction(5)
+names(.traceList)
 
 
-## Ex2. Default settings modified. 
-
-trOps2 <- traceOptions(    # Default trace options modified
- xtags= c("1","mtx"),
- xuid = 1:6
-)  
-options(trace = trOps2)    #  
-str(options()$trace)
-
-.traceList <- list()
-TestedFunction(5)
-.traceList
-
-## Ex3. Specific settings for TestedFunction(). tracePrint() function used.
-
-funL <- list(TestedFunction = list(xtrace = "tracePrint", xtags="msg"))
-trOps3 <- traceOptions(    # Default trace options modified
- funL = funL,
- xtags= c("1","mtx"),
- xuid = 1:6
-)  
-options(trace = trOps3)    #  
-
-
-str(options()$trace)
-
-TestedFunction(7)
 

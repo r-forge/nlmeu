@@ -326,25 +326,31 @@ Names.pdKronecker <- function (object, asList = FALSE, ...)
 "Names<-.pdKronecker" <- function (object, ..., value) 
 {
     fnm <- "Names<-.pdKronecker"
-    .traceFunction(210, "===> Names<-.pdKronecker starts here", fnm, tags=c("1","msg"))
-    .traceFunction(220, value, fnm)
+    
+    hl <-  options()$traceR            # List
+    htrace <- hl[[`Names<-.pdKronecker`]]   # Function. Change Functioon name, after cutting and pasting!!!               
+   if (is.null(htrace)) htrace <- attr(hl, "default")
+   .traceR <- if (is.null(htrace))  function(id, xp , fnm, msg, lbl){ } else  htrace 
+
+    .traceR(210, , fnm, "===> Names<-.pdKronecker starts here")
+    .traceR(220, value, fnm, "Names assigned to pdKronecker object" )
     tmp <- Names(object)
-    .traceFunction(221, tmp, fnm)
-    .traceFunction(222,"before if",fnm, tags = c("msg"))
+    .traceR(221, tmp, fnm)
+    .traceR(222, , fnm, "before if")
     if (!is.null(Names(object))) { 
-      .traceFunction(230, object, fnm, alt=capture.output(str(object)))
-      .traceFunction(240, "-> Before NextMethod", fnm, tags=c("msg"))
+      .traceR(230, object, fnm)
+      .traceR(240, , fnm, "-> Before NextMethod")
       clss <- class(object)   # Used instead 
       class(object) <- "pdMat"
       Names(object) <-  value
       class(object) <-  clss
-      #.traceFunction(240, "-> After NextMethod")
-      .traceFunction(210, "===> Names<-.pdKronecker EXIT1",fnm, tags=c("1","msg"))
+      #.traceR(240, "-> After NextMethod")
+      .traceR(210, , fnm, "===> Names<-.pdKronecker EXIT1")
       #obj
       object
       }
     else {
-     .traceFunction(210, "===> Names<-.pdKronecker EXIT2", fnm, tags=c("1","msg"))
+     .traceR(210, , fnm, "===> Names<-.pdKronecker EXIT2")
         object
     }
 }

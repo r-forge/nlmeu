@@ -1,9 +1,5 @@
 write.Rd <- function(object, ...) UseMethod("write.Rd")
-
-
-#write.Rd(Orthodont, package="nlme")            # by default to working directory
-#write.Rd(Orthodont, package="nlme", dir.path = "") # To terminal
-write.Rd.data.frame <- function(object, ..., dir.path = getwd(), package=""){
+write.Rd.data.frame <- function(object, ...,dir.path = getwd(), package=""){
  #srch <- search()
  #tmp <- paste("package:", package, collapse="", sep="")
  #insrch <- tmp %in% srch
@@ -172,7 +168,6 @@ write.Rd.data.frame <- function(object, ..., dir.path = getwd(), package=""){
     close(th)
     return(cat(fpath,"\n"))
  }
- #return()
+
 }
-#write.Rd.data.frame(pk1dt, package="PKPDx")
 

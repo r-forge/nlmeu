@@ -1,6 +1,6 @@
 export(modifyPackageNamespace)
-export(.traceFunction, traceOptions, tracePrint, traceList)
+## export(.traceFunction, traceOptions, tracePrint, traceList)
 # Generics for which we define new methods:
-export(write.Rd)
+export(write.Rd, univariateStats)
 
 S3method(write.Rd, data.frame)  # Writes skeleton documentation for data frame

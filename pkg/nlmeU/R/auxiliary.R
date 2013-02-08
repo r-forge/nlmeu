@@ -12,10 +12,36 @@ sigma <-  function(object, ...) UseMethod("sigma")
 
 sigma.default <- function(object, ...) object$sigma
 
-.traceFunction <- function(...) {  # Place holder
+
+
+
+runScript <- function(script= NA,  package = "nlmeU", subdir = "scripts", echo = TRUE){
+    scriptsDir <- system.file(subdir, package = package)
+    scriptsList <- list.files(scriptsDir)
+    scriptFile <- file.path(scriptsDir, script)
+    if (!(script %in% scriptsList)) {
+    if (is.na(script)) {
+            errFun <- message
+            errMsg <- ""
+        }
+        else {
+            errFun <- stop
+            errMsg <- paste("Example", example, "does not exist. ")
+        }
+        errFun(errMsg, "Valid scripts are \"", paste(scriptsList, 
+            collapse = "\", \""), "\"")
+    }
+    else {
+        sourceText <- source(scriptFile, echo=echo)
+        sourceText
+    }
 }
 
-## Could not import generic functions from nlme(Aug 2012) 
+
+
+
+## Could not import generic functions from nlme (Aug 2012) 
+## Had to to define them explicitly
 "coef<-" <- function (object, ..., value) UseMethod("coef<-")
 corMatrix <- function (object, ...) UseMethod("corMatrix")
 isInitialized <- function (object) UseMethod("isInitialized")

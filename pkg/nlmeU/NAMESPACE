@@ -1,4 +1,4 @@
-export(missPat, model.matrix.reStruct.U, .traceFunction)
+export(missPat, model.matrix.reStruct.U)
 #export(Xverbose) 
 #export(modify.nlmeNamespace)
 # generic functions

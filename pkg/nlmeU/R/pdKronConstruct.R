@@ -25,11 +25,18 @@
 pdKronecker <- function (value = numeric(0), 
    form = NULL, nam = NULL, data = sys.frame(sys.parent())) 
 {
+
     fnm <- "pdKronecker"
-    .traceFunction(1,"=========> pdKronecker STARTS here", fnm, tags=c("1","msg"))
+    hl <-  options()$traceR         # List
+    htrace <- hl[["pdKronecker"]]   # Function. Change Function name, after cutting and pasting!!!               
+    if (is.null(htrace)) htrace <- attr(hl, "default")
+   .traceR <- if (is.null(htrace))  function(id, xp , fnm, msg, lbl){ } else  htrace 
+
+    
+    .traceR(1, , fnm, "=========> pdKronecker STARTS here")
     object <- numeric(0)
     class(object) <- c("pdKronecker", "pdMat")
-    .traceFunction(1,"--> pdKronecker ENDS here. Calls and returns result from pdConstruct()", fnm, tags=c("1","msg"))
+    .traceR(1, , fnm, "--> pdKronecker ENDS here. Calls and returns result from pdConstruct()")
     pdConstruct(object, value, form, nam, data)
 }
 
@@ -94,9 +101,15 @@ function (object,
     pdClass = sapply(object,FUN=function(el) class(el)[1]) , ...) 
 {
     fnm <- "pdConstruct.pdKronecker"
-    .traceFunction(1, "pdKronecker STARTS here", fnm, tags = c("1","msg"))
+    
+    hl <-  options()$traceR                     # List
+    htrace <- hl[["pdConstruct.pdKronecker"]]   # Function. Change Functioon name, after cutting and pasting!!!               
+    if (is.null(htrace)) htrace <- attr(hl, "default")
+   .traceR <- if (is.null(htrace))  function(id, xp , fnm, msg, lbl){ } else  htrace 
 
-    .traceFunction(5,"=> pdConstruct.pdKronecker arguments ", tags = c("msg"))
+    
+    
+    .traceR(1, ,fnm, "pdKronecker STARTS here")
  
 auxPrint <-function(x){
     cat("---> Arguments \n")
@@ -123,17 +136,17 @@ auxPrint <-function(x){
                 pdClass <- unlist(lapply(value, data.class))
         }
         if (isInitialized(value)) {
-            .traceFunction(9001,"=========> pdConstruct.pdKronecker EXIT1", fnm, tags = c("1","msg"))
+            .traceR(9001, , fnm,"=========> pdConstruct.pdKronecker EXIT1")
             return(pdConstruct(object, as.matrix(value), form, 
                 nam, data, pdClass))
         }
         else {
-            .traceFunction(9001,"=========> pdConstruct.pdKronecker EXIT2", fnm, tags = c("1","msg"))
+            .traceR(9001, , fnm, "=========> pdConstruct.pdKronecker EXIT2")
             return(pdConstruct(object, form = form, nam = nam, 
                 data = data, pdClass = pdClass))
         }
     }
-    .traceFunction(9002, "AFTER if value inherits pdMat", fnm, tags = "msg")
+    .traceR(9002, , fnm, "AFTER if value inherits pdMat")
     if (!is.null(form)) {
         if (data.class(form) != "list") {
             stop("\"form\" must be a list")
@@ -174,9 +187,8 @@ auxPrint <-function(x){
     }
 
     nB <- max(c(nF, nN, nP))
-    .traceFunction(9002, "oVal created", fnm,  tags="msg")
     oVal <- value
-    .traceFunction(9009, oVal, fnm)   
+    .traceR(9009, oVal, fnm, "oVal created")   
     if (length(value) == 0 || is.matrix(value) || is.numeric(value)) {
         if (nB == 1) {
             stop("None of the arguments specify more than one block")
@@ -198,7 +210,7 @@ auxPrint <-function(x){
    if (nP == 1) {
         pdClass <- rep(pdClass, nB)
     }
-    .traceFunction(9002, "object initiated", fnm, tags = "msg")
+    .traceR(9002, , fnm, "object initiated")
     object <- vector("list", nB)
     namInterc <- rep(FALSE, nB)
     namCoef <- vector("list", nB)
@@ -255,7 +267,7 @@ auxPrint <-function(x){
         object[[i]] <- pdMat(value[[i]], form[[i]], nam[[i]], 
             data, pdClass[i])
     }
-    .traceFunction(9002, "End of nB loop", fnm, tags="msg")
+    .traceR(9002, , fnm, "End of nB loop")
     names(object) <- nmsObject   # added Nov.20, 2008
     if (!all(unlist(lapply(object, inherits, "pdMat")))) {
         stop("all elements in the argument must inherit from pdMat objects")
@@ -305,7 +317,7 @@ auxPrint <-function(x){
         if (length(oVal) && (is.matrix(oVal) || is.numeric(oVal))) {
             stop("Must give names when initializing from matrix or parameter")
         }
-        .traceFunction(9001,"=========> pdConstruct.pdKronecker EXIT3", fnm, tags = c("1","msg"))
+        .traceR(9001, , fnm, "=========> pdConstruct.pdKronecker EXIT3")
         return(object)
     }
     else {
@@ -346,9 +358,9 @@ auxPrint <-function(x){
                 coef(object) <- oVal
             }
         }
-        .traceFunction(9001, "pdConstruct: Exit4 \n", fnm, tags=c("1","msg"))
+        .traceR(9001, , fnm, "pdConstruct: Exit4 \n")
         names(object) <- nmsObject  # Added Nov.20, 2008
-        .traceFunction(9000,"=========> pdConstruct.pdKronecker EXIT4", fnm, tags=c("1","msg"))
+        .traceR(9000, ,fnm, "=========> pdConstruct.pdKronecker EXIT4")
         return(object)
     }
 }
