@@ -1,6 +1,7 @@
-## See R20.14a
+## See R20.14b
+
 library(nlme)
-library(nlmeU)
+data(armd, package = "nlmeU")
 lm3.form <- formula(visual ~ visual0 + time + treat.f) 
 fm16.5 <- 
    lme(lm3.form,             
@@ -10,6 +11,7 @@ fm16.5 <-
 formula(fm16.5)                            # Recall formula
 fixef(fm16.5)
 
+library(nlmeU)
 Pwr(fm16.5)                                # Default call 
 Pwr(fm16.5,  L = c("treat.fActive" = 1))   # The L argument
 detach(package:nlmeU)
