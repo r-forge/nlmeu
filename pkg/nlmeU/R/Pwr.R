@@ -1,123 +1,66 @@
-## source ("C:/Users/agalecki/Google Drive/MySoftware/nlmeuRforge/pkg/nlmeU/R/Pwr.R")
-
-Pwr <-  function(object, ...) UseMethod("Pwr")
+## source ("D:/Dropbox/GaleckiPrivate/nlmeURforge/pkg/nlmeU/R/Pwr.R")
 
 
-Pwr.lme <- function (object,                   # Removed ... argument (Feb, 2013)
+
+Pwr.lme <- function (object, ..., 
     type = c("sequential", "marginal"), 
     Terms, L, verbose = FALSE, sigma, ddf= numeric(0), alpha=0.05,
-    altB = NULL) 
+    altB = NULL, tol = 1e-10) 
 {
-# Arguments: object: one object only
-# adjustSigma set to FALSE. Explore adjustSigma argument if missing(sigma) adjust object$sigma
-# altB name
-  funNm <- "Pwr.lme"
+## Arguments: 
+##  1. object: one object only
+#   2. adjustSigma set to FALSE. (Try to explore adjustSigma argument if missing(sigma) 
+#   3. Alternative altB name
+
+   funNm <- "Pwr.lme"
+   .traceRinit <- attr(options()$traceR, "init")
+   .traceR <-   if (is.null(.traceRinit))
+      function(...){} else .traceRinit(funNm) 
+   
   
-   hl <-  options()$traceR            # List
-   htrace <- hl[["Pwr.lme"]]   # Function. Change Function name, after cutting and pasting!!!               
-   if (is.null(htrace)) htrace <- attr(hl, "default")
-   .traceR <- if (is.null(htrace))  function(id, xp , funNm, msg, lbl){ } else  htrace 
-
-  .traceR <- if (is.null(htrace) ) function(id, xnm ,funNm, msg, evalx){}
-        else htrace;
- 
   .traceR(1, , funNm, "Pwr.lme STARTS")
-
-  Lmiss <- missing(L)      # More or less addressed
-  #print(Terms)
-  Tmiss <- missing(Terms)  # Work on Terms argument!!!
-  #print(Tmiss)
-  cLnms <- names(fixef(object))
-
-if (!inherits(object, "lme")) {
+   if (!inherits(object, "lme")) {
             stop("Object must inherit from class \"lme\" ")
 }
 
-fixefNms <- names(fixef(object))
+  Lmiss <- missing(L)
+  Tmiss <- missing(Terms)    
+  Lx <- !Tmiss || !Lmiss     # Contrasts matrix L can be created 
+  fixefNms <- names(fixef(object))
+  if (!Lx && !missing(sigma)) stop("L or Terms arguments need to be specified with non-missing sigma argument") 
+  ### optx <- if (object$sigma < tol) FALSE else TRUE
   
-if (!Tmiss && Lmiss){          # IF 1
-##  Based on Terms argument L matrix is created (assuming that L is missing)
-.traceR(2, ,   funNm, "IF 1 executed")
+  
+if (!Tmiss && Lmiss){          # IF 1  (Check this part)
+##  Based on Terms argument L matrix is created (with colnames)
+##  Colnames assigned
+.traceR(2, ,   funNm, "IF 1 executed: Matrix L created from Terms argument")
+cLnms <- fixefNms
 assign <- attr(object$fixDF, "assign")
 nTerms <- length(assign)
 nX <- length(unlist(assign))
 L <- diag(nX)[unlist(assign[Terms]), , drop = FALSE]
 colnames(L) <- cLnms 
-
-}
-
-
-if (!Tmiss || !Lmiss){  
-## Terms or L present cLnms
-.traceR(2,  , funNm, "IF 2 executed")
-#print("dimL 1")
-dimL <-  if (Lmiss) NULL else dim(L)             # Extract clNms from L argument
-#print("dimL 1a")
-#print(dimL)
-condt <- !Lmiss && is.null(dimL)
-#print(condt)
-namesL <- names(L)
-#print(namesL)
-## cLnms over-written
-cLnms <- if (condt) names(L) else colnames(L)  
-#print(cLnms)
-#print("dimL 1b")
+cLnms <- NULL
 }
 
 
 
-#print("anova0")
+.traceR(52, object$sigma, funNm, "vcov with sigma before adjusting")
+if (!missing(sigma)) object <- nlmeU:::sigmaTolme(object,  value=sigma)
+.traceR(53, object$sigma, funNm, "vcov with sigma after adjusting")
+# .traceR(100, object, funNm, "object with adjusted sigma", lbl="100object1")  
 
-if (!missing(sigma)){
- ## new sigma -> calculate 
- .traceR(2, , funNm, "if (!missing(sigma)) STARTS ---------")
- ## object <- nlmeU:::sigmaTolme(object,  value=sigma)
- # .traceR(1, , funNm, "sigmaTolme STARTS")
- 
-   sigma0 <- object$sigma 
-  .traceR(2, sigma0, funNm, "Initial sigma calculated")  
-  val <- sigma * sigma
-  sc  <- sqrt(val)/sigma0 
-  .traceR(2, sc, funNm, "Scale used")  
-  object$sigma <- sqrt(val)
-  .traceR(2, object$sigma, funNm, "Rescaled sigma extracted from the fitted object")  
-  resids <- object$residuals
-  .traceR(2, resids[1:3], funNm, "resids Before rescaling")  
-  resids <- resids * sc    # Change "std" attribute
-  .traceR(2, resids[1:3], funNm, "resids After Rescaling")  
-  
-  attr(object$fixDF, "varFixFact") <- 
-      sc*attr(object$fixDF, "varFixFact") # Rescaled for anova
-  
-  #print(vcov(object)*sc*sc)
-
-   object$varFix  <- object$varFix*sc*sc  # vcov rescaled July 15, 2011 
-   .traceR(100, object, funNm, "object at the end of IF !missing(sigma)", lbl="100object1")  
-# attr(object$fixDF, "varFixFact") Modified
-   ## return(object)
-}
 
 .traceR(2, , funNm, "anova call")
-# No Terms argument
-
-#print("anova")
-### print(L)
+.traceR(55, if (Lx) L else !Lmiss, funNm, "argumnt L for anova call")
 x <- anova(object, adjustSigma=FALSE,
    test=TRUE,type=type, L=L, verbose=verbose)  # ANOVA results stored in x 
-#print("anova2")
-#print(str(x))
-#print(dim(x))
-#print(str(x))
-#print(L)
-#print(cLnms)
+.traceR(101, x, funNm, "ANOVA stored in x")  
 
 
 rt <- attr(x,"rt")   ### Check whether rt is needed
-F0val <- x[["F-value"]] ### F-stat extracted from anova
-.traceR(20, F0val, funNm)
 
-###   !!!!  Adjust F.stat  Divide by sigma^2???
-#F0val <- F0val *(scale^2)  # 15 Dec 2012
 ndf <- x[["numDF"]]
 
 ddf2 <- if (length(ddf)) ddf else x[["denDF"]] #  ddf2 is needed
@@ -125,7 +68,27 @@ rankL <- ndf
 
 
 
-if (!Lmiss && is.null(dimL))  {
+if (Lx){  
+ ## Terms or L present: cLnms created for later use
+.traceR(2,  , funNm, "IF 2 executed. cLnms created")
+dimL <-  if (Lmiss) NULL else dim(L)             # Extract clNms from L argument
+condt <- !Lmiss && is.null(dimL)
+## cLnms over-written
+cLnms <- if (condt) names(L) else colnames(L)  
+
+}
+
+
+.traceR(51, Lx, funNm, "L created?")
+.traceR(51, if (Lx) cLnms, funNm, "cLnms created conditionally")
+.traceR(51, if(Lx) L, funNm, "L matrix/vector (conditionally)")
+
+
+
+if (!is.null(altB) && Lx){ # START
+.traceR(2, , funNm, "IF 4 executed")
+
+ if (!Lmiss && is.null(dimL))  {
 .traceR(2, , funNm, "IF 3 executed")
    #print("if here 2")
    dim(L) <- c(1,length(L))  # L is matrix
@@ -133,9 +96,6 @@ if (!Lmiss && is.null(dimL))  {
 }
 
 
-
-if (!is.null(altB) && (!Tmiss || !Lmiss)){ # START
-.traceR(2, , funNm, "IF 4 executed")
   ### Go through altB
   altBdt <- as.data.frame(altB)
   altBnrow <- nrow(altBdt)
@@ -189,10 +149,9 @@ Fcrit <- qf(1-alpha, ndf, ddf2)
 ncx <- x[["F-value"]]*ndf  # Rescaling not needed
 
 Power <- 1- pf(Fcrit, ndf, ddf2, ncx) 
-#print(x)
-#print(str(x))
-#print(ddf2)
-#print(ncx)
+
+F0val <- x[["F-value"]] 
+.traceR(20, F0val, funNm, "Incorrect value for adjusted sigma")
 
 ret <- data.frame(x$numDF, ddf2, F0val, ncx, Power) #Fcrit omitted
 

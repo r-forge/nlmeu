@@ -4,6 +4,7 @@ TracedFunction1 <- function(x){
    .traceRinit <- attr(options()$traceR, "init")
    .traceR <-   if (is.null(.traceRinit))
       function(...){} else .traceRinit(funNm) 
+      
    .traceR(1, , funNm, "TracedFunction1 STARTS here")
    .traceR(2, x, funNm)
    .traceR(3, c(1,x), funNm)

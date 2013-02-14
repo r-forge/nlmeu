@@ -1,3 +1,9 @@
+## Generic functions exported. See NAMESPACE
+
+logLik1 <-  function(modfit, dt1, dtInit) UseMethod("logLik1")
+Pwr <-  function(object, ...) UseMethod("Pwr")
+simulateY <- function(object, nsim = 1, seed = NULL, ...) UseMethod("simulateY")
+sigma <-  function(object, ...) UseMethod("sigma")
 
 "missPat" <- function(...){
      args  <- as.list(substitute(list(...)))[-1]
@@ -8,7 +14,6 @@
      txt<-paste(txt,sep='')
      eval(parse(text=txt))
 }
-sigma <-  function(object, ...) UseMethod("sigma")
 
 sigma.default <- function(object, ...) object$sigma
 

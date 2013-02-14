@@ -1,5 +1,5 @@
+library(nlmeU)
 library(nlme)
-data(armd, package="nlmeU")
 lm3.form <- formula(visual ~ visual0 + time + treat.f)
 fm16.5ml <- lme(lm3.form, random = list(subject = pdDiag(~time)) ,
                weights = varPower(form = ~ time),  data = armd,
@@ -7,5 +7,5 @@ fm16.5ml <- lme(lm3.form, random = list(subject = pdDiag(~time)) ,
 
 
 df1 <- subset(armd, subject %in% "1") # Data for subject "1"
-library(nlmeU)
+
 logLik1(fm16.5ml, df1)

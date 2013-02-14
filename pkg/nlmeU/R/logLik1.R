@@ -1,38 +1,39 @@
-logLik1 <-  function(object, ...) UseMethod("logLik1")
 
-logLik1.lme <- function(modfit, dt1, dtInit=NULL){
+logLik1.lme <- function(modfit, dt1, dtInit){
   # Calculates profile likelihood (with beta profiled out) for *one* subject
   # Data with *one* level of grouping
   # correlation component in modelStruct not implemented
   # Continue to work here, if dtInit ne NULL 
 
    funNm <-  "logLik1.lme"
-   hl <-  options()$traceR            # List
-   htrace <- hl[["logLik1.lme"]]   # Function                 
-   if (is.null(htrace)) htrace <- attr(hl, "default")
-   .traceR <- if (is.null(htrace))  function(id, xp , funNm, msg, lbl){ } else  htrace 
-
+   .traceRinit <- attr(options()$traceR, "init")
+   .traceR <-   if (is.null(.traceRinit))
+      function(...){} else .traceRinit(funNm) 
+   if (missing(dtInit)) dtInit <- NULL
    .traceR(1, , funNm, "logLik1.lme STARTS   <=####")
   
     m            <- modfit$modelStruct                 # Model structure
     sigma        <- modfit$sigma                       # sigma
-    .traceR(111, sigma, funNm, "sigma from model fit")
+    .traceR(511, sigma, funNm, "sigma from model fit")
    
-    .traceR(2,  , funNm, "About D matrix")
+    .traceR(2,  , funNm, "D matrix")
  
     D            <- as.matrix(m$reStruct[[1]])         # "subject"
-    .traceR(115, D, funNm)
+    .traceR(520, D, funNm)
     D            <- D  * sigma^2                       # Matrix D 
-    .traceR(116, D, funNm)
+    .traceR(525, D, funNm)
    
-    .traceR(2,  , funNm, "IF process $weights component =====")
+    .traceR(3,  , funNm, "Process $weights component =====")
     
     clw  <- modfit$call$weights
     vecR <- rep(sigma, nrow(dt1))                      
     if (length(clw)){
-    .traceR(211, clw, funNm)
-  
+    .traceR(3,  , funNm, "Length of clw object greater than 0 =====")
+    .traceR(530, clw, funNm)
+    
+    .traceR(535, clw, funNm, "clw object before if.inherits")
     if (inherits(eval(clw),"formula")) clw <- call("varFixed", clw) 
+    .traceR(540, clw, funNm, "clw object before if.inherits")
     clwl  <-  as.list(clw) 
     .traceR(212, clwl, funNm)
  
@@ -70,6 +71,7 @@ logLik1.lme <- function(modfit, dt1, dtInit=NULL){
     }                                               # Diagonal of R_i matrix
     
     .traceR(2, , funNm, "Wrap-up  =====")
+
     #return(zz)  # Continue to work here
     vecR2        <- vecR^2
     R            <- diag(vecR2, nrow=length(vecR))        # R_i matrix     

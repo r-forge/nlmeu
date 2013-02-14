@@ -1,22 +1,20 @@
-simulateY <- function(object, nsim = 1, seed = NULL, ...) UseMethod("simulateY")
 
 simulateY.lme <- function (object, nsim =1, seed = as.integer(runif(1, 0, .Machine$integer.max)), ...,
   verbose = FALSE, sigma) 
 {
 # Data with one level of grouping only.
   funNm <- "simulateY.lme"
-   hl <-  options()$traceR            # List
-   htrace <- hl[["TracedFunction"]]   # Function. Change Function name, after cutting and pasting!!!               
-   if (is.null(htrace)) htrace <- attr(hl, "default")
-   .traceR <- if (is.null(htrace))  function(id, xp , funNm, msg, lbl){ } else  htrace 
-   
+  .traceRinit <- attr(options()$traceR, "init")
+  .traceR <-   if (is.null(.traceRinit))
+      function(...){} else .traceRinit(funNm) 
+     
   .traceR(1, , funNm, "simulateY.lme STARTS   <=####")
- 
+
 if (!inherits(object, "lme"))  stop("Object must inherit from class \"lme\" ")
 
 .traceR(110, missing(sigma), funNm)
 
-if (!missing(sigma))  object <- nlmeU:::sigmaTolme(object, sigma) # sigma(object) <- sigma
+if (!missing(sigma))  object$sigma <- sigma
 
    groups <- object$groups[[1]]
 .traceR(120, groups, funNm)
@@ -70,28 +68,24 @@ sigmaTolme <- function(object, value){
  ### Use this function only with Pwr() and simulateY(), because it  corrupts lme.object
   funNm <- "sigmaTolme"
  
-   hl <-  options()$traceR            # List
-   htrace <- hl[["sigmaTolme"]]   # Function. Change Function name, after cutting and pasting!!!               
-   if (is.null(htrace)) htrace <- attr(hl, "default")
-   .traceR <- if (is.null(htrace))  function(id, xp , funNm, msg, lbl){ } else  htrace 
- 
-  
-
-
+  .traceRinit <- attr(options()$traceR, "init")
+   .traceR <-   if (is.null(.traceRinit))
+      function(...){} else .traceRinit(funNm) 
+   
   .traceR(1, , funNm, "sigmaTolme STARTS")
   sigma0 <- object$sigma 
   .traceR(2, sigma0, funNm)  
   val <- value * value
   sc  <- sqrt(val)/sigma0  
   object$sigma <- sqrt(val)
-  resids <- object$residuals
-  resids <- resids * sc  
-  std <- attr(resids,"std")*sc
-  attr(object$residuals,"std") <- std
+  #resids <- object$residuals
+  #resids <- resids * sc  
+  #std <- attr(resids,"std")*sc
+  ## attr(object$residuals,"std") <- std
   
   .traceR(3, object$sigma, funNm)
   .traceR(4, sc, funNm)
-  attr(object$fixDF, "varFixFact") <- 
+   attr(object$fixDF, "varFixFact") <- 
       sc*attr(object$fixDF, "varFixFact") # Rescaled for anova
   .traceR(5, vcov(object)*sc*sc, funNm)
 

@@ -1,4 +1,47 @@
+Feb. 2013
 
+
+1. Revision of Pwr() is needed
+   a. After done Reinstate one line in Pwr2.R test script
+
+2. Revision simulateY.lme is needed:
+
+a. Originally it was:
+ 
+dirp3 <- file.path("D:", "RBookXAux")
+fp3 <- file.path(dirp3, "LMEsimCh20.dtx")
+(load(fp3))   # simA, simfmA loaded
+# [1] "simA"   "simfmA"
+simfmA[[1]]
+#            numDF denDF  F-value p-value
+#(Intercept)     1   119 4186.241  <.0001
+#time            1   119    4.782  0.0307
+#treat.f         1    38    3.382  0.0738
+
+sim1 <- simA[,1]
+sim1[1:10]
+#       1        2        3        4        1        2        3        4 
+#120.8883 139.7488 134.3489 114.5885 126.1069 116.3877 115.0861 125.2016 
+#       1        2 
+# 121.2278 126.2226 
+
+b. Now incorrect values are returned:
+
+# sim1[1:10]
+       1        2        3        4        1        2        3        4 
+70.88827 89.74880 84.34893 64.58845 76.10687 66.38773 65.08607 75.20164 
+       1        2 
+71.22779 76.22255 
+
+
+
+
+February: 2013
+
+   Document following objects:
+
+
+'Pwr' 'logLik1' 'missPat' 'sigma' 'simulateY'
 
 =>  Version 0.25-x  (May 2012)
  - Builds on nlme package

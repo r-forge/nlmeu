@@ -38,7 +38,7 @@ fmA <-
        control = cntrl)
 fixef(fmA)
 sigma(fmA)
-Pwr(fmA, sigma = sgma, L = c("treat.fActive" = 1))
+## Pwr(fmA, sigma = sgma, L = c("treat.fActive" = 1))    # Feb. 2013. Work here
 
 dif <- 10
 dim(dif) <- c(length(dif), 1)
