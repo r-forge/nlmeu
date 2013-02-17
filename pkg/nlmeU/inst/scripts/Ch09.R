@@ -3,6 +3,10 @@
 ### code chunk: Chap9init
 ###################################################
 options(width = 65, digits = 5, show.signif.stars = FALSE)
+packageVersion("nlmeU")
+packageVersion("nlme")
+packageVersion("ellipse")
+packageVersion("lattice")
 sessionInfo()
 data(armd, package = "nlmeU")
 
@@ -274,7 +278,13 @@ splom.object <- splom(splom.form,
 print(splom.object)
 rm(my.upperPanel,mySuperPanel,splom.object)
 
+#### sessionInfo with packages attached
 
+sessionInfo()
+
+detach(package:nlme)
+detach(package:lattice)
+detach(package:ellipse)
 
 
 

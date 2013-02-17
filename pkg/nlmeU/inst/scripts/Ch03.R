@@ -7,6 +7,13 @@
 ### 
 ###################################################
 options(width = 65, digits = 5, show.signif.stars = FALSE)
+
+
+packageVersion("nlmeU")
+packageVersion("nlme")
+packageVersion("reshape")
+packageVersion("plyr")
+packageVersion("lattice")
 sessionInfo()
 
 ylims <- c(0, 90) 
@@ -427,8 +434,8 @@ rm(auxDt, auxDt2, tmpDt)
 ### code chunk: R 3.18a
 ###################################################
 data(fcat, package = "nlmeU")
-(scM <- with(fcat, tapply(scorec, list(id, target), mean)))
-
+scM <- with(fcat, tapply(scorec, list(id, target), mean))
+scM[c(1, 2, 539), ]
 
 
 ###################################################
@@ -441,6 +448,8 @@ histogram(~scorec|target,
 detach(package:lattice)
 
 ##################################################
-##### Cleanup
+##### Cleanup and sessionInfo 
 ##################################################
 rm(scM)
+
+sessionInfo()             # At the end of the session

@@ -2,7 +2,10 @@
 ### code chunk: Chap6init
 ###################################################
 options(width=65, digits=5, show.signif.stars = FALSE)
+packageVersion("nlmeU")
+packageVersion("nlme")
 sessionInfo()
+
 data(armd, package = "nlmeU")
 
 ###################################################
@@ -111,4 +114,8 @@ intervals(fm6.1)           # 95% CI for beta, sigma
 plot(predict(fm6.1), residuals(fm6.1))   # Same as Fig. 6.1a
 qqnorm(residuals(fm6.1))                 # Same as Fig. 6.1b
 qqline(residuals(fm6.1))
+
+### sessionInfo()
+sessionInfo()
+detach(package:nlme)
 

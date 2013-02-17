@@ -3,6 +3,8 @@
 ### code chunk: Ch01init
 ###################################################
 options(width=65, digits=5, show.signif.stars = FALSE )
+packageVersion("nlmeU")
+packageVersion("nlme")
 sessionInfo()
 
 
@@ -10,7 +12,7 @@ sessionInfo()
 ### code chunk: R2.1
 ###################################################
 ## dataDir <- file.path("C:", "temp")                # Data directory
-dataDir <- file.path(.Library, "nlmeU", "csvData")   # Directory in package
+dataDir <- file.path(.Library, "nlmeU", "csvData")   # Directory in nlmeU package
 fp   <- file.path(dataDir, "armd240.data.csv")       # .csv file path
 armd240.data <- read.csv(fp, header = TRUE)          # Loading csv data
 dim(armd240.data)                                    # No. of rows and cols
@@ -249,7 +251,8 @@ str(fcat)
 ###################################################
 ### code chunk: R2.15b
 ###################################################
-(tab1 <- xtabs(~ id + target, data = fcat))   # id by target table
+tab1 <- xtabs(~ id + target, data = fcat)     # id by target table
+tab1[c(1,2,539),]
 all(tab1 > 0)                                 # All counts > 0? 
 range(tab1)                                   # Range of counts
 
@@ -266,3 +269,7 @@ rm(treat.f, miss.pat, facs, lbls)
 rm(nms,nms1, nms2, nms2a, nms3a)
 rm(idx1, idx12, nItms, tab1, dtId)
 
+### sessionInfo
+  
+sessionInfo()            # with packages attached
+detach(package:nlme)

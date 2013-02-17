@@ -47,7 +47,7 @@ dtF <- Pwr(fmA, sigma = sgma,
     L = c("treat.fActive" = 1), altB = dif)
 dtF
 
-
+sessionInfo()
 detach(package:nlmeU)
 detach(package:nlme)
 

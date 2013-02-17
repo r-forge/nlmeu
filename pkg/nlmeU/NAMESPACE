@@ -1,8 +1,10 @@
-importFrom(nlme, Initialize, varWeights, getVarCov)
+importFrom(nlme, Initialize, varWeights, getVarCov, fixef)
 export(missPat, runScript)
 
 # generic functions defined in auxiliary.R
 export(logLik1,  Pwr, sigma, simulateY)
+
+# Methods
 S3method(logLik1,lme)
 S3method(Pwr,lme)
 S3method(sigma,default)

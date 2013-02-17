@@ -14,5 +14,6 @@ fixef(fm16.5)
 library(nlmeU)
 Pwr(fm16.5)                                # Default call 
 Pwr(fm16.5,  L = c("treat.fActive" = 1))   # The L argument
+sessionInfo()
 detach(package:nlmeU)
 detach(package:nlme)

@@ -3,6 +3,8 @@
 ### code chunk: Chap8init
 ###################################################
 options(width = 65, digits = 5, show.signif.stars = FALSE)
+packageVersion("nlmeU")
+packageVersion("nlme")
 sessionInfo()
 data(armd, package = "nlmeU")
 
@@ -53,3 +55,6 @@ stratum[1:6]                # First six observations
 varWeights(vf0i)[3:6]       # Variance weights 1/lambdai:(7.8)
 logLik(vf0i)                # Contribution to the log-likelihood
 
+###### sessionInfo() with packages attached
+sessionInfo()
+detach(package:nlme)

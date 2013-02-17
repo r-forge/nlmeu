@@ -9,3 +9,6 @@ fm16.5ml <- lme(lm3.form, random = list(subject = pdDiag(~time)) ,
 df1 <- subset(armd, subject %in% "1") # Data for subject "1"
 
 logLik1(fm16.5ml, df1)
+sessionInfo()
+detach(package:nlme)
+detach(package:nlmeU)

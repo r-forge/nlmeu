@@ -2,6 +2,8 @@
 ### code chunk: Chap11init
 ###################################################
 options(width = 65, digits = 5, show.signif.stars = FALSE)
+packageVersion("nlme")
+packageVersion("lattice")
 sessionInfo()
 
 library(nlme)
@@ -157,3 +159,7 @@ ceEn <- Initialize(ceEn, df)
 coef(ceEn, unconstrained=FALSE)  # Constrained rho, rho0
 corMatrix(ceEn)[[1]]             # Corr matrix for the 1st subject
 
+### SessionInfo 
+sessionInfo()     # with packages attached
+detach(package:nlme)
+detach(package:lattice)
