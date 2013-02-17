@@ -1,4 +1,38 @@
-importFrom(nlme, Initialize, varWeights, getVarCov, fixef)
+####  Functions exported by nlme package
+# export(            
+#       ACF, allCoef, asOneFormula, asTable, augPred, balancedGrouped,
+#       "coef<-", "coefficients<-", collapse, compareFits,
+#       comparePred, corAR1, corARMA, corCAR1, corCompSymm,
+#       corExp, corFactor, corGaus, corIdent, corLin, corMatrix,
+#       corNatural, corRatio, corSpatial, corSpher, corSymm,
+#       "covariate<-", Dim, fdHess, fixed.effects, fixef, gapply,
+#       getCovariate, getCovariateFormula, getData, getGroups,
+#       getGroupsFormula, getResponse, getResponseFormula, getVarCov,
+#       gls, glsControl, glsStruct, gnls, gnlsControl, gnlsStruct,
+#       groupedData, gsummary, Initialize, intervals, isBalanced,
+#       isInitialized, LDEsysMat, lme, lmeControl, lmeScale, lmeStruct,
+#       lmList, logDet, "matrix<-", Names, "Names<-", needUpdate,
+#       nfGroupedData, nlme, nlmeControl, nlmeStruct, nlsList,
+#       nmGroupedData, pdBlocked, pdCompSymm, pdConstruct, pdDiag,
+#       pdFactor, pdIdent, pdLogChol, pdMat, pdMatrix, pdNatural,
+#       pdSymm, phenoModel, pooledSD, quinModel,
+#       random.effects, ranef, recalc, reStruct, simulate.lme,
+#       splitFormula, varComb, varConstPower, VarCorr, varExp,
+#       varFixed, varFunc, varIdent, Variogram, varPower, varWeights
+# )
+
+# called in nlme package directly via do.call
+# export(anova.lme, nlsList.formula, plot.lme)
+
+# needed as name stored in the call via match.call
+# export(lme.formula, lme.lmList, lmList.formula, nlme.formula,
+#      nlme.nlsList)
+### END of nlme exports
+
+importFrom(nlme, varPower, Initialize, varWeights)   # logLik1
+importFrom(nlme, getVarCov)                          # simulateY
+
+
 export(missPat, runScript)
 
 # generic functions defined in auxiliary.R

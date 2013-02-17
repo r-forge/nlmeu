@@ -5,13 +5,14 @@ lm3.form <- formula(visual ~ visual0 + time + treat.f)
 fm16.5ml <- lme(lm3.form, random = list(subject = pdDiag(~time)) ,
                weights = varPower(form = ~ time),  data = armd,
                method="ML")
-
-
-df1 <- subset(armd, subject %in% "1") # Data for subject "1"
 detach(package:nlme)
 
 library(nlmeU)
-logLik1(fm16.5ml, df1)
+seedValue <- 5342
+set.seed(seedValue)
+simY <- simulateY(fm16.5ml, nsim = 10)
+str(simY)
+
 packageVersion("nlme")
 sessionInfo()
 detach(package:nlmeU)

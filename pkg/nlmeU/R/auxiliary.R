@@ -24,7 +24,7 @@ sigma.default <- function(object, ...) object$sigma
 
 runScript <- function(script= NA,  package = "nlmeU", subdir = "scripts", echo = TRUE){
     scriptsDir <- system.file(subdir, package = package)
-    scriptsList <- list.files(scriptsDir)
+    scriptsList <- list.files(scriptsDir, pattern = "[[:alnum:]][.][R]$")
     scriptFile <- file.path(scriptsDir, script)
     if (!(script %in% scriptsList)) {
     if (is.na(script)) {
@@ -34,9 +34,10 @@ runScript <- function(script= NA,  package = "nlmeU", subdir = "scripts", echo =
         else {
             errFun <- stop
             errMsg <- paste("Example", example, "does not exist. ")
+            
         }
-        errFun(errMsg, "Valid scripts are \"", paste(scriptsList, 
-            collapse = "\", \""), "\"")
+        errFun(errMsg, "Valid scripts are: \"", paste(scriptsList, 
+            collapse = "\", \n"), "\"")
     }
     else {
         sourceText <- source(scriptFile, echo=echo)

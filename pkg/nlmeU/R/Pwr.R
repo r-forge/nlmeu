@@ -26,7 +26,8 @@ Pwr.lme <- function (object, ...,
   Lmiss <- missing(L)
   Tmiss <- missing(Terms)    
   Lx <- !Tmiss || !Lmiss     # Contrasts matrix L can be created 
-  fixefNms <- names(fixef(object))
+  fixefs <- object$coefficients$fixed
+  fixefNms <- names(fixefs)
   if (!Lx && !missing(sigma)) stop("L or Terms arguments need to be specified with non-missing sigma argument") 
   ### optx <- if (object$sigma < tol) FALSE else TRUE
   
@@ -100,7 +101,7 @@ if (!is.null(altB) && Lx){ # START
   altBdt <- as.data.frame(altB)
   altBnrow <- nrow(altBdt)
   altBnms  <- names(altBdt)
-  fixefx <- fixef(object)
+  fixefx <- object$coefficients$fixed
   dt1 <- data.frame(matrix(rep(fixefx, altBnrow), nrow= altBnrow, byrow = TRUE))
   names(dt1) <- fixefNms
   #print(names(dt1))
@@ -190,7 +191,7 @@ ret <- data.frame(x$numDF, ddf2, F0val, ncx, Power) #Fcrit omitted
       } else {
       attr(ret,"label") <- "Power calculations: \n" 
       }
-attr(ret, "coefficients") <- fixef(object)
+attr(ret, "coefficients") <- object$coefficients$fixed
 attr(ret,"varFixed")   <- vcovb
   
 attr(ret,"alpha") <- alpha
