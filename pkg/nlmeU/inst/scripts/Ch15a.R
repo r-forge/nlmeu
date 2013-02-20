@@ -4,6 +4,7 @@
 ### code chunk Chap15init
 ###################################################
 options(width=65, digits=5,show.signif.stars = FALSE)   
+date()
 packageVersion("Matrix")
 sessionInfo()
 SeedValue <- 17761

@@ -2,6 +2,7 @@
 ### code chunk: Chap18mer
 ###################################################
 options(width = 65, digits = 5, show.signif.stars = FALSE)
+date()
 packageVersion("nlmeU")
 packageVersion("lme4.0")
 packageVersion("lattice")
@@ -61,7 +62,5 @@ update(rnf6qn[["schoolid"]],         # For schoolid (see Fig. 18.9b)
 
 #### sessionInfo with packages attached 
 sessionInfo() 
-detach(package:lme4.0)
-detach(package:lattice)
 
 

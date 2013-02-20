@@ -8,8 +8,6 @@ R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
 
-  Natural language support but running in an English locale
-
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
 'citation()' on how to cite R or R packages in publications.
@@ -22,9 +20,10 @@ Type 'q()' to quit R.
 > ### code chunk Chap14init
 > ###################################################
 > options(width=65, digits=5, show.signif.stars = FALSE)   
-> 
+> date()
+[1] "Mon Feb 18 18:58:02 2013"
 > packageVersion("nlmeU")
-[1] '0.30.1'
+[1] '0.30.4'
 > packageVersion("nlme")
 [1] '3.1.104'
 > sessionInfo()
@@ -32,7 +31,7 @@ R version 2.15.1 (2012-06-22)
 Platform: i386-pc-mingw32/i386 (32-bit)
 
 locale:
-[1] LC_COLLATE=English_United States.1252 
+[1] LC_COLLATE=C                          
 [2] LC_CTYPE=English_United States.1252   
 [3] LC_MONETARY=English_United States.1252
 [4] LC_NUMERIC=C                          
@@ -208,7 +207,7 @@ $g1
 
 > getGroupsFormula(reSt)           # Model hierarchy
 ~g1/g2
-<environment: 0x02aba60c>
+<environment: 0x032df0c4>
 > Names(reSt)                      # Row/col names for pdMat components
 $g2
 [1] "agefM" "agefO" "agefY"
@@ -313,7 +312,7 @@ R version 2.15.1 (2012-06-22)
 Platform: i386-pc-mingw32/i386 (32-bit)
 
 locale:
-[1] LC_COLLATE=English_United States.1252 
+[1] LC_COLLATE=C                          
 [2] LC_CTYPE=English_United States.1252   
 [3] LC_MONETARY=English_United States.1252
 [4] LC_NUMERIC=C                          
@@ -324,7 +323,7 @@ attached base packages:
 [7] base     
 
 other attached packages:
-[1] nlmeU_0.30-1 nlme_3.1-104
+[1] nlmeU_0.30-4 nlme_3.1-104
 
 loaded via a namespace (and not attached):
 [1] grid_2.15.1    lattice_0.20-6 tools_2.15.1  
@@ -333,4 +332,4 @@ loaded via a namespace (and not attached):
 > 
 > proc.time()
    user  system elapsed 
-   0.93    0.07    0.95 
+   0.43    0.07    0.48 

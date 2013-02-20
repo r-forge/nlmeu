@@ -3,6 +3,7 @@
 ### code chunk: Ch05init
 ###################################################
 options(width=65, digits=5, show.signif.stars = FALSE)
+date()
 sessionInfo()
 
 

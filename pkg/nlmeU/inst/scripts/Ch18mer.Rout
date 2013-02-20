@@ -8,8 +8,6 @@ R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
 
-  Natural language support but running in an English locale
-
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
 'citation()' on how to cite R or R packages in publications.
@@ -22,8 +20,10 @@ Type 'q()' to quit R.
 > ### code chunk: Chap18mer
 > ###################################################
 > options(width = 65, digits = 5, show.signif.stars = FALSE)
+> date()
+[1] "Wed Feb 20 10:17:55 2013"
 > packageVersion("nlmeU")
-[1] '0.30.1'
+[1] '0.30.4'
 > packageVersion("lme4.0")
 [1] '0.999999.1'
 > packageVersion("lattice")
@@ -34,7 +34,7 @@ R version 2.15.1 (2012-06-22)
 Platform: i386-pc-mingw32/i386 (32-bit)
 
 locale:
-[1] LC_COLLATE=English_United States.1252 
+[1] LC_COLLATE=C                          
 [2] LC_CTYPE=English_United States.1252   
 [3] LC_MONETARY=English_United States.1252
 [4] LC_NUMERIC=C                          
@@ -201,7 +201,7 @@ R version 2.15.1 (2012-06-22)
 Platform: i386-pc-mingw32/i386 (32-bit)
 
 locale:
-[1] LC_COLLATE=English_United States.1252 
+[1] LC_COLLATE=C                          
 [2] LC_CTYPE=English_United States.1252   
 [3] LC_MONETARY=English_United States.1252
 [4] LC_NUMERIC=C                          
@@ -216,7 +216,9 @@ other attached packages:
 
 loaded via a namespace (and not attached):
 [1] grid_2.15.1   nlme_3.1-104  stats4_2.15.1 tools_2.15.1 
-> detach(package:lme4.0)
-> detach(package:lattice)
-Error: package 'lattice' is required by 'Matrix' so will not be detached
-Execution halted
+> 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+   5.00    0.14    5.10 

@@ -1,0 +1,14 @@
+Package: nlmeForTesting
+Version: 0.0001
+Date: $Date$
+Revision: $Revision$
+Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski <>
+Maintainer: Andrzej Galecki <agalecki@umich.edu>
+Title: Testing new features in nlme package.
+Description: 
+Depends: nlme, R (>= 2.14.2)
+LinkingTo: nlme
+Suggests:  lattice, testthat
+License: GPL (version 2 or later)
+URL:  http://www-personal.umich.edu/~agalecki/
+LazyData: yes

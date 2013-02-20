@@ -5,6 +5,7 @@
 ###################################################
 
 options(width=65, digits=5,show.signif.stars = FALSE)   
+date()
 packageVersion("nlmeU")
 packageVersion("nlme")
 sessionInfo()

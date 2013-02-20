@@ -8,8 +8,6 @@ R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
 Type 'license()' or 'licence()' for distribution details.
 
-  Natural language support but running in an English locale
-
 R is a collaborative project with many contributors.
 Type 'contributors()' for more information and
 'citation()' on how to cite R or R packages in publications.
@@ -23,12 +21,14 @@ Type 'q()' to quit R.
 > ### code chunk: Ch05init
 > ###################################################
 > options(width=65, digits=5, show.signif.stars = FALSE)
+> date()
+[1] "Mon Feb 18 18:57:39 2013"
 > sessionInfo()
 R version 2.15.1 (2012-06-22)
 Platform: i386-pc-mingw32/i386 (32-bit)
 
 locale:
-[1] LC_COLLATE=English_United States.1252 
+[1] LC_COLLATE=C                          
 [2] LC_CTYPE=English_United States.1252   
 [3] LC_MONETARY=English_United States.1252
 [4] LC_NUMERIC=C                          
@@ -318,4 +318,4 @@ $treat.f
 > 
 > proc.time()
    user  system elapsed 
-   0.57    0.04    0.59 
+   0.20    0.12    0.28 

@@ -2,6 +2,7 @@
 ### code chunk: Chap11init
 ###################################################
 options(width = 65, digits = 5, show.signif.stars = FALSE)
+date()
 packageVersion("nlme")
 packageVersion("lattice")
 sessionInfo()
