@@ -1,0 +1,9 @@
+# PKG_CFLAGS=$(C_VISIBILITY)
+
+#    Dear Emacs, treat me as -*- Makefile -*-
+# PKG_LIBS=$(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS)
+
+## default 'nlmeForTesting.dll' does not work in Namespace registration #for R <= 2.14.x
+all: nlme.dll
+nlme.dll: $(OBJECTS)
+	$(SHLIB_LINK) -o $@ $(OBJECTS) $(ALL_LIBS)
