@@ -28,8 +28,9 @@ names(armd240.data) <- nms                           # Variables' names reinstat
 ###################################################
 ### code chunk: R2.2
 ###################################################
-data(armd.wide, package = "nlmeU")                   # armd data loaded
+data(armd.wide, package = "nlmeU")                   # armd.wide data loaded
 str(armd.wide)                                       # Structure of data
+head(armd.wide)                                      # First few records
 (facs <- sapply(armd.wide, is.factor))               # Factors indicated 
 names(facs[facs == TRUE])                            # Factor names displayed                  
 
@@ -63,7 +64,6 @@ data(armd0, package = "nlmeU")             # From nlmeU package
 dim(armd0)                                 # No. of rows and cols
 head(armd0)                                # First six records
 names(armd0)                               # Variables' names
-dim(armd0)                                 # No. of rows and cols
 str(armd0)                                 # Data structure    
 
 
@@ -131,7 +131,7 @@ str(prt.fiber)
 
 
 ###################################################
-### code chunk: R2.7c
+### code chunk: R2.8
 ###################################################
 prt <- merge(prt.subjects, prt.fiber, sort=FALSE)
 dim(prt)
@@ -140,7 +140,7 @@ head(prt)
 
 
 ###################################################
-### code chunk: R2.8
+### code chunk: R2.9
 ###################################################
 data(classroom, package = "WWGbook")
 dim(classroom)                       # Number of rows & variables
@@ -150,7 +150,7 @@ str(classroom)
 
 
 ###################################################
-### code chunk: R2.9
+### code chunk: R2.10
 ###################################################
 SIIdata <- within(classroom, {
    sex <- factor(sex, 
@@ -166,7 +166,7 @@ str(SIIdata)
 
 
 ###################################################
-### code chunk: R2.10
+### code chunk: R2.11
 ###################################################
 rdaDir <- file.path("C:", "temp")         # Dir path
 fp <- file.path(rdaDir, "SIIdata.Rdata")  # External file path
@@ -176,7 +176,7 @@ file.exists(fp)
 
 
 ###################################################
-### code chunk: R2.11
+### code chunk: R2.12
 ###################################################
 data(SIIdata, package = "nlmeU")         # Load data
 dtId <- subset(SIIdata, select = c(schoolid, classid, childid))
@@ -189,7 +189,7 @@ names(gsummary(dtId, form = ~schoolid, inv = TRUE))
 
 
 ###################################################
-### code chunk: R2.12a
+### code chunk: R2.13a
 ###################################################
 (nms1 <- names(gsummary(SIIdata,
     form = ~schoolid,              # schoolid-specific
@@ -197,7 +197,7 @@ names(gsummary(dtId, form = ~schoolid, inv = TRUE))
 
 
 ###################################################
-### code chunk: R2.12b
+### code chunk: R2.13b
 ###################################################
 nms2a <- names(gsummary(SIIdata, 
     form = ~classid,               # classid- and schoolid-specific 
@@ -207,7 +207,7 @@ idx1  <- match(nms1, nms2a)
 
 
 ###################################################
-### code chunk: R2.12c
+### code chunk: R2.13c
 ###################################################
 nms3a <- names(gsummary(SIIdata, 
                  form = ~childid,  # All
@@ -218,7 +218,7 @@ nms3a[-idx12]                      # childid-specific
 
 
 ###################################################
-### code chunk: R2.13
+### code chunk: R2.14
 ###################################################
 fp <- file.path(dataDir, "crossreg.data.csv")
 crossreg.data <- read.csv(fp, header = TRUE) 
@@ -229,7 +229,7 @@ str(crossreg.data)                      # Data structure
 
 
 ###################################################
-### code chunk: R2.14
+### code chunk: R2.15
 ###################################################
 unique(crossreg.data$target)          # Unique values for target
 (unique(crossreg.data$id))            # Unique values for id 
@@ -238,7 +238,7 @@ summary(crossreg.data$scorec)         # Summary statistics for scorec
 
 
 ###################################################
-### code chunk: R2.15a
+### code chunk: R2.16a
 ###################################################
 nItms  <- c(4, 6, 8, 5, 9, 6, 8, 6, 5)        # See Table 2.1
 (lbls <- paste("T", 1:9, "(", nItms, ")", sep = ""))
@@ -250,7 +250,7 @@ str(fcat)
 
 
 ###################################################
-### code chunk: R2.15b
+### code chunk: R2.16b
 ###################################################
 tab1 <- xtabs(~ id + target, data = fcat)     # id by target table
 tab1[c(1,2,539),]

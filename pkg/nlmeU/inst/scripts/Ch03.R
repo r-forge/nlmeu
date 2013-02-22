@@ -76,13 +76,13 @@ detach(armd0)
 
 
 ###################################################
-### code chunk: R3.4 (Fig. 3.2 horizontal grid lines added)
+### Fig. 3.2 with horizontal grid lines added
 ###################################################
 
 library(lattice)
-myPanel <- function(x,y, subscripts, ...){
-  panel.grid(h=-1, v=0)    
-  panel.bwplot(x,y, ...) 
+myPanel <- function(x, y, subscripts, ...){
+  panel.grid(h = -1, v = 0)    
+  panel.bwplot(x, y, ...) 
 }
 
 bw1 <- bwplot(visual ~ time.f|treat.f,
@@ -283,7 +283,8 @@ xtabs(~schlN) # Distribution of the number of pupils over schools
 ### code chunk: R3.12
 ###################################################
 attach(SIIdata)
-(mthgM <- by(cbind(mathgain, mathkind), schoolid, colMeans))
+##  Long output omitted
+##  (mthgM <- by(cbind(mathgain, mathkind), schoolid, colMeans))
 detach(SIIdata)
 
 ###################################################
@@ -318,14 +319,23 @@ rm(cst1, cst2)
 ###################################################
 summary(schlDt$housepov)
 
-#### Auxiliary step: Setting limits for y-axis
-range(SIIdata$mathgain)
-ylims <- c(-120, 260)
-
 ###################################################
 ### code chunk: R3.14b
 ###################################################
 library(lattice)
+xyplot(mthgMn ~ housepov,                         # Fig. 3.8a
+       schlDt, type = c("p", "smooth"), grid = TRUE) 
+xyplot(mthgMn ~ mthkMn,                           # Fig. 3.8b
+       schlDt, type = c("p", "smooth"), grid = TRUE) 
+
+##################################################
+## More detailed code for Figs. 3.8a and 3.8b
+##################################################
+
+#### Auxiliary step: Setting limits for y-axis
+range(SIIdata$mathgain)
+ylims <- c(-120, 260)
+
 xyplot(mthgMn ~ housepov,                         # Fig. 3.8a
        schlDt, type = c("p", "smooth"), 
        ylim = ylims, grid = TRUE) 
@@ -348,27 +358,27 @@ sum(clssCnt)                         # Total number of classes
 ### Steps similar to those shown in R13.3.
 ###################################################
 
-# See R 2.12b how to obtain vector nms2 containing class-specific variables
+## See R2.13b how to obtain vector nms2 containing class-specific variables
 nms2 <- c("yearstea","mathknow", "mathprep", "classid") 
 library(reshape)
-(idvars <- c(nms2,"housepov"))
+(idvars <- c(nms2, "housepov"))
 mvars   <- c("childid")
-dtm1    <- melt(SIIdata, id.vars=idvars, measure.vars=mvars)
+dtm1    <- melt(SIIdata, id.vars = idvars, measure.vars = mvars)
 cst1    <- cast(dtm1, 
              classid + housepov + mathknow + mathprep ~ variable, 
              function(el) length(unique(el)))
 names(cst1)[5] <- "clssN"
 
 mvars   <- c("mathgain","mathkind")
-dtm2    <- melt(SIIdata, id.vars="classid", measure.vars=mvars)
-cst2    <- cast(dtm2, classid~variable, mean)
-names(cst2) <- c("classid","mthgMn","mthkMn")
+dtm2    <- melt(SIIdata, id.vars = "classid", measure.vars = mvars)
+cst2    <- cast(dtm2, classid ~ variable, mean)
+names(cst2) <- c("classid", "mthgMn", "mthkMn")
 clssDt  <- merge(cst1, cst2, sort = FALSE)
 
 ###################################################
 ### code chunk: R 3.16
 ###################################################
-clssDt
+head(clssDt)                     # First few records only
 
 ###################################################
 ### code chunk for Figure 3.9
@@ -442,7 +452,7 @@ scM[c(1, 2, 539), ]
 ###################################################
 library(lattice)
 histogram(~scorec|target, 
-   data= fcat, breaks = NULL
+   data= fcat, breaks = NULL             # Fig. 3.11
 )
 detach(package:lattice)
 
