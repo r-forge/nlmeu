@@ -4,6 +4,7 @@ useDynLib(nlme, .registration=TRUE)
 import(stats)
 importFrom(graphics, pairs, plot)
 
+
 export(ACF, allCoef, asOneFormula, asTable, augPred, balancedGrouped,
        "coef<-", "coefficients<-", collapse, compareFits,
        comparePred, corAR1, corARMA, corCAR1, corCompSymm,

@@ -49,7 +49,6 @@ export(missPat, runScript)
 # generic functions defined in auxiliary.R
 export(logLik1,  Pwr, sigma, simulateY)
 
-# export(model.matrix)
 
 # Methods
 S3method(logLik1,lme)
@@ -57,6 +56,7 @@ S3method(Pwr,lme)
 S3method(sigma,default)
 S3method(simulateY, lme)
 S3method(print, Pwr)
+
 # S3method(model.matrix, reStruct) # Does not over-write nlme method
 
 ### pdKronecker specific 
