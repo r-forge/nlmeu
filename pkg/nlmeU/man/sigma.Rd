@@ -20,7 +20,7 @@ sigma(object, ...)
 \value{
   numeric scalar value. 
 }
-\author{Andrzej Galecki \& Tomasz Burzykowski}
+\author{Andrzej Galecki and Tomasz Burzykowski}
 %\seealso{\code{\link{sigma.default}},
 %  \code{\link{sigma.pdMat}}}
 \examples{

@@ -1,0 +1,224 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ###################################################
+> ### code chunk: Chap18mer
+> ###################################################
+> options(width = 65, digits = 5, show.signif.stars = FALSE)
+> date()
+[1] "Wed Mar 06 18:46:38 2013"
+> packageVersion("nlmeU")
+[1] '0.30.7'
+> packageVersion("lme4.0")
+[1] '0.9999.2'
+> packageVersion("lattice")
+[1] '0.20.6'
+> 
+> sessionInfo()
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=C                          
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+>   
+> require(lattice) 
+Loading required package: lattice
+> 
+> data(SIIdata, package = "nlmeU")
+> 
+> 
+> ###################################################
+> ### code chunk number 5: R18.17
+> ###################################################
+> library(lme4.0)
+Loading required package: Matrix
+
+Attaching package: 'lme4.0'
+
+The following object(s) are masked from 'package:stats':
+
+    AIC, BIC
+
+> fm18.6mer <-                                 
++    lmer(mathgain ~ ses + minority + poly(mathkind, 3) + ses:minority + 
++           (1|schoolid) + (1|schoolid:classid), # Syntax #1 (general)
++         data = SIIdata, REML = FALSE)
+> summ  <- summary(fm18.6mer)
+> print(summ, corr = FALSE)
+Linear mixed model fit by maximum likelihood 
+Formula: mathgain ~ ses + minority + poly(mathkind, 3) + ses:minority +      (1 | schoolid) + (1 | schoolid:classid) 
+   Data: SIIdata 
+   AIC   BIC logLik deviance REMLdev
+ 11348 11399  -5664    11328   11291
+Random effects:
+ Groups           Name        Variance Std.Dev.
+ schoolid:classid (Intercept)  86.0     9.27   
+ schoolid         (Intercept)  66.8     8.17   
+ Residual                     690.9    26.28   
+Number of obs: 1190, groups: schoolid:classid, 312; schoolid, 107
+
+Fixed effects:
+                     Estimate Std. Error t value
+(Intercept)             61.35       2.07   29.65
+ses                      8.84       1.94    4.55
+minorityMnrt=Yes        -6.86       2.28   -3.01
+poly(mathkind, 3)1    -660.46      30.99  -21.31
+poly(mathkind, 3)2     124.46      28.24    4.41
+poly(mathkind, 3)3    -178.34      27.97   -6.37
+ses:minorityMnrt=Yes    -5.82       2.44   -2.39
+> 
+> update(fm18.6mer, 
++        mathgain ~ ses + minority + poly(mathkind, 3) + ses:minority + 
++          (1|schoolid) + (1|classid))           # Syntax #2 
+Linear mixed model fit by maximum likelihood 
+Formula: mathgain ~ ses + minority + poly(mathkind, 3) + (1 | schoolid) +      (1 | classid) + ses:minority 
+   Data: SIIdata 
+   AIC   BIC logLik deviance REMLdev
+ 11348 11399  -5664    11328   11291
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ classid  (Intercept)  86.0     9.27   
+ schoolid (Intercept)  66.8     8.17   
+ Residual             690.9    26.28   
+Number of obs: 1190, groups: classid, 312; schoolid, 107
+
+Fixed effects:
+                     Estimate Std. Error t value
+(Intercept)             61.35       2.07   29.65
+ses                      8.84       1.94    4.55
+minorityMnrt=Yes        -6.86       2.28   -3.01
+poly(mathkind, 3)1    -660.46      30.99  -21.31
+poly(mathkind, 3)2     124.46      28.24    4.41
+poly(mathkind, 3)3    -178.34      27.97   -6.37
+ses:minorityMnrt=Yes    -5.82       2.44   -2.39
+
+Correlation of Fixed Effects:
+            (Intr) ses    mnrM=Y p(,3)1 p(,3)2 p(,3)3
+ses         -0.186                                   
+mnrtyMnrt=Y -0.781  0.149                            
+ply(mth,3)1 -0.118 -0.132  0.166                     
+ply(mth,3)2 -0.051 -0.067  0.074  0.064              
+ply(mth,3)3  0.026 -0.029 -0.025 -0.027 -0.009       
+ss:mnrtyM=Y  0.155 -0.784 -0.062  0.035  0.067  0.039
+> 
+> update(fm18.6mer, 
++        mathgain ~ ses + minority + poly(mathkind, 3) + ses:minority + 
++          (1|schoolid/classid))                 # Syntax #3
+Linear mixed model fit by maximum likelihood 
+Formula: mathgain ~ ses + minority + poly(mathkind, 3) + (1 | schoolid/classid) +      ses:minority 
+   Data: SIIdata 
+   AIC   BIC logLik deviance REMLdev
+ 11348 11399  -5664    11328   11291
+Random effects:
+ Groups           Name        Variance Std.Dev.
+ classid:schoolid (Intercept)  86.0     9.27   
+ schoolid         (Intercept)  66.8     8.17   
+ Residual                     690.9    26.28   
+Number of obs: 1190, groups: classid:schoolid, 312; schoolid, 107
+
+Fixed effects:
+                     Estimate Std. Error t value
+(Intercept)             61.35       2.07   29.65
+ses                      8.84       1.94    4.55
+minorityMnrt=Yes        -6.86       2.28   -3.01
+poly(mathkind, 3)1    -660.46      30.99  -21.31
+poly(mathkind, 3)2     124.46      28.24    4.41
+poly(mathkind, 3)3    -178.34      27.97   -6.37
+ses:minorityMnrt=Yes    -5.82       2.44   -2.39
+
+Correlation of Fixed Effects:
+            (Intr) ses    mnrM=Y p(,3)1 p(,3)2 p(,3)3
+ses         -0.186                                   
+mnrtyMnrt=Y -0.781  0.149                            
+ply(mth,3)1 -0.118 -0.132  0.166                     
+ply(mth,3)2 -0.051 -0.067  0.074  0.064              
+ply(mth,3)3  0.026 -0.029 -0.025 -0.027 -0.009       
+ss:mnrtyM=Y  0.155 -0.784 -0.062  0.035  0.067  0.039
+> 
+> 
+> ###################################################
+> ### code chunk number 10: R18.18
+> ###################################################
+> anova(fm18.6mer)	                 # Approximate F-test statistics
+Analysis of Variance Table
+                  Df Sum Sq Mean Sq F value
+ses                1    481     481    0.70
+minority           1      8       8    0.01
+poly(mathkind, 3)  3 368141  122714  177.62
+ses:minority       1   3936    3936    5.70
+> logLik(fm18.6mer)                  # ML value
+'log Lik.' -5663.9 (df=10)
+> unlist(VarCorr(fm18.6mer))         # d_1 and d_2
+schoolid:classid         schoolid 
+          85.981           66.768 
+> sigma(fm18.6mer)                   # sigma
+[1] 26.285
+> 
+> 
+> ###################################################
+> ### code chunk number 11: R18.19a.
+> ###################################################
+> rsd6 <- resid(fm18.6mer)
+> qqnorm(rsd6)            
+> 
+> 
+> ###################################################
+> ### code chunk number 12: R18.19b
+> ###################################################
+> rnf6mer <- ranef(fm18.6mer)          # Random effects
+> rnf6qn  <- plot(rnf6mer, grid = TRUE)# Q-Q plot for random effects
+> update(rnf6qn[["schoolid:classid"]], # For classid  (see Fig. 18.9a)
++        ylab = c("Random effects for classes")) 
+> update(rnf6qn[["schoolid"]],         # For schoolid (see Fig. 18.9b) 
++        ylab = c("Random effects for schools")) 
+> 
+> #### sessionInfo with packages attached 
+> sessionInfo() 
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=C                          
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+
+other attached packages:
+[1] lme4.0_0.9999-2 Matrix_1.0-6    lattice_0.20-6 
+
+loaded via a namespace (and not attached):
+[1] grid_2.15.0   nlme_3.1-103  stats4_2.15.0 tools_2.15.0 
+> 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+   5.39    0.03    5.44 

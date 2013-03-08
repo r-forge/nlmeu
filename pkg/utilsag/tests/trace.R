@@ -5,10 +5,10 @@ TracedFunction1 <- function(x){
    .traceR <-   if (is.null(.traceRinit))
       function(...){} else .traceRinit(funNm) 
       
-   .traceR(1, , funNm, "TracedFunction1 STARTS here")
+   .traceR(1,"TracedFunction1 STARTS here", funNm, msg = TRUE)
    .traceR(2, x, funNm)
    .traceR(3, c(1,x), funNm)
-   .traceR(1, ,funNm, "TracedFunction1 ENDS here")
+   .traceR(1,"TracedFunction1 ENDS here", funNm, msg = TRUE )
    x
 }
 
@@ -18,7 +18,7 @@ TracedFunction2 <- function(x){
    .traceR <-   if (is.null(.traceRinit))
       function(...){} else .traceRinit(funNm) 
 
-   .traceR(1, , funNm, "TracedFunction2 STARTS here")
+   .traceR(1, "TracedFunction2 STARTS here", funNm, msg = TRUE)
     mtx <- diag(x,2)
    .traceR(2, mtx, funNm)
    .traceR(3, list(x, mtx), funNm)
@@ -30,10 +30,8 @@ TracedFunction2 <- function(x){
    .traceR(70, as.list(envx), funNm, "Environment envx as list")
     z <- NULL
    .traceR(80, z, funNm, lbl= "80a")
-
    .traceR(80, capture.output(z), funNm, lbl = "80b")
-
-   .traceR(1, ,funNm, "TracedFunction2 ENDS here")
+   .traceR(1, "TracedFunction2 ENDS here", funNm, msg = TRUE)
    x
 }
 
@@ -47,9 +45,9 @@ TracedFunction1(1)
 traceR <- list()
 attr(traceR, "init") <-  utilsag:::traceRinit     #  Always needed for traceR
 attr(traceR, "default") <- utilsag:::traceRprint  #  traceRprint, traceList
-attr(traceR, "id")   =   1                      #  Numeric with selected ids
+attr(traceR, "id") <- 1                 #  Numeric with selected ids
 attr(traceR, "default")
-options (traceR=traceR) 
+options (traceR = traceR) 
 TracedFunction1(1)
 TracedFunction2(2)
 
@@ -76,10 +74,10 @@ traceR <- list(
 
 idL <- list("TF2" = 1:2)              # Selected ids for TF2
 
-attr(traceR, "id")   =   idL  
+attr(traceR, "id")   <-  idL  
 attr(traceR, "init") <-  utilsag:::traceRinit    # Always needed
                    
-options (traceR=traceR) 
+options (traceR = traceR) 
 TracedFunction1(41)
 
 .traceRlist <- list()

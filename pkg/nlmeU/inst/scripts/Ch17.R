@@ -1,3 +1,0 @@
-date()
-packageVersion("nlmeU")
-message("Code for Chapter 17 will be prepared later (Feb.15, 2013)")

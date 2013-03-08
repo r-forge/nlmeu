@@ -3,7 +3,7 @@
 
 logLik1 <-  function(modfit, dt1, dtInit) UseMethod("logLik1")
 Pwr <-  function(object, ...) UseMethod("Pwr")
-simulateY <- function(object, nsim = 1, seed = NULL, ...) UseMethod("simulateY")
+simulateY <- function(object, nsim = 1, seed = NULL, ..., verbose = FALSE, sigma) UseMethod("simulateY")
 sigma <-  function(object, ...) UseMethod("sigma")
 
 
@@ -26,7 +26,7 @@ sigma.default <- function(object, ...) object$sigma
 
 
 
-runScript <- function(script= NA,  package = "nlmeU", subdir = "scripts", echo = TRUE){
+runScript <- function(script= NA,  package = "nlmeU", subdir = "scriptsR15.0", echo = TRUE){
     scriptsDir <- system.file(subdir, package = package)
     scriptsList <- list.files(scriptsDir, pattern = "[[:alnum:]][.][R]$")
     scriptFile <- file.path(scriptsDir, script)
@@ -51,8 +51,3 @@ runScript <- function(script= NA,  package = "nlmeU", subdir = "scripts", echo =
 
 
 
-meltx <-
-function (data, ...) 
-{
-    data.frame(value = data)
-}

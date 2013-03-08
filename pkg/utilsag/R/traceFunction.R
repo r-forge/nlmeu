@@ -5,7 +5,7 @@
    
 traceRinit <- function(flbl){      # Function label/name
    hl <-  options()$traceR         # List
-   htrace <- hl[[flbl]]           # Trace function
+   htrace <- hl[[flbl]]            # Trace function
    if (is.null(htrace)) htrace <- attr(hl, "default")
    .traceR <- if (is.null(htrace))  function(...){ } else  htrace 
    if (is.null(htrace) ) function(...){} else htrace
@@ -16,7 +16,7 @@ traceRdefault<- function(...){}
 ## Auxiliary functions
 
 traceRinfoAux <- function(
- id, # Not used by this function
+ id,  # id Not used by this function
  flbl, msg, lbl 
 ){ 
  tt <- paste(flbl, lbl,  sep = "_") 
@@ -41,8 +41,14 @@ return(sel)
 ## Main traceR functions: Need to have: id, object, flbl, msg, lbl arguments.
 
 traceRprint1 <- function(id, object = NULL, flbl, 
- msg =paste("Trace ", lbl, " executed", sep = ""),
+ msg = paste("Trace ", lbl, " executed", sep = ""),
  lbl = as.character(id)){ 
+
+if (!is.character(msg) && msg) {   # If msg is TRUE then message extracted from object argument
+  msg <- object 
+  object <- NULL
+}
+
 ## All traces will be printed
 info <- utilsag:::traceRinfoAux(id, flbl, msg, lbl)
 cat(info)
@@ -52,7 +58,13 @@ if (!is.null(object)) print(object)
 traceRprint <- function(id, object = NULL, flbl, 
  msg = paste("Trace ", lbl, " executed", sep = ""), 
  lbl = as.character(id)){ 
-sel <- utilsag:::traceRselect(id,lbl, flbl)
+
+if (!is.character(msg) && msg) {   # If msg is TRUE then message taken from object argument
+  msg <- object 
+  object <- NULL
+}
+
+sel <- utilsag:::traceRselect(id, lbl, flbl)
 if (sel ) traceRprint1(id, object, flbl, msg, lbl)
 }
 

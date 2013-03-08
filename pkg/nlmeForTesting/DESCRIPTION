@@ -8,7 +8,7 @@ Title: Testing new features in nlme package.
 Description: Minor changes compared to original nlme package. Changes allow to run models with pdKronecker class defined in nlmeU package
 Depends: graphics, stats, R (>= 2.14.2)
 LinkingTo: nlme
-Imports: lattice
+Imports: lattice, nlmeU
 Suggests:  lattice, testthat
 License: GPL (version 2 or later)
 URL:  http://www-personal.umich.edu/~agalecki/

@@ -1,0 +1,249 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ###################################################
+> ### code chunk: Chap6init
+> ###################################################
+> options(width=65, digits=5, show.signif.stars = FALSE)
+> date()
+[1] "Wed Mar 06 17:39:41 2013"
+> packageVersion("nlmeU")
+[1] '0.30.7'
+> packageVersion("nlme")
+[1] '3.1.103'
+> sessionInfo()
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=C                          
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+> 
+> data(armd, package = "nlmeU")
+> 
+> ###################################################
+> ### code chunk: R6.1
+> ###################################################
+> lm1.form <-                   # Fixed effects formula:(6.1)
++     formula(visual ~ -1 + visual0 + time.f + treat.f:time.f )
+> vis.lm1.mf <- model.frame(lm1.form, armd)        # Model frame
+> vis.lm1.dm <- model.matrix(lm1.form, vis.lm1.mf) # Design matrix X
+> dim(vis.lm1.dm)               # Dimensions
+[1] 867   9
+> (nms <- colnames(vis.lm1.dm)) # Long column names ...
+[1] "visual0"                   "time.f4wks"               
+[3] "time.f12wks"               "time.f24wks"              
+[5] "time.f52wks"               "time.f4wks:treat.fActive" 
+[7] "time.f12wks:treat.fActive" "time.f24wks:treat.fActive"
+[9] "time.f52wks:treat.fActive"
+> nms <- abbreviate(nms)        # ... abbreviated
+> colnames(vis.lm1.dm) <- nms   # ... assigned.
+> head(vis.lm1.dm, n = 6)       # X matrix. Six rows.
+  vsl0 tm.4 tm.12 tm.24 tm.52 t.4: t.12: t.24: t.52:
+2   59    1     0     0     0    1     0     0     0
+3   59    0     1     0     0    0     1     0     0
+5   65    1     0     0     0    1     0     0     0
+6   65    0     1     0     0    0     1     0     0
+7   65    0     0     1     0    0     0     1     0
+8   65    0     0     0     1    0     0     0     1
+> attr(vis.lm1.dm, "contrasts") # Contrasts attribute.
+$time.f
+             .L       .Q        .C
+4wks  -0.522167  0.56505 -0.397573
+12wks -0.302307 -0.16233  0.795147
+24wks  0.027482 -0.73674 -0.454369
+52wks  0.796992  0.33403  0.056796
+
+$treat.f
+[1] "contr.treatment"
+
+> contrasts(armd$treat.f)       # Contrasts for treat.f
+        Active
+Placebo      0
+Active       1
+> 
+> 
+> ###################################################
+> ### code chunk: R6.2a
+> ###################################################
+> lm6.1 <- lm(lm1.form, data = armd)         # M6.1:(6.1)
+> summ <- summary(lm6.1)                     # Summary
+> tT <- coef(summ)                           # beta, se, t-test
+> rownames(tT)                               # Fixed effects (beta) names
+[1] "visual0"                   "time.f4wks"               
+[3] "time.f12wks"               "time.f24wks"              
+[5] "time.f52wks"               "time.f4wks:treat.fActive" 
+[7] "time.f12wks:treat.fActive" "time.f24wks:treat.fActive"
+[9] "time.f52wks:treat.fActive"
+> rownames(tT) <- abbreviate(rownames(tT))   # Abbreviated beta names
+> printCoefmat(tT, P.values = TRUE)
+      Estimate Std. Error t value Pr(>|t|)
+vsl0    0.8304     0.0284   29.21  < 2e-16
+tm.4    8.0753     1.9434    4.16  3.6e-05
+tm.12   7.0807     1.9407    3.65  0.00028
+tm.24   3.6302     1.9532    1.86  0.06342
+tm.52  -1.7464     1.9895   -0.88  0.38029
+t.4:   -2.3528     1.6289   -1.44  0.14900
+t.12:  -3.7085     1.6438   -2.26  0.02432
+t.24:  -3.4492     1.6940   -2.04  0.04205
+t.52:  -4.4735     1.7781   -2.52  0.01206
+> summ$sigma                                 # sigma
+[1] 12.376
+> 
+> 
+> ###################################################
+> ### code chunk: R6.2b
+> ###################################################
+> anova(lm6.1)                               # ANOVA table
+Analysis of Variance Table
+
+Response: visual
+                Df  Sum Sq Mean Sq  F value Pr(>F)
+visual0          1 2165776 2165776 14138.99 <2e-16
+time.f           4   14434    3608    23.56 <2e-16
+time.f:treat.f   4    2703     676     4.41 0.0016
+Residuals      858  131426     153                
+> 
+> 
+> ###################################################
+> ### code chunk: Simple syntax for Fig. 6.1a
+> ###             Traditional graphics 
+> ###################################################
+> plot(fitted(lm6.1), resid(lm6.1))          # Fig. 6.1a
+> abline(h = seq(-40, 40, by = 20), col = "grey")
+> abline(v = seq( 10, 80, by = 10), col = "grey")
+> 
+> 
+> ###################################################
+> ### code chunk: Elaborated syntax for Fig. 6.1a
+> ###             Traditional graphics 
+> ###################################################
+> ylim <- c(-50,50)
+>  plot(fitted(lm6.1), resid(lm6.1),
++   ylim = ylim, type = "n", axes = FALSE, cex.lab = 0.9,
++   ylab = "Residuals", 
++   xlab = "Fitted values"
++ )  
+> abline(h = seq(-40,40, by = 20), col = "grey")
+> abline(v = seq(10, 80, by = 10), col = "grey")
+> points(fitted(lm6.1), resid(lm6.1))
+> axis(1, cex.axis = 0.9)
+> axis(2, cex.axis = 0.9)
+> box()
+> 
+> ###################################################
+> ### code chunk: Simple syntax for Fig. 6.1b
+> ###             Traditional graphics 
+> ###################################################
+> qqnorm(resid(lm6.1)); qqline(resid(lm6.1))  # Fig. 6.1b
+> 
+> 
+> ###################################################
+> ### code chunk: Elaborated syntax for Fig. 6.1b
+> ###             Traditional graphics 
+> ###################################################
+> qnDt <- qqnorm(resid(lm6.1),   
++ plot.it = FALSE
++ ) 
+> plot(qnDt, 
++   type = "n", 
++   ylim = c(-50, 50), #  c(-3.8,3.8),  c(-50,50), 
++   xlim = c(-3.8,3.8), #   c(-50,50), 
++   main = "",                         # Normal Q-Q Plot
++   ylab = "Sample Quantiles", 
++   xlab = "Theoretical Quantiles", 
++   axes = FALSE 
++ )
+> abline(h = seq(-40, 40, by = 20), col = "grey")
+> abline(v = -3:3, col = "grey")
+> qqline(resid(lm6.1))
+> points(qnDt)
+> axis(1, cex.axis = 0.9)
+> axis(2, cex.axis = 0.9)
+> box()
+> 
+> 
+> ###################################################
+> ### code chunk: R6.3
+> ###################################################
+> require(nlme)              # Attach nlme package
+Loading required package: nlme
+> fm6.1 <- gls(lm1.form,     # M6.1:(6.1)
++              data = armd)
+> intervals(fm6.1)           # 95% CI for beta, sigma
+Approximate 95% confidence intervals
+
+ Coefficients:
+                             lower     est.    upper
+visual0                    0.77458  0.83037  0.88616
+time.f4wks                 4.26092  8.07531 11.88970
+time.f12wks                3.27166  7.08066 10.88965
+time.f24wks               -0.20332  3.63022  7.46376
+time.f52wks               -5.65132 -1.74643  2.15846
+time.f4wks:treat.fActive  -5.54995 -2.35278  0.84440
+time.f12wks:treat.fActive -6.93482 -3.70852 -0.48222
+time.f24wks:treat.fActive -6.77400 -3.44915 -0.12430
+time.f52wks:treat.fActive -7.96341 -4.47345 -0.98349
+attr(,"label")
+[1] "Coefficients:"
+
+ Residual standard error:
+ lower   est.  upper 
+11.818 12.376 12.991 
+> 
+> ###################################################
+> ### code chunk: Syntax for Fig. 6.1
+> ###################################################
+> plot(predict(fm6.1), residuals(fm6.1))   # Same as Fig. 6.1a
+> qqnorm(residuals(fm6.1))                 # Same as Fig. 6.1b
+> qqline(residuals(fm6.1))
+> 
+> ### sessionInfo()
+> sessionInfo()
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=C                          
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+
+other attached packages:
+[1] nlme_3.1-103
+
+loaded via a namespace (and not attached):
+[1] grid_2.15.0    lattice_0.20-6 tools_2.15.0  
+> detach(package:nlme)
+> 
+> 
+> proc.time()
+   user  system elapsed 
+   0.56    0.09    0.68 

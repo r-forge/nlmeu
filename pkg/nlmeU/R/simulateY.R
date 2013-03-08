@@ -1,5 +1,5 @@
 
-simulateY.lme <- function (object, nsim =1, seed = as.integer(runif(1, 0, .Machine$integer.max)), ...,
+simulateY.lme <- function (object, nsim = 1, seed = as.integer(runif(1, 0, .Machine$integer.max)), ...,
   verbose = FALSE, sigma) 
 {
 # Data with one level of grouping only.
@@ -9,6 +9,8 @@ simulateY.lme <- function (object, nsim =1, seed = as.integer(runif(1, 0, .Machi
       function(...){} else .traceRinit(funNm) 
      
   .traceR(1, , funNm, "simulateY.lme STARTS   <=####")
+
+if (verbose) print(paste("nsim = ", nsim ,", seed = ", seed, sep = ""))
 
 if (!inherits(object, "lme"))  stop("Object must inherit from class \"lme\" ")
 
@@ -24,14 +26,16 @@ if (!missing(sigma))  object$sigma <- sigma
         if (is.numeric(individuals)) 
             individuals <- ugroups[individuals]
 .traceR(150, individuals, funNm)
-Vlist <- getVarCov(object, individuals, type="marginal")
+Vlist <- nlme::getVarCov(object, individuals, type="marginal")
 fitd0 <- fitted(object, level=0)
 chVlist <- lapply(Vlist, chol)
 
 nx <- nsim * length(fitd0)
+
+set.seed(seed)
 noise.mtx <- matrix(rnorm(nx), nrow = length(fitd0), ncol = nsim)
 
-.traceR(2, ,funNm, "lapply STARTS here ***")
+.traceR(2, "lapply STARTS here ***",funNm, msg = TRUE)
 dimN   <-   sapply(chVlist, ncol)  # Number of records per subject
 cdimN1 <- cumsum(dimN)
 cdimN0 <- cumsum(dimN) - dimN + 1
@@ -40,7 +44,7 @@ tList <- vector(length(dimN), mode = "list")
 tList[] <- 1:length(dimN)
 auxF1 <- 
   function(el){ # 1,2, ...
-     .traceR(1001, , funNm, "Local auxF1() within simulateY.lme() STARTS here ***")
+     .traceR(1001,"Local auxF1() within simulateY.lme() STARTS here ***" , funNm, msg = TRUE)
      .traceR(1015, el, funNm)
      chV <- chVlist[[el]]
      ix <- cdimN[el,]
@@ -50,17 +54,17 @@ auxF1 <-
      noisex <- noise.mtx[i0:i1, ]
      .traceR(1025, dim(noisex), funNm)
      tx <-t(chV) %*% noisex   # Check transpose here
-     .traceR(1001, ,funNm, "Local auxF1() within simulateY.lme() ENDS here ***")
+     .traceR(1001,"Local auxF1() within simulateY.lme() ENDS here ***" ,funNm, msg=TRUE)
      tx
 }
 res <- lapply(tList, FUN= auxF1)
-.traceR(2, , funNm, "lapply ENDED ***")
+.traceR(2,"lapply ENDED ***" , funNm, msg = TRUE )
 
-.traceR(2, , funNm, "resAll STARTS***")
+.traceR(2, "resAll STARTS***", funNm, msg = TRUE)
 resAll <- NULL 
 for (i in 1:length(dimN)) resAll <- rbind(resAll, res[[i]])
-.traceR(2, , funNm, "resAll ENDS***")
-.traceR(1, , funNm, "simulateY.lme ENDS   <=####")
+.traceR(2, "resAll ENDS***", funNm, msg = TRUE)
+.traceR(1, "simulateY.lme ENDS   <=####", funNm, msg =TRUE )
 return(resAll + fitd0)
 }
 
@@ -72,7 +76,7 @@ sigmaTolme <- function(object, value){
    .traceR <-   if (is.null(.traceRinit))
       function(...){} else .traceRinit(funNm) 
    
-  .traceR(1, , funNm, "sigmaTolme STARTS")
+  .traceR(1, "sigmaTolme STARTS", funNm, msg=TRUE)
   sigma0 <- object$sigma 
   .traceR(2, sigma0, funNm)  
   val <- value * value
@@ -90,6 +94,6 @@ sigmaTolme <- function(object, value){
   .traceR(5, vcov(object)*sc*sc, funNm)
 
    object$varFix  <- object$varFix*sc*sc  # vcov rescaled  
-   .traceR(1, , funNm, "sigmaTolme ENDS")
+   .traceR(1,"sigmaTolme ENDS" , funNm, msg = TRUE)
    object
 }

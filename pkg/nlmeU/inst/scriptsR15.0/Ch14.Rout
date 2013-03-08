@@ -1,0 +1,335 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ###################################################
+> ### code chunk Chap14init
+> ###################################################
+> options(width=65, digits=5, show.signif.stars = FALSE)   
+> date()
+[1] "Wed Mar 06 17:40:07 2013"
+> packageVersion("nlmeU")
+[1] '0.30.7'
+> packageVersion("nlme")
+[1] '3.1.103'
+> sessionInfo()
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=C                          
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+> data(armd, package = "nlmeU")
+> 
+> ###################################################
+> ### code chunk: R14.1a
+> ###################################################
+> library(nlme)
+> (pdCS0    <- pdCompSymm(~agex))               
+Uninitialized positive definite matrix structure of class pdCompSymm.
+> isInitialized(pdCS0)                               # Not initialized        
+[1] FALSE
+> 
+> 
+> ###################################################
+> ### code chunk: R14.1b
+> ###################################################
+> mtxUN    <- matrix(c(4, 1, 1, 9), nrow = 2)        # pdSymm matrix
+> dt1      <- data.frame(agex = c(15, 45, 71, 82))   # Numeric age
+> (pdSm    <- pdSymm(mtxUN, ~agex, data = dt1))               
+Positive definite matrix structure of class pdSymm representing
+            (Intercept) agex
+(Intercept)           4    1
+agex                  1    9
+> isInitialized(pdSm)                             # Initialized
+[1] TRUE
+> 
+> 
+> ###################################################
+> ### code chunk: R14.1c
+> ###################################################
+> mtxCS    <- matrix(4 * diag(3) + 1, nrow = 3)      # CompSymm matrix
+> dt2      <- data.frame(agef = c("Y", "M", "O", "O")) # Factor age 
+> (pdCSf   <- pdCompSymm(mtxCS, ~-1 + agef, data = dt2))               
+Positive definite matrix structure of class pdCompSymm representing
+      agefM agefO agefY
+agefM     5     1     1
+agefO     1     5     1
+agefY     1     1     5
+> 
+> 
+> ###################################################
+> ### code chunk: R14.2a
+> ###################################################
+> summary(pdSm)               # Summary
+ Formula: ~agex
+ Structure: General positive-definite
+            StdDev Corr  
+(Intercept) 2      (Intr)
+agex        3      0.167 
+> formula(pdSm)               # Formula
+~agex
+> Names(pdSm)                 # Row/col names
+[1] "(Intercept)" "agex"       
+> (Dmtx <- as.matrix(pdSm))   # D matrix
+            (Intercept) agex
+(Intercept)           4    1
+agex                  1    9
+> Dim(pdSm)                   # Dimensions of D  
+[1] 2 2
+> logDet(pdSm)                # log|D^(1/2)|
+[1] 1.7777
+> 
+> # VarCorr(pdSm)             # Variances, correlation coefficients
+> # corMatrix(pdSm)           # Corr(D)
+> 
+> 
+> ###################################################
+> ### code chunk: 14.2b
+> ###################################################
+> Names(pdCSf)                 # Row/col names
+[1] "agefM" "agefO" "agefY"
+> as.matrix(pdCSf)             # D matrix
+      agefM agefO agefY
+agefM     5     1     1
+agefO     1     5     1
+agefY     1     1     5
+> 
+> 
+> ###################################################
+> ### code chunk: 14.3a
+> ###################################################
+> coef(pdSm, unconstrained = FALSE)   # Constrained coefficients   
+     var((Intercept)) cov(agex,(Intercept)) 
+                    4                     1 
+            var(agex) 
+                    9 
+> coef(pdSm)                          # Unconstrained coefficients  
+[1] 0.68424 0.08184 1.09344
+> 
+> 
+> ###################################################
+> ### code chunk: 14.3b
+> ###################################################
+> coef(pdCSf, unconstrained = FALSE)  # Constrained coefficients  
+std. dev    corr. 
+  2.2361   0.2000 
+> coef(pdCSf)                         # Unconstrained coefficients  
+[1]  0.80472 -0.13353
+> log(5)/2                            # First coefficient verified 
+[1] 0.80472
+> rho <- 0.2                          # rho
+> nc  <- 3                            # No. of columns
+> aux <- (rho + 1/(nc - 1))/(1 - rho) # Modified Fisher's z: (10.35)
+> log(aux)                            # Second coefficient verified
+[1] -0.13353
+> 
+> 
+> ###################################################
+> ### code chunk: R14.4a
+> ###################################################
+> pdSm0 <- pdSymm(mtxUN)
+> coef(pdSm0)                     # Unconstrained theta_D  
+[1] 0.68424 0.08184 1.09344
+> Dmtx <- pdMatrix(pdSm0)         # Matrix D
+> CholD <- chol(Dmtx)             # Cholesky factor U of D: D=U'U
+> vd <- svd(CholD, nu=0)          # SVD of U: (13.46)
+> vd$v %*% (log(vd$d) * t(vd$v))  # (13.47)
+        [,1]    [,2]
+[1,] 0.68424 0.08184
+[2,] 0.08184 1.09344
+> 
+> 
+> ###################################################
+> ### code chunk: R14.4b
+> ###################################################
+> pdLCh <- pdLogChol(mtxUN)
+> coef(pdLCh)                     # Unconstrained coefficients theta_D  
+[1] 0.69315 1.08453 0.50000
+> LChD  <- CholD                  # U
+> diag(LChD) <- log(diag(LChD))   # \diag(U) log-transformed
+> LChD
+        [,1]   [,2]
+[1,] 0.69315 0.5000
+[2,] 0.00000 1.0845
+> 
+> 
+> ###################################################
+> ### code chunk: R14.4c
+> ###################################################
+> pdNat <- pdNatural(mtxUN)
+> coef(pdNat)                     # Unconstrained theta_D 
+[1] 0.69315 1.09861 0.33647
+> log(sqrt(diag(Dmtx)))           # log(SDs)
+[1] 0.69315 1.09861
+> corD  <- cov2cor(Dmtx)          # Corr(D)
+> rho   <- corD[upper.tri(corD)]  # rho_ij (for i<j) 
+> log((1+rho)/(1-rho))            # Fisher's z: (10.33)
+[1] 0.33647
+> 
+> 
+> ###################################################
+> ### code chunk: R14.5
+> ###################################################
+> reSt <- reStruct(list(g1=pdSm,   # D_1
++                       g2=pdCSf)) # D_2 
+> isInitialized(reSt)
+[1] TRUE
+> names(reSt)                      # Note: order g1, g2 reversed 
+[1] "g2" "g1"
+> formula(reSt)                    # Formulae for pdMat components
+$g2
+~-1 + agef
+
+$g1
+~agex
+
+> getGroupsFormula(reSt)           # Model hierarchy
+~g1/g2
+<environment: 0x0000000004be1730>
+> Names(reSt)                      # Row/col names for pdMat components
+$g2
+[1] "agefM" "agefO" "agefY"
+
+$g1
+[1] "(Intercept)" "agex"       
+
+> 
+> 
+> ###################################################
+> ### code chunk: R14.6a
+> ###################################################
+> as.matrix(reSt)            # D_1,D_2   
+$g1
+            (Intercept) agex
+(Intercept)           4    1
+agex                  1    9
+
+$g2
+      agefM agefO agefY
+agefM     5     1     1
+agefO     1     5     1
+agefY     1     1     5
+
+> coef(reSt)                 # Unconstrained coefs for D_2,D_1   
+     g21      g22      g11      g12      g13 
+ 0.80472 -0.13353  0.68424  0.08184  1.09344 
+> 
+> 
+> ###################################################
+> ### code chunk: R14.6b
+> ###################################################
+> reSt[["g1"]]                     # See pdSm in Panel R14.1b
+Positive definite matrix structure of class pdSymm representing
+            (Intercept) agex
+(Intercept)           4    1
+agex                  1    9
+> g2.pdMat  <- reSt[["g2"]]        # See pdCSf in Panel R14.1c
+> all.equal(pdCSf, g2.pdMat)       # g2.pdMat and pdCSf are equal
+[1] TRUE
+> 
+> ###################################################
+> ### code chunk: R14.7
+> ###################################################
+> Zmtx1 <- model.matrix(formula(pdSm), dt1)                    
+> prmatrix(Zmtx1)                 # Design matrix Z_1 for pdSm
+  (Intercept) agex
+1           1   15
+2           1   45
+3           1   71
+4           1   82
+> Zmtx2 <- model.matrix(formula(pdCSf),dt2)                    
+> prmatrix(Zmtx2)                 # Design matrix Z_2 for pdCSf 
+  agefM agefO agefY
+1     0     0     1
+2     1     0     0
+3     0     1     0
+4     0     1     0
+> dtz  <- data.frame(dt1,dt2)     # Data frame to evaluate reSt 
+> Zmtx <- model.matrix(reSt, dtz) # Design matrix Z for reSt 
+> prmatrix(Zmtx)                  # Matrix Z w/out attributes
+  g2.agefM g2.agefO g2.agefY g1.(Intercept) g1.agex
+1        0        0        1              1      15
+2        1        0        0              1      45
+3        0        1        0              1      71
+4        0        1        0              1      82
+> 
+> 
+> ###################################################
+> ### code chunk: R14.8
+> ###################################################
+> reSt  <- reStruct(list(g1 = pdSm, g2 = pdCSf))         # reStruct class
+> corSt <- corExp(c(0.3, 0.1), form=~tx, nugget = TRUE)  # corStruct class
+> vF    <- varExp(0.8, form = ~agex)                     # varFunc class
+> (lmeSt<- lmeStruct(reStruct = reSt, corStruct=corSt,   # lmeStruct class
++           varStruct = vF))                             # ... created.
+reStruct  parameters:
+     g21      g22      g11      g12      g13 
+ 0.80472 -0.13353  0.68424  0.08184  1.09344 
+corStruct  parameters:
+ range nugget 
+   0.3    0.1 
+varStruct  parameters:
+expon 
+  0.8 
+> coefs <- coef(lmeSt,unconstrained=FALSE) # Constrained coefficients...
+> (as.matrix(coefs))                       # ...printed more compactly
+                                     [,1]
+reStruct.g2.std. dev              2.23607
+reStruct.g2.corr.                 0.20000
+reStruct.g1.var((Intercept))      4.00000
+reStruct.g1.cov(agex,(Intercept)) 1.00000
+reStruct.g1.var(agex)             9.00000
+corStruct.range                   1.34986
+corStruct.nugget                  0.52498
+varStruct.expon                   0.80000
+> 
+> #### sessionInfo ###
+> library(nlmeU)
+> sessionInfo()           # with packages attached
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=C                          
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+
+other attached packages:
+[1] nlmeU_0.30-7 nlme_3.1-103
+
+loaded via a namespace (and not attached):
+[1] grid_2.15.0    lattice_0.20-6 tools_2.15.0  
+> detach(package:nlmeU)
+> detach(package:nlme)
+> 
+> proc.time()
+   user  system elapsed 
+   0.43    0.06    0.48 

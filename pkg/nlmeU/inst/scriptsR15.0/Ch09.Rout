@@ -1,0 +1,471 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> 
+> ###################################################
+> ### code chunk: Chap9init
+> ###################################################
+> options(width = 65, digits = 5, show.signif.stars = FALSE)
+> date()
+[1] "Wed Mar 06 17:39:43 2013"
+> packageVersion("nlmeU")
+[1] '0.30.7'
+> packageVersion("nlme")
+[1] '3.1.103'
+> packageVersion("ellipse")
+[1] '0.3.7'
+> packageVersion("lattice")
+[1] '0.20.6'
+> sessionInfo()
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=C                          
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+> data(armd, package = "nlmeU")
+> 
+> library(nlme)
+> lm1.form <-                             # See also R6.1
++    formula(visual ~ -1 + visual0 + time.f + treat.f:time.f)
+> fm6.1 <- gls(lm1.form, data = armd)
+> 
+> ###################################################
+> ### code chunk: R9.1a
+> ###################################################
+> lm1.form <-                             # See also R6.1
++    formula(visual ~ -1 + visual0 + time.f + treat.f:time.f)
+> fm9.1 <-                                # M9.1
++    gls(lm1.form,                  
++        weights = varIdent(form = ~1|time.f), # Var. function; <delta>-group 
++        data = armd)
+> summary(fm9.1)                  
+Generalized least squares fit by REML
+  Model: lm1.form 
+  Data: armd 
+     AIC    BIC  logLik
+  6740.3 6802.1 -3357.1
+
+Variance function:
+ Structure: Different standard deviations per stratum
+ Formula: ~1 | time.f 
+ Parameter estimates:
+  4wks  12wks  24wks  52wks 
+1.0000 1.3976 1.6643 1.8809 
+
+Coefficients:
+                            Value Std.Error t-value p-value
+visual0                    0.8630   0.02544  33.917  0.0000
+time.f4wks                 6.2729   1.59943   3.922  0.0001
+time.f12wks                5.2821   1.76164   2.998  0.0028
+time.f24wks                1.8353   1.90835   0.962  0.3365
+time.f52wks               -3.5604   2.07185  -1.718  0.0861
+time.f4wks:treat.fActive  -2.3253   1.08515  -2.143  0.0324
+time.f12wks:treat.fActive -3.6893   1.53028  -2.411  0.0161
+time.f24wks:treat.fActive -3.4326   1.87797  -1.828  0.0679
+time.f52wks:treat.fActive -4.4395   2.22756  -1.993  0.0466
+
+ Correlation: 
+                          visul0 tm.f4w tm.f12 tm.f24 tm.f52
+time.f4wks                -0.879                            
+time.f12wks               -0.796  0.700                     
+time.f24wks               -0.734  0.645  0.584              
+time.f52wks               -0.683  0.601  0.544  0.501       
+time.f4wks:treat.fActive   0.020 -0.352 -0.016 -0.015 -0.014
+time.f12wks:treat.fActive  0.010 -0.009 -0.429 -0.007 -0.007
+time.f24wks:treat.fActive  0.007 -0.006 -0.005 -0.474 -0.005
+time.f52wks:treat.fActive  0.012 -0.010 -0.009 -0.009 -0.504
+                          t.4:.A t.12:. t.24:.
+time.f4wks                                    
+time.f12wks                                   
+time.f24wks                                   
+time.f52wks                                   
+time.f4wks:treat.fActive                      
+time.f12wks:treat.fActive  0.000              
+time.f24wks:treat.fActive  0.000  0.000       
+time.f52wks:treat.fActive  0.000  0.000  0.000
+
+Standardized residuals:
+     Min       Q1      Med       Q3      Max 
+-4.05779 -0.53429  0.13874  0.64988  3.45976 
+
+Residual standard error: 8.2441 
+Degrees of freedom: 867 total; 858 residual
+> fm9.1$modelStruct$varStruct             # (9.3): delta1=1, ...  
+Variance function structure of class varIdent representing
+  4wks  12wks  24wks  52wks 
+1.0000 1.3976 1.6643 1.8809 
+> (intervals(fm9.1, which = "var-cov"))   # 95% CI for delta2,3,4 & sigma
+Approximate 95% confidence intervals
+
+ Variance function:
+       lower   est.  upper
+12wks 1.2269 1.3976 1.5921
+24wks 1.4576 1.6643 1.9004
+52wks 1.6409 1.8809 2.1559
+attr(,"label")
+[1] "Variance function:"
+
+ Residual standard error:
+ lower   est.  upper 
+7.5190 8.2441 9.0391 
+> 
+> ###################################################
+> ### code chunk: R9.1b
+> ###################################################
+> anova(fm6.1, fm9.1)                     # M6.1 nested in M9.1
+      Model df    AIC    BIC  logLik   Test L.Ratio p-value
+fm6.1     1 10 6821.6 6869.2 -3400.8                       
+fm9.1     2 13 6740.3 6802.1 -3357.1 1 vs 2  87.326  <.0001
+> 
+> 
+> ###################################################
+> ### code chunk: R9.2a
+> ###################################################
+> fm9.2 <-                                    # M9.2 <- M9.1
++    update(fm9.1,                    
++           weights = varPower(form = ~time)) # (9.4); <delta>-group 
+> fm9.3 <-                                    # M9.3 <- M9.1
++    update(fm9.1,                            # (9.5); strata=treat.f 
++           weights = varPower(form = ~time|treat.f))
+> fm9.4 <-                                    # M9.4 <- M9.1
++   update(fm9.1, weights = varPower())       # (9.6); <delta,mu>-group
+> fm9.5 <-                                    # M9.5 <- M9.1
++   update(fm9.1,                             
++          weights = varPower(fixed = 1))     # (9.7), <mu>-group
+> 
+> 
+> ###################################################
+> ### code chunk: R9.2b
+> ###################################################
+> anova(fm9.2, fm9.3)                       # M9.2 nested in M9.3
+      Model df    AIC    BIC  logLik   Test  L.Ratio p-value
+fm9.2     1 11 6738.1 6790.4 -3358.1                        
+fm9.3     2 12 6740.1 6797.2 -3358.1 1 vs 2 0.015529  0.9008
+> 
+> 
+> ###################################################
+> ### code chunk: R9.2c
+> ###################################################
+> anova(fm9.2, fm9.1)                       # M9.2 nested in M9.1
+      Model df    AIC    BIC  logLik   Test L.Ratio p-value
+fm9.2     1 11 6738.1 6790.4 -3358.1                       
+fm9.1     2 13 6740.3 6802.1 -3357.1 1 vs 2   1.832  0.4001
+> 
+> 
+> ###################################################
+> ### code chunk: R9.2d
+> ###################################################
+> anova(fm9.5, fm9.4)                       # M9.5 nested in M9.4 
+      Model df    AIC    BIC  logLik   Test L.Ratio p-value
+fm9.5     1 10 6965.9 7013.5 -3473.0                       
+fm9.4     2 11 6823.1 6875.4 -3400.6 1 vs 2  144.84  <.0001
+> 
+> ###################################################
+> ### code chunk: R9.2e
+> ###################################################
+> AIC(fm9.1, fm9.2, fm9.3,                  # Non-nested models
++     fm9.4, fm9.5)                         # Smaller AIC corresponds to a better fit
+      df    AIC
+fm9.1 13 6740.3
+fm9.2 11 6738.1
+fm9.3 12 6740.1
+fm9.4 11 6823.1
+fm9.5 10 6965.9
+> 
+> 
+> ###################################################
+> ### code chunk: R9.3a
+> ###################################################
+> mSt2 <- fm9.2$modelStruct           # Model structure
+> vF2 <- mSt2$varStruct               # Variance function:(9.4)
+> summary(vF2)                        # Summary: delta.
+Variance function:
+ Structure: Power of variance covariate
+ Formula: ~time 
+ Parameter estimates:
+  power 
+0.25193 
+> summary(fm9.2)$sigma                # sigma
+[1] 5.9749
+> 
+> 
+> 
+> ###################################################
+> ### code chunk: R9.3b
+> ###################################################
+> mSt3 <- fm9.3$modelStruct           # Model structure
+> vF3  <- mSt3$varStruct              # Variance function:(9.5)
+> summary(vF3)                        # Summary: delta1,2
+Variance function:
+ Structure: Power of variance covariate, different strata
+ Formula: ~time | treat.f 
+ Parameter estimates:
+ Active Placebo 
+0.25325 0.25113 
+> coef(vF3)                           # delta1,2
+ Active Placebo 
+0.25325 0.25113 
+> formula(vF3)                        # Variance function formula
+~time | treat.f
+> varWeights(vF3)[3:10]               # Weights for two subjects
+ Active  Active  Active  Active Placebo Placebo Placebo Placebo 
+0.70393 0.53297 0.44716 0.36764 0.70600 0.53578 0.45019 0.70600 
+> 
+> ###################################################
+> ### code chunk: R9.4a
+> ###################################################
+> library(lattice)
+> plot(fm9.2,                                   # Fig. 9.1a
++      resid(., type = "response") ~ fitted(.)) # Raw vs fitted  
+> plot(fm9.2,                                   # Raw vs time (not shown)
++      resid(., type = "response") ~ time)      # (See Fig. 9.1a)     
+> bwplot(resid(fm9.2) ~ time.f,                 # Fig. 9.1b         
++        pch = "|", data = armd)                # Raw vs time.f.                      
+> 
+> ###################################################
+> ### code chunk: R9.4b
+> ###################################################
+> 
+> plot(fm9.2,                                   # Fig. 9.1c
++      resid(., type = "pearson" ) ~ fitted(.)) # Pearson vs fitted 
+> plot(fm9.2,                                   #  vs time (not shown)
++      resid(., type = "pearson") ~ time)       # (See Fig. 9.1c)
+> bwplot(                                       # Fig. Fig. 9.1d
++   resid(fm9.2, type = "pearson") ~ time.f,    # Pearson vs time.f                          
++   pch = "|", data = armd)                 
+> 
+> 
+> ###################################################
+> ### code chunk: R9.4c
+> ###################################################
+> plot(fm9.2,                               # Fig. 9.2a
++      sqrt(abs(resid(., type = "response"))) ~ fitted(.),
++      type = c("p", "smooth"))
+> plot(fm9.2,                               # Fig. 9.2b
++      sqrt(abs(resid(., type = "pearson"))) ~ fitted(.),
++      type = c("p", "smooth"))
+> 
+> ###################################################
+> ### code chunk: More elaborate syntax for Figure 9.2
+> ###################################################
+> 
+> ylab <- c("Residuals", "Standardized residuals")
+> xlab <- c("Fitted values", "Time in weeks")
+> ylim1 <- c(-50,50)                          # For Figs. 9.1a and 9.1b
+> ylim2 <- c(-4.2, 4.2)                       # For Figs. 9.1a and 9.1b
+> xlims <- c("4", "12","24","52wks")          # For Figs. 9.1b and 9.1d
+> 
+> xyPanel <- function(x,y,subscripts,...){   # For Figs. 9.1a and 9.1c
++   panel.grid(h = -1, v = -1)  # vertical and horizontal
++   panel.xyplot(x, y, ...)     # points over the grid
++ }
+> 
+> bwPanel <- function(x,y,subscripts,...){   # For Figs. 9.1b and 9.1d
++   panel.grid(h = -1, v = 0)
++   panel.bwplot(x, y, ...)         # bwplot over the grid
++ }
+> 
+> ### Fig. 9.1a. Raw vs fitted
+> plot(fm9.2,              
++   resid(., type = "response") ~ fitted(.), panel = xyPanel,
++   ylim = ylim1, xlab = xlab[1], ylab = ylab[1])  
+> 
+> ### Fig. 9.1b Raw vs time 
+> bwp <- bwplot(                        # Fig. 9.1b         
++   resid(fm9.2, type = "response") ~ time.f,              # Raw  vs time.f 
++   data = armd, 
++   panel= bwPanel,  
++   pch = "|"
++ )                 
+> update(bwp, xlim = xlims, xlab=xlab[2], ylab=ylab[1], ylim = ylim1)
+> 
+> 
+> ### Fig. 9.1c. Pearson vs fitted
+> plot(fm9.2, 
++   resid(., type = "pearson") ~ fitted(.), 
++   panel = xyPanel,
++   ylim = ylim2, xlab = xlab[1], ylab = ylab[2])  
+> 
+> ### Fig. 9.1d Pearson vs time 
+> bwp <- bwplot(                        # Fig. 9.1b         
++   resid(fm9.2, type = "pearson") ~ time.f,              # Raw  vs time.f 
++   data = armd, 
++   panel= bwPanel,  
++   pch = "|"
++ )                 
+> update(bwp, xlim = xlims, xlab=xlab[2], ylab=ylab[2], ylim = ylim2)
+> 
+> ###################################################
+> ### code chunk: Syntax for Fig. 9.2a
+> ###################################################
+> 
+> myPanel <- function(x,y,...){
++   panel.grid(h = -1, v = -1)
++   panel.xyplot(x, y, ...)
++ }
+> 
+> plot(fm9.2,
++   sqrt(abs(resid(., type = "response"))) ~ fitted(.),
++   type = c("p", "smooth"), 
++   panel=myPanel,
++   xlab = xlab[1],
++   ylab = "Raw residuals"
++ )
+> 
+> ###################################################
+> ### code chunk: Syntax for Fig. 9.2b
+> ###################################################
+> 
+> plot(fm9.2,
++   sqrt(abs(resid(., type = "pearson"))) ~ fitted(.),
++   type = c("p", "smooth"), 
++   panel=myPanel,
++   xlab = xlab[1],
++   ylab = "Pearson residuals"
++ )
+> 
+> 
+> ###################################################
+> ### code chunk: Scatterplot matrix: Data preparation
+> ###################################################
+> residP <- resid(fm9.2, type="p")
+> dtAux <- subset(armd, select = c(subject, visual, time, time.f, treat.f)) 
+> require(reshape)
+Loading required package: reshape
+Loading required package: plyr
+
+Attaching package: 'reshape'
+
+The following object(s) are masked from 'package:plyr':
+
+    rename, round_any
+
+> dtP <- data.frame(dtAux, residP)
+> dtPm <- melt(dtP,
++      measure.var=c("residP"),
++      id.var = c("subject","time.f"))
+> dtPc <- cast(subject ~ time.f ~ variable, data = dtPm) # array
+> dtPc <- data.frame(dtPc) 
+> names(dtPc) <- c("P4wks","P12wks","P24wks","P52wks")
+> head(dtPc)
+      P4wks    P12wks   P24wks    P52wks
+1  0.016107 -0.671981       NA        NA
+2  1.175450  0.654523  0.78941  0.427177
+3 -0.093647 -0.250817 -1.45465        NA
+4 -0.010880  0.080416  0.32658  0.849908
+6 -0.219952 -0.045533  0.27667 -0.056657
+7  0.766786  1.207017  1.12235  0.824471
+> range(dtPc, na.rm=TRUE)
+[1] -3.9484  3.3663
+> 
+> ###################################################
+> ### code chunk: Syntax to create Fig. 9.3 using splom() function
+> ###################################################
+> 
+> library(ellipse)
+> my.upperPanel <-                           ## pairwise.complete.obs 
++   function(x, y, subscripts, ...){
++   panel.xyplot(x, y, type = "n", ...)      # no plot
++   ic <- complete.cases(cbind(x,y))
++   mn <- c(mean(x[ic]), mean(y[ic]))
++   covx <- var(cbind(x,y), use="complete.obs")
++   # print(covx)
++   # ex <- ellipse(covx)
++   corrx <- cov2cor(covx)
++   corx <- round(corrx[1,2], 2)
++   abs.corx <- abs(corx)
++   # print(corx)
++   cex.value <- 3
++   ltext(0, 0, corx, cex = abs.corx * cex.value)
++ }
+> 
+> my.lowerPanel <-                          ## pairwise.complete.obs 
++   function(x,y,subscripts,...){
++   panel.grid(h = -1, v = -1)
++   covx <- var(cbind(x, y), use = "complete.obs")
++   # print(covx)
++   ex <- ellipse(covx)
++   panel.xyplot(ex[ ,1], ex[ ,2], lty = 2, type = "l", ...)
++   panel.xyplot(x, y, ...)
++ }
+> 
+> 
+> mySuperPanel <- function(z, subscripts, panel.subscripts,...){
++   panel.pairs(z, subscripts = subscripts,
++               panel.subscripts = panel.subscripts,
++               as.matrix=TRUE, 
++               upper.panel = "my.upperPanel",
++               lower.panel = "my.lowerPanel",
++               prepanel.limits = function(z) return(c(-4,4))
++ )
++ }
+> 
+> 
+> splom.form <- formula(~cbind(P4wks,P12wks,P24wks,P52wks))
+> splom.object <- splom(splom.form,
++   data=dtPc,             #### subset(armd240,miss.pat =="----"),
++   as.matrix=TRUE,  #### varnames = abbrev.names, 
++   xlab="",
++   superpanel = mySuperPanel
++ )
+> ### fig. 9.3
+> print(splom.object)
+> rm(my.upperPanel,mySuperPanel,splom.object)
+> 
+> #### sessionInfo with packages attached
+> 
+> sessionInfo()
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=C                          
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+
+other attached packages:
+[1] ellipse_0.3-7  reshape_0.8.4  plyr_1.7.1     lattice_0.20-6
+[5] nlme_3.1-103  
+
+loaded via a namespace (and not attached):
+[1] grid_2.15.0  tools_2.15.0
+> 
+> detach(package:nlme)
+> detach(package:lattice)
+> detach(package:ellipse)
+> 
+> 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+   2.91    0.10    3.10 

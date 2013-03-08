@@ -32,34 +32,39 @@ MODIFYns <-
   
   nm <- nms[el]
   fnm <- "modifyPackageNamespace"
-  .traceFunction(101, " MODIFYns called from modifyPackageNamespace STARTS here", fnm, tags = c("1","msg"))
-  .traceFunction(102, nm, fnm)
-  .traceFunction(103, cat(head(value), sep="\n"), fnm)
-  .traceFunction(104, cat(tail(value), sep="\n"), fnm)
+  
+  .traceRinit <- attr(options()$traceR, "init")
+  .traceR <- if (is.null(.traceRinit))
+      function(...){} else .traceRinit(fnm) 
+
+  .traceR(101, "MODIFYns called from modifyPackageNamespace STARTS here", fnm, msg = TRUE)
+  .traceR(102, nm, fnm)
+  .traceR(103, cat(head(value), sep="\n"), fnm)
+  .traceR(104, cat(tail(value), sep="\n"), fnm)
   ## ns: environment class, methods:= as.list(ns), 579 components/functions in nlme package.
   ## env:  579 components
   vnm <- deparse(substitute(value))
   ###cat(paste("{", nm, "} <- {", vnm, "} \n", sep=""))
-  .traceFunction(111, pkgnm, fnm)
+  .traceR(111, pkgnm, fnm)
   ns  <- loadNamespace(pkgnm)  # "nlme"
   nsF <- as.character(capture.output(ns))
-  .traceFunction(115, nsF, fnm) 
+  .traceR(115, nsF, fnm) 
   env <- environment(fun)
   envF <- as.character(capture.output(env))
-  .traceFunction(121, envF, fnm)  
+  .traceR(121, envF, fnm)  
   unlockBinding(nm, env)
-  .traceFunction(125, "Binding unlocked", fnm) 
+  .traceR(125, "Binding unlocked", fnm) 
   environment(nm) <- environment(value) <- env
-  .traceFunction(130, "New values for env(nm), env(value)" , fnm) 
-  assign(nm, value, envir=env)
+  .traceR(130, "New values for env(nm), env(value)" , fnm, msg = TRUE) 
+  assign(nm, value, envir = env)
   
-  .traceFunction(135, "Assigned", fnm)
+  .traceR(135, "Assigned", fnm)
   assignInNamespace(nm, value, ns= ns, envir = env) 
-  .traceFunction(140, "done assignInNamespace", fnm)
+  .traceR(140, "done assignInNamespace", fnm, msg = TRUE)
   lockBinding(nm, env) 
  }
   nms <- names(modifyList)
-  .traceFunction(1, " MODIFYns called from modifyPackageNamespace ENDS here", fnm, tags = c("1","msg"))
+  .traceR(1, "MODIFYns called from modifyPackageNamespace ENDS here", fnm, msg = TRUE)
 
   sapply(as.list(1:length(modifyList)), MODIFYns)
 

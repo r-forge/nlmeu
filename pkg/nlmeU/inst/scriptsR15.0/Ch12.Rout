@@ -1,0 +1,672 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ###################################################
+> ### code chunk: Chap12init
+> ###################################################
+> options(width = 65, digits = 5, show.signif.stars = FALSE)
+> date()
+[1] "Wed Mar 06 17:39:48 2013"
+> packageVersion("nlmeU")
+[1] '0.30.7'
+> packageVersion("nlme")
+[1] '3.1.103'
+> packageVersion("lattice")
+[1] '0.20.6'
+> packageVersion("reshape")
+[1] '0.8.4'
+> packageVersion("plyr")
+[1] '1.7.1'
+> 
+> sessionInfo()
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=C                          
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+> require(nlme)    
+Loading required package: nlme
+> require(lattice) 
+Loading required package: lattice
+> 
+> 
+> data(armd, package = "nlmeU")
+> 
+> ## From Chapter 6
+> lm1.form <-                   # Fixed effects formula:(6.1)
++     formula(visual ~ -1 + visual0 + time.f + treat.f:time.f )
+> 
+> ## From Chapter 9
+> fm9.2 <- gls(lm1.form,                   # R9.2a
++        weights = varPower(form = ~time),
++        data = armd)                      # varStruct from <delta> group 
+> 
+> ##  For plots
+> xlims <- c("4", "12","24","52wks")
+> ylims <- c(-4.9, 4.9)
+> 
+> ###################################################
+> ### code chunk: R12.1a
+> ###################################################
+> (Vg1 <- Variogram(fm9.2, form = ~ time | subject))
+   variog dist n.pairs
+1 0.41144    8     224
+2 0.35739   12     214
+3 0.54202   20     212
+4 0.23819   28     190
+5 0.46203   40     194
+6 0.61401   48     193
+> plot(Vg1, smooth = FALSE, xlab = "Time difference")     # Fig. 12.1a
+> 
+> 
+> ###################################################
+> ### code chunk: R12.1b
+> ###################################################
+> (Vg2 <- Variogram(fm9.2, form = ~tp | subject))
+   variog dist n.pairs
+1 0.34060    1     628
+2 0.50380    2     406
+3 0.61401    3     193
+> plot(Vg2, smooth = FALSE, xlab = "Time Lag")            # Fig. 12.1b
+> 
+> 
+> 
+> ###################################################
+> ### code chunk: R12.2a
+> ###################################################
+> lm1.form <-                                  # (12.1). See R6.1
++    formula(visual ~ -1 + visual0 + time.f + treat.f:time.f )
+> fm12.1 <-                                    # M12.1
++    gls(lm1.form, weights = varPower(form = ~time), 
++        correlation = corCompSymm(form = ~1|subject),
++        data = armd)
+> 
+> ###################################################
+> ### code chunk: R12.2b
+> ###################################################
+> intervals(fm12.1, which = "var-cov")   # CIs for rho (12.4), delta (12.3), sigma 
+Approximate 95% confidence intervals
+
+ Correlation structure:
+      lower    est.   upper
+Rho 0.50447 0.57326 0.63664
+attr(,"label")
+[1] "Correlation structure:"
+
+ Variance function:
+        lower    est.   upper
+power 0.21581 0.25982 0.30382
+attr(,"label")
+[1] "Variance function:"
+
+ Residual standard error:
+ lower   est.  upper 
+5.2357 5.9815 6.8336 
+> 
+> ###################################################
+> ### code chunk: R12.3a
+> ###################################################
+> fm12.1vcov <-                          # Ri 
++    getVarCov(fm12.1, individual = "2")
+> nms <- c("4wks", "12wks", "24wks", "52wks")
+> dnms <- list(nms, nms)                 # Dimnames created
+> dimnames(fm12.1vcov) <- dnms           # Dimnames assigned
+> print(fm12.1vcov)
+Marginal variance covariance matrix
+        4wks   12wks   24wks   52wks
+4wks  73.531  56.077  67.143  82.081
+12wks 56.077 130.140  89.323 109.200
+24wks 67.143  89.323 186.560 130.740
+52wks 82.081 109.200 130.740 278.810
+  Standard Deviations: 8.575 11.408 13.659 16.698 
+> print(cov2cor(fm12.1vcov),             # Ci: (12.4)
++       corr = TRUE, stdevs = FALSE) 
+Marginal correlation matrix
+         4wks   12wks   24wks   52wks
+4wks  1.00000 0.57326 0.57326 0.57326
+12wks 0.57326 1.00000 0.57326 0.57326
+24wks 0.57326 0.57326 1.00000 0.57326
+52wks 0.57326 0.57326 0.57326 1.00000
+> 
+> 
+> ###################################################
+> ### code chunk: R12.3b
+> ###################################################
+> anova(fm9.2, fm12.1)                   # M9.2 nested in M12.1
+       Model df    AIC    BIC  logLik   Test L.Ratio p-value
+fm9.2      1 11 6738.1 6790.4 -3358.1                       
+fm12.1     2 12 6456.9 6514.0 -3216.5 1 vs 2  283.21  <.0001
+> 
+> 
+> ###################################################
+> ### code chunk: R12.4a
+> ###################################################
+> fm12.2 <-                            # M12.2 nested in M9.2
++    update(fm9.2,                     # (12.5)
++           correlation = corAR1(form = ~tp|subject), 
++           data = armd)
+> 
+> 
+> ###################################################
+> ### code chunk: R12.4b
+> ###################################################
+> intervals(fm12.2, which = "var-cov") # CIs for rho (12.5), delta (12.3), sigma
+Approximate 95% confidence intervals
+
+ Correlation structure:
+       lower    est.   upper
+Phi1 0.60398 0.65731 0.70478
+attr(,"label")
+[1] "Correlation structure:"
+
+ Variance function:
+       lower    est.   upper
+power 0.1832 0.23119 0.27918
+attr(,"label")
+[1] "Variance function:"
+
+ Residual standard error:
+ lower   est.  upper 
+5.5036 6.3563 7.3411 
+> 
+> 
+> ###################################################
+> ### code chunk: R12.5a
+> ###################################################
+> fm12.2vcov <- 
++    getVarCov(fm12.2, individual = "2")
+> dimnames(fm12.2vcov) <- dnms
+> fm12.2vcov                           # Ri matrix 
+Marginal variance covariance matrix
+        4wks   12wks   24wks   52wks
+4wks  76.698  64.992  50.144  39.411
+12wks 64.992 127.470  98.346  77.296
+24wks 50.144  98.346 175.620 138.030
+52wks 39.411  77.296 138.030 251.100
+  Standard Deviations: 8.7578 11.29 13.252 15.846 
+> fm12.2cor <- cov2cor(fm12.2vcov)
+> print(fm12.2cor, digits = 2,         # Ci:(12.5)
++       corr = TRUE, stdevs = FALSE)          
+Marginal correlation matrix
+      4wks 12wks 24wks 52wks
+4wks  1.00  0.66  0.43  0.28
+12wks 0.66  1.00  0.66  0.43
+24wks 0.43  0.66  1.00  0.66
+52wks 0.28  0.43  0.66  1.00
+> 
+> 
+> ###################################################
+> ### code chunk: R12.5b
+> ###################################################
+> anova(fm12.1, fm12.2)                # M12.1 versus M12.2
+       Model df    AIC  BIC  logLik
+fm12.1     1 12 6456.9 6514 -3216.5
+fm12.2     2 12 6396.9 6454 -3186.5
+> 
+> 
+> ###################################################
+> ### code chunk: R12.6a
+> ###################################################
+> fm12.3 <-                       # M12.3 from M12.2 
++    update(fm12.2, correlation = corSymm(form = ~tp|subject),
++           data = armd)
+> 
+> 
+> ###################################################
+> ### code chunk: R12.6b
+> ###################################################
+> intervals(fm12.3,               # 95% CIs for rho:(12.6), delta:(12.3), sigma
++           which = "var-cov")
+Approximate 95% confidence intervals
+
+ Correlation structure:
+           lower    est.   upper
+cor(1,2) 0.48963 0.58206 0.66155
+cor(1,3) 0.33240 0.44820 0.55068
+cor(1,4) 0.15182 0.30062 0.43610
+cor(2,3) 0.57117 0.65122 0.71900
+cor(2,4) 0.41930 0.53096 0.62680
+cor(3,4) 0.69847 0.76578 0.81966
+attr(,"label")
+[1] "Correlation structure:"
+
+ Variance function:
+        lower    est.   upper
+power 0.21908 0.27126 0.32345
+attr(,"label")
+[1] "Variance function:"
+
+ Residual standard error:
+ lower   est.  upper 
+4.9539 5.7379 6.6460 
+> 
+> 
+> ###################################################
+> ### code chunk: R12.7
+> ###################################################
+> fm12.3vcov <-                                    # Ri  
++    getVarCov(fm12.3, individual = "2")
+> dimnames(fm12.3vcov) <- dnms
+> fm12.3vcov
+Marginal variance covariance matrix
+        4wks   12wks   24wks   52wks
+4wks  69.846  54.769  50.897  42.105
+12wks 54.769 126.760  99.627 100.190
+24wks 50.897  99.627 184.630 174.380
+52wks 42.105 100.190 174.380 280.860
+  Standard Deviations: 8.3574 11.259 13.588 16.759 
+> fm12.3cor <- cov2cor(fm12.3vcov)                 # Ci:(12.6)
+> print(fm12.3cor, corr = TRUE, stdevs = FALSE)
+Marginal correlation matrix
+         4wks   12wks   24wks   52wks
+4wks  1.00000 0.58206 0.44820 0.30062
+12wks 0.58206 1.00000 0.65122 0.53096
+24wks 0.44820 0.65122 1.00000 0.76578
+52wks 0.30062 0.53096 0.76578 1.00000
+> 
+> 
+> ###################################################
+> ### code chunk: R12.8a
+> ###################################################
+> anova(fm12.2, fm12.3)              # M12.2 nested in M12.3
+       Model df    AIC  BIC  logLik   Test L.Ratio p-value
+fm12.2     1 12 6396.9 6454 -3186.5                       
+fm12.3     2 17 6387.2 6468 -3176.6 1 vs 2  19.711  0.0014
+> 
+> 
+> ###################################################
+> ### code chunk: R12.8b
+> ###################################################
+> fmA.vc   <-                        # Alternative model
++    update(fm12.3, weights = varIdent(form = ~1|time.f))
+> anova(fm12.3, fmA.vc)              # M12.3 nested in alternative model
+       Model df    AIC    BIC  logLik   Test L.Ratio p-value
+fm12.3     1 17 6387.2 6468.0 -3176.6                       
+fmA.vc     2 19 6389.4 6479.7 -3175.7 1 vs 2  1.8432  0.3979
+> 
+> 
+> ###################################################
+> ### code chunk: 12.9a
+> ###################################################
+>  panel.bwxplot0 <- 
++    function(x,y, subscripts, ...)
++            {        
++             panel.grid(h = -1, v = 0)
++             panel.stripplot(x, y, col = "grey", ...)
++             panel.bwplot(x, y, pch = "|", ...)
++            }
+>  bwplot(resid(fm12.3) ~ time.f | treat.f,              # Fig. 12.2
++         panel = panel.bwxplot0, 
++         ylab = "Residuals", data = armd)
+> 
+> ###################################################
+> ### code chunk: 12.9b
+> ###################################################
+>  plot(fm12.3)                                        # Fig. 12.3a
+>  plot(fm12.3,                                        # Fig. 12.3b
++       resid(., type = "p") ~ fitted(.) | time.f)
+> 
+> ###################################################
+> ### code chunk:  Fig. 12.3  More detailed syntax
+> ###################################################
+>  xyplot(resid(fm12.3, type = "p") ~ fitted(fm12.3),           # Fig. 12.3a
++    grid = TRUE, ylim = c(-4.5, 4.5), 
++    xlab = "", ylab = ""                 # To save some space
++  )   
+>  
+>  xyplot(resid(fm12.3, type = "p") ~ fitted(fm12.3)| time.f,   # Fig. 12.3b
++    grid = TRUE, ylim = c(-4.5, 4.5), 
++    xlab = "", ylab = "", 
++    data = armd
++  )   
+> 
+> ###################################################
+> ### code chunk: R12.9b (continued)
+> ###################################################
+>  stdres.plot <- 
++    plot(fm12.3,  resid(., type = "p") ~ jitter(time) | treat.f, 
++         id = 0.01, adj = c(-0.3, 0.5 ), grid = FALSE)
+>  plot(update(stdres.plot,                            # Fig. 12.4
++              grid = "h"))
+> 
+> 
+> ###################################################
+> ### code chunk for Fig. 12.5
+> ###################################################
+> ##### Create auxiliary data
+> 
+> ## id for Figure 12.5 (connecting lines for outlying subjects at time = 4)
+> idq <- 0.02               
+> id <- armd$subject
+> 
+> residP <- resid(fm12.3, type = "pearson")  # Pearson residuals
+> 
+> 
+> attach(armd)
+> 
+> ##  Create uid and ix vectors
+> 
+> idx1 <- tp == 1                                    # time = 4 wks 
+> idx <- (abs(residP) > -qnorm(idq/2)) & idx1        # Logical vector
+> outliers.idx <- data.frame(subject, time, treat.f, visual, residP, idx)
+> outliers <- subset(outliers.idx, idx, select = -idx)
+> nrow(outliers)                                     # Number of outliers
+[1] 10
+> uid <- unique(outliers$subject)
+> length(uid)                                        # Number of selected subjects
+[1] 10
+> uid
+ [1] 75  82  100 114 122 132 136 148 227 231
+234 Levels: 1 2 3 4 6 7 8 9 10 11 12 13 14 15 16 17 18 19 ... 240
+> detach(armd)
+> 
+> gin <-  rep(FALSE, length(armd$subject))
+> gin[id %in% uid] <- TRUE
+> 
+> dt <- data.frame(armd, gin=gin, resid.p = residP)
+> dtGin <- dt[gin, ]
+> 
+> ###################################################
+> ### code chunk for Fig. 12.5
+> ###################################################
+> 
+> myPanel <- function(x, y, subscripts, groups, ...) {
++             panel.grid(h = -1, v = 0) 
++             gin <- dt$gin
++             gins <- gin[subscripts]
++             panel.xyplot(x, y)   # All points
++             x1 <- x[gins]
++             y1 <- y[gins]
++             subs1 <- subscripts[gins]
++             panel.superpose(x1, y1, subs1, groups, type = "l", lty = "13")
++         }
+> 
+> xyplot(resid.p ~ time.f | treat.f, data = dt,
++         panel = myPanel,
++         subscripts = TRUE,
++         groups = subject,
++         scales = list(abbreviate = TRUE),
++         aspect = 1,
++         xlab = "Standardized residuals",
++         ylim = ylims)
+> 
+> 
+> ###################################################
+> ### code chunk for Fig. 12.5 Alternative syntax
+> ###################################################
+> 
+> myPanel <- function(x, y, subscripts, ...) {
++            panel.grid(h = -1, v = 0) 
++            panel.stripplot(x, y, ...)   
++            grps <- dt$subject
++            gin <- dt$gin
++            gins <- gin[subscripts]
++            x1 <- x[gins]
++            y1 <- y[gins]
++            subs1 <- subscripts[gins]
++            panel.superpose(x1, y1, subs1, grps, type = "l", lty = "13")
++ }
+> 
+> bw.object <- bwplot(resid.p ~ time.f | treat.f, 
++         data = dt,
++         panel = myPanel,
++         ylab = "Standardized residuals", 
++         aspect = 1.2 )
+> update(bw.object, xlim=xlims,
++         ylim = ylims )  
+> 
+> 
+> ###################################################
+> ### code chunk: R12.9c
+> ###################################################
+> panel.bwxplot <- function(x,y, subscripts, ...){
++  panel.grid(h = -1, v = 0)
++  bwstats <- tapply(y, x, boxplot.stats)
++  outy <-  unlist(lapply(bwstats, FUN = function(el) el$out))
++  idx0 <- 1:length(y)
++  idx <- y %in% outy
++  idx1 <- idx0[idx]
++  panel.stripplot(x[-idx1], y[-idx1], jitter.data = TRUE, col = "grey", ...)
++  panel.bwplot(x, y, pch = "|", ...)
++ }
+> 
+> bwplot(                                              # Fig. 12.7
++     resid(fm12.3, type = "n") ~ time.f | treat.f,                                 
++     panel = panel.bwxplot,                           # User defined panel
++     ylab = "Normalized residuals",
++     data = armd)                 
+> qqnorm(fm12.3, ~resid(., type= "n") | time.f)        # Fig. 12.8
+> 
+> 
+> 
+> ###################################################
+> ### code chunk for Fig. 12.6 (splom)
+> ###################################################
+> r1p <- resid(fm12.3, type = "pearson")
+> r1n <- resid(fm12.3, type = "normalized")
+> dtP <- data.frame(armd, r1p, r1n)
+> library(reshape)
+Loading required package: plyr
+
+Attaching package: 'reshape'
+
+The following object(s) are masked from 'package:plyr':
+
+    rename, round_any
+
+> dtPm <- melt(dtP,
++      measure.var = c("r1p","r1n"),
++      id.var = c("subject","time.f"))
+> dtPc <- cast(dtPm, subject*variable ~ time.f) #
+> dtPc <- data.frame(dtPc) 
+> names(dtPc) <- c("subject","var","P4wks","P12wks","P24wks","P52wks")
+> range(dtPc$P4wks, na.rm = TRUE)  
+[1] -4.0329  3.4785
+> 
+> myFunL <- function(corx) { 
++       ltext(-2.2, 3.2, substitute(paste(rho, corx), list(corx = corx)), cex = 1)
++ }
+> 
+> myFunU <- function(corx) { 
++       ltext(-2.2,-3.9, substitute(paste(rho,corx),list(corx = corx)), cex = 1)
++ }
+> 
+> my.upperPanel <-   ## pairwise.complete.obs 
++   function(x, y, subscripts, ...){
++   vr <- dtPc$var == "r1n" 
++   subs <- subscripts[vr]         
++   x1 <- x[subs]
++   y1 <- y[subs]
++   panel.abline(h = c(-4, -2, 0, 2, 4), col = "grey", ...)
++   panel.abline(v = c(-4, -2, 0, 2, 4), col = "grey", ...)
++   panel.xyplot(x1, y1, ...)
++   corx <- round(cor(x1, y1, use = "complete.obs"), 2)
++   abs.corx <- abs(corx)
++   corx <- paste("=", corx, sep = "")
++   myFunU(corx)
++ }
+> 
+> my.lowerPanel <-    ## pairwise.complete.obs 
++   function(x, y, subscripts, ...){
++   vr <- dtPc$var == "r1p" 
++   subs <- subscripts[vr]         
++   x1 <- x[subs]
++   y1 <- y[subs]
++   panel.abline(h = c(-4, -2, 0, 2, 4), col = "grey", ...)
++   panel.abline(v = c(-4, -2, 0, 2, 4), col = "grey", ...)
++   panel.xyplot(x1, y1, ...)
++   corx <- round(cor(x1, y1, use = "complete.obs"), 2)
++   abs.corx <- abs(corx)
++   corx <- paste("=", corx, sep = "")
++   print(corx)
++   cex.value <- 2
++   myFunL(corx)
++ }
+> 
+> 
+> 
+> mySuperPanel <- function(z, subscripts, panel.subscripts, ...){
++   panel.pairs(z, subscripts = subscripts,
++               panel.subscripts = panel.subscripts,
++               as.matrix = TRUE, 
++               upper.panel = "my.upperPanel",
++               lower.panel = "my.lowerPanel",
++         ## simpler syntax: prepanel.limits = function(z) return(c(-4.7,4.7))
++               pscales =list(
++                 P4wks =list(limits=c(-4.7,4.7)),
++                 P12wks=list(limits=c(-4.7,4.7)),
++                 P24wks=list(limits=c(-4.7,4.7)),
++                 P52wks=list(limits=c(-4.7,4.7))  ) )
++ print(names(z))
++ }
+> 
+> abbrev.names <- c("vis0", "vis4", "vis12", "vis24", "vis52")
+> splom.form <- formula(~cbind(P4wks,P12wks,P24wks,P52wks))
+> splom(splom.form,
++   data = dtPc,   #### subset(armd240,miss.pat =="----"),   
++   as.matrix = TRUE,  #### varnames = abbrev.names, 
++   xlab = "",
++   superpanel = mySuperPanel 
++ )
+[1] "=0.58"
+[1] "=0.42"
+[1] "=0.65"
+[1] "=0.27"
+[1] "=0.5"
+[1] "=0.74"
+[1] "P4wks"  "P12wks" "P24wks" "P52wks"
+> 
+> 
+> 
+> ###################################################
+> ### code chunk for  Fig. 12.8 (alternative syntax)
+> ###################################################
+> qqPlot <- qqnorm(fm12.3, ~ resid(., type = "n") | time.f)
+> update(qqPlot, grid = TRUE, xlim = ylims, ylim = ylims, 
++        aspect = 1)
+> 
+> ###################################################
+> ### code chunk: R12.10
+> ###################################################
+> anova(update(fm12.3, method = "ML"))                # M12.3
+Denom. DF: 858 
+               numDF F-value p-value
+visual0            1  9867.8  <.0001
+time.f             4    26.6  <.0001
+time.f:treat.f     4     2.0  0.0869
+> 
+> 
+> 
+> ###################################################
+> ### code chunk: R12.11a
+> ###################################################
+> lm1a.form <- formula (visual ~ visual0 + time.f         # (12.7)
++     + treat.f + time.f:treat.f)   
+> fm12.3a <- update(fm12.3, lm1a.form,          # M12.3a <-  M12.3
++     method = "ML", data = armd)
+> lm2.form <- formula(visual ~ visual0 + time             # (12.8)
++     + treat.f + treat.f:time)
+> fm12.4 <- update(fm12.3, lm2.form,            # M12.4  <- M12.3
++     method = "ML", data = armd)
+> lm3.form <-  update(lm2.form, . ~ . - treat.f:time)     # (12.9)
+> fm12.5 <- update(fm12.3, lm3.form,            # M12.5 <- M12.3
++     method = "ML", data = armd)
+> 
+> 
+> ###################################################
+> ### code chunk: R12.11b
+> ###################################################
+> anova(fm12.3a, fm12.4, fm12.5)          # M12.3a,  M12.4, M12.5
+        Model df    AIC    BIC  logLik   Test L.Ratio p-value
+fm12.3a     1 17 6395.7 6476.7 -3180.9                       
+fm12.4      2 13 6389.6 6451.5 -3181.8 1 vs 2  1.8367  0.7658
+fm12.5      3 12 6389.0 6446.2 -3182.5 2 vs 3  1.4129  0.2346
+> 
+> 
+> ###################################################
+> ### code chunk: R12.11c
+> ###################################################
+> anova(fm12.5) 
+Denom. DF: 863 
+            numDF F-value p-value
+(Intercept)     1  9374.1  <.0001
+visual0         1   613.0  <.0001
+time            1   104.3  <.0001
+treat.f         1     6.0  0.0146
+> 
+> 
+> ###################################################
+> ### code chunk: R12.12
+> ###################################################
+> fm12.5vcov <- getVarCov(fm12.5,          # R_i
++      individual="2")
+> dimnames(fm12.5vcov) <- dnms             # Dimnames assigned
+> fm12.5vcov 
+Marginal variance covariance matrix
+        4wks   12wks   24wks   52wks
+4wks  68.990  53.905  50.102  41.127
+12wks 53.905 125.520  98.433  98.942
+24wks 50.102  98.433 183.100 172.940
+52wks 41.127  98.942 172.940 279.010
+  Standard Deviations: 8.306 11.203 13.532 16.704 
+> fm12.5cor <- cov2cor(fm12.5vcov)         # C_i
+> print(fm12.5cor, corr=TRUE, stdevs=FALSE)
+Marginal correlation matrix
+         4wks   12wks   24wks   52wks
+4wks  1.00000 0.57928 0.44578 0.29643
+12wks 0.57928 1.00000 0.64930 0.52872
+24wks 0.44578 0.64930 1.00000 0.76514
+52wks 0.29643 0.52872 0.76514 1.00000
+> 
+> #### sessionInfo  ####
+> 
+> sessionInfo()                 # with packages attached 
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=C                          
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+
+other attached packages:
+[1] reshape_0.8.4  plyr_1.7.1     lattice_0.20-6 nlme_3.1-103  
+
+loaded via a namespace (and not attached):
+[1] grid_2.15.0  tools_2.15.0
+> detach(package:nlme)      
+> detach(package:lattice)
+> detach(package:reshape)
+> 
+> proc.time()
+   user  system elapsed 
+  18.39    0.12   18.65 

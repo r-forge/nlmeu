@@ -1,0 +1,618 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ###################################################
+> ### code chunk Chap16lmeinit
+> ###################################################
+> options(width=65, digits=5,show.signif.stars = FALSE) 
+> date()
+[1] "Wed Mar 06 17:51:24 2013"
+> packageVersion("nlmeU")
+[1] '0.30.7'
+> packageVersion("nlme")
+[1] '3.1.103'
+> packageVersion("RLRsim")
+[1] '2.0.12'
+> packageVersion("lattice")
+[1] '0.20.6'
+>   
+> sessionInfo()
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=C                          
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+> 
+> library(nlme)
+> library(lattice)
+> data(armd, package = "nlmeU")
+> rlims <- c(-4.5, 4.5)
+> xlims <- c(0, 90)
+> xlimc <- c("4", "12", "24", "52wks")
+> 
+> lm1.form <- 
++     formula(visual ~ -1 + visual0 + time.f + treat.f:time.f)
+> vis.gls1 <- gls(lm1.form, data = armd)
+> vis.gls1.tpwr <- 
++     gls(lm1.form, weights = varPower(form=~time), data=armd)
+> 
+> 
+> ###################################################
+> ### code chunk: R16.1
+> ###################################################
+> lm2.form <-                               # (16.1)
++    formula(visual ~ visual0 + time + treat.f + treat.f:time)
+> (fm16.1 <-                                # M16.1
++     lme(lm2.form,                         
++     random = ~1|subject, data = armd))    # b_0i:(16.5)
+Linear mixed-effects model fit by REML
+  Data: armd 
+  Log-restricted-likelihood: -3289
+  Fixed: lm2.form 
+       (Intercept)            visual0               time 
+          9.288078           0.826440          -0.212216 
+     treat.fActive time:treat.fActive 
+         -2.422000          -0.049591 
+
+Random effects:
+ Formula: ~1 | subject
+        (Intercept) Residual
+StdDev:      8.9782   8.6275
+
+Number of Observations: 867
+Number of Groups: 234 
+> printCoefmat(summary(fm16.1)$tTable,      # Print fixed effects, etc.
++              has.Pvalue = TRUE, P.values = TRUE) # ... with p-values
+                      Value Std.Error       DF t-value p-value
+(Intercept)          9.2881    2.6819 631.0000    3.46 0.00057
+visual0              0.8264    0.0447 231.0000   18.50 < 2e-16
+time                -0.2122    0.0229 631.0000   -9.26 < 2e-16
+treat.fActive       -2.4220    1.5000 231.0000   -1.61 0.10774
+time:treat.fActive  -0.0496    0.0336 631.0000   -1.48 0.14002
+> 
+> 
+> ###################################################
+> ### code chunk: R16.2
+> ###################################################
+> getGroupsFormula(fm16.1)           # Grouping formula
+~subject
+<environment: 0x0000000004de6420>
+> str(grpF <- getGroups(fm16.1))     # Grouping factor 
+ Factor w/ 234 levels "1","2","3","4",..: 1 1 2 2 2 2 3 3 3 4 ...
+ - attr(*, "label")= chr "subject"
+> grpF[1:17]              
+ [1] 1 1 2 2 2 2 3 3 3 4 4 4 4 6 6 6 6
+234 Levels: 1 2 3 4 6 7 8 9 10 11 12 13 14 15 16 17 18 19 ... 240
+> levels(grpF)[1:5]
+[1] "1" "2" "3" "4" "6"
+> range(xtabs(~grpF))      # Min, Max no. of observations
+[1] 1 4
+> 
+> 
+> ###################################################
+> ### code chunk: R16.3a
+> ###################################################
+> getVarCov(fm16.1, individual = "2")   # d_11: (16.6)
+Random effects variance covariance matrix
+            (Intercept)
+(Intercept)      80.608
+  Standard Deviations: 8.9782 
+> VarCorr(fm16.1)                       # d_11, sigma^2
+subject = pdLogChol(1) 
+            Variance StdDev
+(Intercept) 80.608   8.9782
+Residual    74.434   8.6275
+> 
+> 
+> ###################################################
+> ### code chunk: R16.3b
+> ###################################################
+> getVarCov(fm16.1,                     
++           type = "conditional",       # R_i: (16.6)
++           individual = "2")   
+subject 2 
+Conditional variance covariance matrix
+       1      2      3      4
+1 74.434  0.000  0.000  0.000
+2  0.000 74.434  0.000  0.000
+3  0.000  0.000 74.434  0.000
+4  0.000  0.000  0.000 74.434
+  Standard Deviations: 8.6275 8.6275 8.6275 8.6275 
+> 
+> ###################################################
+> ### code chunk: R16.4
+> ###################################################
+> (fm16.1cov <- 
++     getVarCov(fm16.1,                       
++               type = "marginal",      # V_i: (16.7)
++               individual = "2")) 
+subject 2 
+Marginal variance covariance matrix
+        1       2       3       4
+1 155.040  80.608  80.608  80.608
+2  80.608 155.040  80.608  80.608
+3  80.608  80.608 155.040  80.608
+4  80.608  80.608  80.608 155.040
+  Standard Deviations: 12.452 12.452 12.452 12.452 
+> (cov2cor(fm16.1cov[[1]]))             # Corr(V_i)      
+        1       2       3       4
+1 1.00000 0.51991 0.51991 0.51991
+2 0.51991 1.00000 0.51991 0.51991
+3 0.51991 0.51991 1.00000 0.51991
+4 0.51991 0.51991 0.51991 1.00000
+> 
+> 
+> ###################################################
+> ### code chunk: R16.5
+> ###################################################
+> (fm16.2 <-                            # M16.2 <- M16.1
++    update(fm16.1,                        
++           weights = varPower(form = ~ time),  # (9.4)
++           data = armd))
+Linear mixed-effects model fit by REML
+  Data: armd 
+  Log-restricted-likelihood: -3260.6
+  Fixed: lm2.form 
+       (Intercept)            visual0               time 
+          7.066881           0.866544          -0.212627 
+     treat.fActive time:treat.fActive 
+         -2.305034          -0.050888 
+
+Random effects:
+ Formula: ~1 | subject
+        (Intercept) Residual
+StdDev:      7.7056   3.6067
+
+Variance function:
+ Structure: Power of variance covariate
+ Formula: ~time 
+ Parameter estimates:
+  power 
+0.31441 
+Number of Observations: 867
+Number of Groups: 234 
+> 
+> 
+> ###################################################
+> ### code chunk: R16.6
+> ###################################################
+> VarCorr(fm16.2)                            # d_11: (16.6), sigma^2
+subject = pdLogChol(1) 
+            Variance StdDev
+(Intercept) 59.376   7.7056
+Residual    13.008   3.6067
+> getVarCov(fm16.2,                          # R_i: (16.8)
++           type = "conditional",
++           individual = "2")
+subject 2 
+Conditional variance covariance matrix
+       1      2      3      4
+1 31.103  0.000  0.000   0.00
+2  0.000 62.062  0.000   0.00
+3  0.000  0.000 95.966   0.00
+4  0.000  0.000  0.000 156.05
+  Standard Deviations: 5.577 7.8779 9.7962 12.492 
+> (fm16.2cov <-                              # V_i: (16.9)
++    getVarCov(fm16.2,
++              type = "marginal",
++              individual = "2"))  
+subject 2 
+Marginal variance covariance matrix
+       1       2       3       4
+1 90.479  59.376  59.376  59.376
+2 59.376 121.440  59.376  59.376
+3 59.376  59.376 155.340  59.376
+4 59.376  59.376  59.376 215.430
+  Standard Deviations: 9.512 11.02 12.464 14.677 
+> cov2cor(fm16.2cov[[1]])                    # Corr(V_i)
+        1       2       3       4
+1 1.00000 0.56645 0.50083 0.42529
+2 0.56645 1.00000 0.43230 0.36710
+3 0.50083 0.43230 1.00000 0.32457
+4 0.42529 0.36710 0.32457 1.00000
+> 
+> 
+> ###################################################
+> ### code chunk: R16.7a
+> ###################################################
+>  plot(fm16.2)                         # Fig. 16.1
+> 
+> 
+> ###################################################
+> ### code chunk: R16.7b
+> ###################################################
+>  plot(fm16.2,                         # Figure not shown
++       resid(., type = "pearson") ~ time | treat.f,
++       id = 0.05)
+>  bwplot(resid(fm16.2, type = "p") ~ time.f | treat.f,  # Fig. 16.2  
++         # panel = panel.bwxplot2,     # User-defined panel (will be provided at a later time)
++         data = armd)
+> 
+> 
+> 
+> ###################################################
+> ### code chunk: R16.7c
+> ###################################################
+> qqnorm(fm16.2, ~resid(.) | time.f)   # Fig. 16.3
+> qqnorm(fm16.2, ~ranef(.))            # Fig. 16.4
+> 
+> ###################################################
+> ### code chunk: R16.8
+> ###################################################
+> 
+> id <- 0.05                              # Argument for qnorm()
+> outliers.idx <- 
++    within(armd,
++           {
++           resid.p <- resid(fm16.2, type = "pearson") # Pearson residuals
++           idx <- abs(resid.p) > -qnorm(id/2)         # Indicator vector
++           })
+> outliers  <- subset(outliers.idx, idx)  # Data with outliers
+> nrow(outliers)                          # Number of outliers
+[1] 38
+> outliers$subject                        # IDs of outliers
+ [1] 40  46  51  56  56  68  68  70  73  73  73  75  77  87  90 
+[16] 91  93  104 104 107 112 112 120 121 121 135 137 137 143 151
+[31] 162 165 178 191 200 209 227 227
+234 Levels: 1 2 3 4 6 7 8 9 10 11 12 13 14 15 16 17 18 19 ... 240
+> 
+> ###################################################
+> ### code chunk: R16.9
+> ###################################################
+> aug.Pred <-                  # augPred for M16.2
++    augPred(fm16.2,                             
++            primary = ~time,  # Primary covariate
++            level = 0:1,      # Marginal(0) and subj.-spec.(1)
++            length.out = 2)    
+> plot(aug.Pred, layout = c(4, 4, 1),   # Fig. 16.5
++      key = list(lines = list(lty = c(1,2)),
++                 text = list(c("Marginal", "Subject-specific")),
++                 columns = 2))
+> 
+> 
+> ###################################################
+> ### code chunk: R16.10
+> ###################################################
+> fm16.3 <-                                # M16.3 <- M16.2
++    update(fm16.2,
++           random = ~1 + time | subject,  # D: (16.16)
++           data = armd)
+> getVarCov(fm16.3, individual = "2")     
+Random effects variance covariance matrix
+            (Intercept)    time
+(Intercept)    48.70500 0.26266
+time            0.26266 0.07412
+  Standard Deviations: 6.9789 0.27225 
+> intervals(fm16.3, which = "var-cov")     # 95% CI for theta_d, delta (16.8), sigma
+Approximate 95% confidence intervals
+
+ Random Effects:
+  Level: subject 
+                         lower    est.   upper
+sd((Intercept))        5.99019 6.97891 8.13082
+sd(time)               0.23009 0.27225 0.32213
+cor((Intercept),time) -0.12564 0.13824 0.38386
+
+ Variance function:
+         lower    est.  upper
+power 0.015191 0.10744 0.1997
+attr(,"label")
+[1] "Variance function:"
+
+ Within-group standard error:
+ lower   est.  upper 
+3.9993 5.1222 6.5604 
+> 
+> ###################################################
+> ### code chunk: R16.11
+> ###################################################
+> fm16.4 <-                               # M16.4 <- M16.3
++     update(fm16.3,                              
++            random = list(subject = pdDiag(~time)),  # Diagonal D
++            data = armd)
+> intervals(fm16.4)                       # 95% CI for beta, theta_d, delta, sigma  
+Approximate 95% confidence intervals
+
+ Fixed effects:
+                      lower      est.     upper
+(Intercept)         0.81277  5.262213  9.711655
+visual0             0.82464  0.899900  0.975157
+time               -0.27954 -0.215031 -0.150524
+treat.fActive      -4.58882 -2.278756  0.031308
+time:treat.fActive -0.15055 -0.056451  0.037646
+attr(,"label")
+[1] "Fixed effects:"
+
+ Random Effects:
+  Level: subject 
+                  lower    est.   upper
+sd((Intercept)) 6.33067 7.23195 8.26153
+sd(time)        0.24108 0.28096 0.32744
+
+ Variance function:
+         lower    est.   upper
+power 0.014823 0.11108 0.20733
+attr(,"label")
+[1] "Variance function:"
+
+ Within-group standard error:
+ lower   est.  upper 
+3.8979 5.0312 6.4939 
+> 
+> 
+> ###################################################
+> ### code chunk: R16.12
+> ###################################################
+> anova(fm16.4, fm16.3)              # H0: d_12=0 
+       Model df    AIC    BIC  logLik   Test L.Ratio p-value
+fm16.4     1  9 6449.8 6492.6 -3215.9                       
+fm16.3     2 10 6450.6 6498.2 -3215.3 1 vs 2   1.194  0.2745
+> 
+> ###################################################
+> ### code chunk: R16.13
+> ###################################################
+> lm3.form <- formula(visual ~ visual0 + time + treat.f) # (12.9)
+> fm16.5  <-  
++    update(fm16.4,                        
++           lm3.form, data = armd)            
+> summary(fm16.5)$tTable                    # beta, se(beta), t-test
+                 Value Std.Error  DF  t-value    p-value
+(Intercept)    5.44156  2.261866 632   2.4058 1.6424e-02
+visual0        0.89983  0.038215 231  23.5464 2.5503e-63
+time          -0.24156  0.023917 632 -10.0997 2.4641e-22
+treat.fActive -2.65528  1.128683 231  -2.3525 1.9485e-02
+> intervals(fm16.5, which = "var-cov")      # 95% CI for theta_d, delta, sigma 
+Approximate 95% confidence intervals
+
+ Random Effects:
+  Level: subject 
+                  lower    est.  upper
+sd((Intercept)) 6.33448 7.23570 8.2651
+sd(time)        0.24121 0.28102 0.3274
+
+ Variance function:
+         lower    est.   upper
+power 0.015687 0.11052 0.20535
+attr(,"label")
+[1] "Variance function:"
+
+ Within-group standard error:
+ lower   est.  upper 
+3.9177 5.0391 6.4815 
+> 
+> 
+> ###################################################
+> ### code chunk: R16.14
+> ###################################################
+> VarCorr(fm16.5)                            # D, (16.16)sigma
+subject = pdDiag(time) 
+            Variance  StdDev 
+(Intercept) 52.355293 7.23570
+time         0.078974 0.28102
+Residual    25.392868 5.03913
+> getVarCov(fm16.5,                          # Ri (16.8)
++           type = "conditional", individual = "2")
+subject 2 
+Conditional variance covariance matrix
+       1     2      3      4
+1 34.498  0.00  0.000  0.000
+2  0.000 43.98  0.000  0.000
+3  0.000  0.00 51.262  0.000
+4  0.000  0.00  0.000 60.816
+  Standard Deviations: 5.8735 6.6317 7.1597 7.7984 
+> (fm16.5cov <-                              # Vi (16.9) 
++    getVarCov(fm16.5,
++              type = "marginal",
++              individual = "2"))  
+subject 2 
+Marginal variance covariance matrix
+       1       2       3       4
+1 88.117  56.146  59.937  68.782
+2 56.146 107.710  75.100 101.640
+3 59.937  75.100 149.110 150.920
+4 68.782 101.640 150.920 326.720
+  Standard Deviations: 9.387 10.378 12.211 18.075 
+> cov2cor(fm16.5cov[[1]])                    # Corr(Vi) 
+        1       2       3       4
+1 1.00000 0.57633 0.52290 0.40538
+2 0.57633 1.00000 0.59261 0.54180
+3 0.52290 0.59261 1.00000 0.68375
+4 0.40538 0.54180 0.68375 1.00000
+> 
+> 
+> 
+> 
+> ###################################################
+> ### code chunk: R16.15a
+> ###################################################
+> (fm16.6 <-                                       #  M16.6 <- M16.3 
++     update(fm16.3, weights = varIdent(form = ~1 | time.f)))
+Linear mixed-effects model fit by REML
+  Data: armd 
+  Log-restricted-likelihood: -3204
+  Fixed: lm2.form 
+       (Intercept)            visual0               time 
+           5.10354            0.90120           -0.21041 
+     treat.fActive time:treat.fActive 
+          -2.18434           -0.05931 
+
+Random effects:
+ Formula: ~1 + time | subject
+ Structure: General positive-definite, Log-Cholesky parametrization
+            StdDev  Corr  
+(Intercept) 7.34621 (Intr)
+time        0.31104 -0.132
+Residual    4.62311       
+
+Variance function:
+ Structure: Different standard deviations per stratum
+ Formula: ~1 | time.f 
+ Parameter estimates:
+      4wks      12wks      24wks      52wks 
+1.00000000 1.62525293 1.74357631 0.00051508 
+Number of Observations: 867
+Number of Groups: 234 
+> 
+> 
+> ###################################################
+> ### code chunk: R16.15b
+> ###################################################
+> anova(fm16.3, fm16.6)        # varPower (M16.3) nested in varIdent (M16.6)
+       Model df    AIC    BIC  logLik   Test L.Ratio p-value
+fm16.3     1 10 6450.6 6498.2 -3215.3                       
+fm16.6     2 12 6432.1 6489.2 -3204.0 1 vs 2  22.499  <.0001
+> 
+> ###################################################
+> ### code chunk: R16.16
+> ###################################################
+> AIC(fm16.1, fm16.2,                     # M16.1, M16.2
++     fm16.3, fm16.4)                     # M16.3, M16.4
+       df    AIC
+fm16.1  7 6592.0
+fm16.2  8 6537.1
+fm16.3 10 6450.6
+fm16.4  9 6449.8
+> fm16.4ml <- update(fm16.4, method = "ML")
+> fm16.5ml <- update(fm16.5, method = "ML")
+> anova(fm16.4ml, fm16.5ml)               # M16.4 nested in M16.5
+         Model df    AIC    BIC  logLik   Test L.Ratio p-value
+fm16.4ml     1  9 6438.0 6480.9 -3210.0                       
+fm16.5ml     2  8 6437.4 6475.5 -3210.7 1 vs 2  1.3972  0.2372
+> 
+> ###################################################
+> ### code chunk: R16.17a
+> ###################################################
+> vis.gls1a   <-                                # Null model
++    gls(lm2.form, data = armd)              
+> (anova.res  <- anova(vis.gls1a, fm16.1))      # Null vs. M16.1
+          Model df    AIC    BIC logLik   Test L.Ratio p-value
+vis.gls1a     1  6 6839.9 6868.5  -3414                       
+fm16.1        2  7 6592.0 6625.3  -3289 1 vs 2  249.97  <.0001
+> (anova.res[["p-value"]][2])/2                 
+[1] 0
+> 
+> 
+> ###################################################
+> ### code chunk: R16.17b
+> ###################################################
+> library(RLRsim)    
+Loading required package: mgcv
+This is mgcv 1.7-13. For overview type 'help("mgcv-package")'.
+Warning message:
+package 'RLRsim' was built under R version 2.15.3 
+> exactRLRT(fm16.1)                             # M16.1 (alternative model)
+
+	simulated finite sample distribution of RLRT.  (p-value
+	based on 10000 simulated values)
+
+data:  
+RLRT = 249.97, p-value < 2.2e-16
+
+> 
+> 
+> ###################################################
+> ### code chunk: R16.18a
+> ###################################################
+> fm16.7 <-                                  # M16.7 <- M16.4
++    update(fm16.4, weights = NULL,          # Constant resid. variance 
++           data = armd)              
+> 
+> 
+> ###################################################
+> ### code chunk: R16.18b
+> ###################################################
+> (an.res <-                                 # M16.1 (null)
++     anova(fm16.1, fm16.7))                 # M16.7 (alternative)
+       Model df    AIC    BIC  logLik   Test L.Ratio p-value
+fm16.1     1  7 6592.0 6625.3 -3289.0                       
+fm16.7     2  8 6453.1 6491.2 -3218.6 1 vs 2  140.83  <.0001
+> (RLRT <- an.res[["L.Ratio"]][2])           # LR-test statistic
+[1] 140.83
+> .5 * pchisq(RLRT, 1, lower.tail = FALSE) + # 0.5* chi(1)^2 + 0.5 * chi(2)^2
++   .5 * pchisq(RLRT, 2, lower.tail = FALSE) 
+[1] 1.3971e-31
+> 
+> 
+> ###################################################
+> ### code chunk: R16.18c
+> ###################################################
+> mAux <-        # Auxiliary model with random slopes only. 
++    update(fm16.1, random = ~0 + time|subject, 
++           data = armd)         
+> exactRLRT(m = mAux,           # Auxiliary model
++           m0 = fm16.1,        # M16.1 (null)
++           mA = fm16.7)        # M16.7 (alternative)
+
+	simulated finite sample distribution of RLRT.  (p-value
+	based on 10000 simulated values)
+
+data:  
+RLRT = 140.83, p-value < 2.2e-16
+
+> 
+> 
+> ###################################################
+> ### code chunk: R16.18d
+> ###################################################
+> vis.lme2.sim <- 
++      simulate(fm16.1, m2 = fm16.7, nsim = 10000, seed = 654321)
+> ## save(vis.lme2.sim , file = "ARMDsimLMM.dat")
+> ## load("ARMDsimLMM.dat")            # vis.lme2.sim loaded
+> plot(vis.lme2.sim, df = c(1, 2),     # Fig. 16.12
++      abline = c(0, 1, lty = 2))
+>                
+> ### sessionInfo
+> 
+> sessionInfo()                      # Before detaching packages
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=C                          
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+
+other attached packages:
+[1] RLRsim_2.0-12  mgcv_1.7-13    lattice_0.20-6 nlme_3.1-103  
+
+loaded via a namespace (and not attached):
+[1] Matrix_1.0-6 grid_2.15.0  tools_2.15.0
+>  
+> detach(package:nlme)
+> detach(package:RLRsim)
+> detach(package:lattice)
+> 
+> 
+> 
+> proc.time()
+   user  system elapsed 
+3255.69    0.18 3256.84 

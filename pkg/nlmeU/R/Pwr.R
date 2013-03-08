@@ -35,7 +35,7 @@ Pwr.lme <- function (object, ...,
 if (!Tmiss && Lmiss){          # IF 1  (Check this part)
 ##  Based on Terms argument L matrix is created (with colnames)
 ##  Colnames assigned
-.traceR(2, ,   funNm, "IF 1 executed: Matrix L created from Terms argument")
+.traceR(2,"IF 1 executed: Matrix L created from Terms argument" ,   funNm, msg = TRUE)
 cLnms <- fixefNms
 assign <- attr(object$fixDF, "assign")
 nTerms <- length(assign)
@@ -47,9 +47,9 @@ cLnms <- NULL
 
 
 
-.traceR(52, object$sigma, funNm, "vcov with sigma before adjusting")
+.traceR(52, object$sigma, funNm, "object with sigma before rescaling")
 if (!missing(sigma)) object <- nlmeU:::sigmaTolme(object,  value=sigma)
-.traceR(53, object$sigma, funNm, "vcov with sigma after adjusting")
+.traceR(53, object$sigma, funNm, "object with sigma after rescaling")
 # .traceR(100, object, funNm, "object with adjusted sigma", lbl="100object1")  
 
 

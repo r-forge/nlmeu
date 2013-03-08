@@ -8,9 +8,7 @@ fm16.5ml <- lme(lm3.form, random = list(subject = pdDiag(~time)) ,
 detach(package:nlme)
 
 library(nlmeU)
-seedValue <- 5342
-set.seed(seedValue)
-simY <- simulateY(fm16.5ml, nsim = 10)
+simY <- simulateY(fm16.5ml, nsim = 10, seed = 5342)
 str(simY)
 
 packageVersion("nlme")

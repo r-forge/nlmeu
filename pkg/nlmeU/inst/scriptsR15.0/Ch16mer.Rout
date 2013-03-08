@@ -1,0 +1,444 @@
+
+R version 2.15.0 (2012-03-30)
+Copyright (C) 2012 The R Foundation for Statistical Computing
+ISBN 3-900051-07-0
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> ###################################################
+> ### code chunk Chap16merinit
+> ###################################################
+> 
+>  
+>         
+> options(width=65, digits=5,show.signif.stars = FALSE) 
+> date()
+[1] "Wed Mar 06 18:45:42 2013"
+> packageVersion("nlmeU")
+[1] '0.30.7'
+> packageVersion("reshape")
+[1] '0.8.4'
+> packageVersion("lme4.0")
+[1] '0.9999.2'
+> packageVersion("RLRsim")
+[1] '2.0.12'
+> sessionInfo()
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=C                          
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+> 
+> 
+> data(armd, package = "nlmeU")
+> 
+> 
+> ###################################################
+> ### code chunk: R16.19a
+> ###################################################
+> library(lme4.0)
+Loading required package: Matrix
+Loading required package: lattice
+
+Attaching package: 'lme4.0'
+
+The following object(s) are masked from 'package:stats':
+
+    AIC, BIC
+
+> 
+> fm16.1mer  <-                       
++    lmer(visual ~ visual0 + time * treat.f + (1|subject),
++         data = armd)
+> print(fm16.1mer, corr = FALSE)               
+Linear mixed model fit by REML 
+Formula: visual ~ visual0 + time * treat.f + (1 | subject) 
+   Data: armd 
+  AIC  BIC logLik deviance REMLdev
+ 6592 6625  -3289     6566    6578
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ subject  (Intercept) 80.6     8.98    
+ Residual             74.4     8.63    
+Number of obs: 867, groups: subject, 234
+
+Fixed effects:
+                   Estimate Std. Error t value
+(Intercept)          9.2881     2.6817    3.46
+visual0              0.8264     0.0447   18.50
+time                -0.2122     0.0229   -9.26
+treat.fActive       -2.4220     1.4999   -1.61
+time:treat.fActive  -0.0496     0.0336   -1.48
+> 
+> 
+> ###################################################
+> ### code chunk: R16.19b
+> ###################################################
+> vcovb <- vcov(fm16.1mer)                     #
+> corb <- cov2cor(vcovb)                       #  
+> nms <- abbreviate(names(fixef(fm16.1mer)), 5)
+> rownames(corb) <- nms
+> corb
+5 x 5 Matrix of class "dpoMatrix"
+          [,1]       [,2]       [,3]      [,4]       [,5]
+(Int)  1.00000 -0.9200264 -0.1847104 -0.294970  0.1263825
+visl0 -0.92003  1.0000000 -0.0028807  0.022204  0.0017642
+time  -0.18471 -0.0028807  1.0000000  0.334926 -0.6832037
+trt.A -0.29497  0.0222042  0.3349262  1.000000 -0.4757390
+tm:.A  0.12638  0.0017642 -0.6832037 -0.475739  1.0000000
+> 
+> 
+> ###################################################
+> ### code chunk: R16.20a
+> ###################################################
+> VarCorr(fm16.1mer)                    # Estimates of D, Corr(D)       
+$subject
+            (Intercept)
+(Intercept)      80.608
+attr(,"stddev")
+(Intercept) 
+     8.9782 
+attr(,"correlation")
+            (Intercept)
+(Intercept)           1
+
+attr(,"sc")
+[1] 8.6275
+> (sgma <- sigma(fm16.1mer))            # Estimate of sigma   
+[1] 8.6275
+> 
+> 
+> ###################################################
+> ### code chunk: R16.20b
+> ###################################################
+> A <- getME(fm16.1mer, "A")            # A
+> I.n <- Diagonal(ncol(A))              # I_N
+> V <- sgma^2 * (I.n + crossprod(A))    # V = sigma^2 (I_N + A'A) 
+> 
+> str(getME(fm16.1mer, "flist"))        # Grouping factor
+'data.frame':	867 obs. of  1 variable:
+ $ subject: Factor w/ 234 levels "1","2","3","4",..: 1 1 2 2 2 2 3 3 3 4 ...
+ - attr(*, "assign")= int 1
+> 
+> # V[3:6, 3:6]                         # V_i commented out (see R16.4)
+> 
+> 
+> ###################################################
+> ### code chunk: R16.21a
+> ###################################################
+> coefs <- coef(summary(fm16.1mer)) 
+> ddf <- c(631, 231, 631, 231, 631)                 # Denominator df
+> pT <- 2 * (1 - pt(abs(coefs[, "t value"]), ddf))  # p -value
+> tTable <- cbind(coefs, ddf, pT)
+> printCoefmat(tTable, P.values = TRUE, has.Pvalue = TRUE)
+                   Estimate Std. Error t value ddf      pT
+(Intercept)          9.2881     2.6817  3.4635 631 0.00057
+visual0              0.8264     0.0447 18.5035 231 < 2e-16
+time                -0.2122     0.0229 -9.2551 631 < 2e-16
+treat.fActive       -2.4220     1.4999 -1.6148 231 0.10772
+time:treat.fActive  -0.0496     0.0336 -1.4776 631 0.14002
+> 
+> 
+> ###################################################
+> ### code chunk: R16.21b
+> ###################################################
+> (dtaov <- anova(fm16.1mer))
+Analysis of Variance Table
+             Df Sum Sq Mean Sq F value
+visual0       1  25578   25578  343.64
+time          1  14627   14627  196.51
+treat.f       1    516     516    6.94
+time:treat.f  1    163     163    2.18
+> ddf1 <- ddf[-1]                          # ddf for intercept omitted
+> within(dtaov,
++       {
++        `Pr(>F)` <- pf(`F value`, Df, ddf1, lower.tail = FALSE)
++        denDf <- ddf1
++        })
+Analysis of Variance Table
+             Df Sum Sq Mean Sq F value denDf Pr(>F)
+visual0       1  25578   25578  343.64   231 <2e-16
+time          1  14627   14627  196.51   631 <2e-16
+treat.f       1    516     516    6.94   231  0.009
+time:treat.f  1    163     163    2.18   631  0.140
+> 
+> 
+> ###################################################
+> ### code chunk: R16.22a
+> ###################################################
+> SeedValue <- 17432157                 # Check it out
+> set.seed(SeedValue)
+> 
+> merObject <- fm16.1mer                      # M16.1 fit
+> simD1 <- simulate(merObject, nsim = 1000)   # Simulated y 
+> SimD1summ <- apply(simD1, 
++      2,                               # Over columns
++   function(y){
++     auxFit <- refit(merObject, y)     # Refit M16.1 with new y
++     summ <- summary(auxFit)           # Summary
++     beta <- fixef(summ)               # beta
++     Sx <- getME(auxFit, "theta")      # S element
++     sgma <- sigma(auxFit)     
++     list(beta = beta, ST = Sx, sigma = sgma)
++              })
+> 
+> 
+> 
+> ###################################################
+> ### code chunk: R16.22b
+> ###################################################
+> betaE  <-                          # Matrix with beta esimates
++    sapply(SimD1summ, FUN = function(x) x$beta)
+> STe <- sapply(SimD1summ, FUN = function(x) x$ST)
+> sigmaE <- sapply(SimD1summ, FUN = function(x) x$sigma)
+> 
+> 
+> ###################################################
+> ### code chunk: R16.23a
+> ###################################################
+> betaEm <- apply(betaE, 1, mean)         # Means (for each row)
+> betaEq <-                               # Quantiles
++     apply(betaE, 1,                        
++           FUN = function(x) quantile(x, c(0.5, 0.025, 0.975)))
+> ptE <-                                     # \zx!p?-values
++     apply(betaE, 1,                       
++           FUN = function(x){
++              prb <- mean(x > 0)
++              2 * pmax(0.5/ncol(betaE), pmin(prb, 1 - prb)) 
++                            })
+> cbind(betaEm, t(betaEq), ptE)         # Bind results columnwise 
+                      betaEm       50%     2.5%     97.5%   ptE
+(Intercept)         9.394788  9.492017  4.08912 14.660523 0.001
+visual0             0.825508  0.827323  0.74051  0.912949 0.001
+time               -0.213524 -0.213382 -0.26105 -0.168694 0.001
+treat.fActive      -2.452846 -2.424268 -5.26639  0.501710 0.110
+time:treat.fActive -0.048591 -0.049308 -0.11922  0.022705 0.144
+> 
+> 
+> ###################################################
+> ### code chunk: R16.23b
+> ###################################################
+> d11E <- STe * sigmaE
+> rndE <- rbind(d11E, sigmaE)                # Matrix with two rows
+> rndEm <- rowMeans(rndE)                    # Means (for each row)
+> rndEq <- apply(rndE, 1,                    # Quantiles
++    FUN = function(x) quantile(x, c(0.5, 0.025, 0.975)))
+> cbind(rndEm, t(rndEq))                     # Bind results 
+        rndEm    50%   2.5%   97.5%
+d11E   8.9627 8.9567 7.9279 10.0541
+sigmaE 8.6316 8.6265 8.1620  9.0935
+> 
+> 
+> ###################################################
+> ### code chunk: R16.24
+> ###################################################
+> names(sigmaE) <- names(STe) <- NULL          # For vectors
+> parSimD1  <-                                 # Matrix
++    rbind(betaE, ST1 = STe, sigma = sigmaE) 
+> parSimD1t <-                                 # Transposed 
++     data.frame(t(parSimD1), check.names=FALSE)
+> parSimD1s <-                                 # Subset
++     subset(parSimD1t, select = -`(Intercept)`) # Intercept omitted
+> require(reshape)                             # melt function needed
+Loading required package: reshape
+Loading required package: plyr
+
+Attaching package: 'reshape'
+
+The following object(s) are masked from 'package:plyr':
+
+    rename, round_any
+
+The following object(s) are masked from 'package:lme4.0':
+
+    expand
+
+The following object(s) are masked from 'package:Matrix':
+
+    expand
+
+> densityplot(~value | variable,               # Fig. 16.13
++             data = melt(parSimD1s),          # Molten data 
++             scales = list(relation = "free"), 
++             plot.points = FALSE) 
+Using  as id variables
+> detach(package:reshape)    
+> 
+> 
+> 
+> 
+> ###################################################
+> ### code chunk: R16.25a
+> ###################################################
+> lm2.form  <- visual ~ visual0 + time + treat.f + treat.f:time
+> vis.lm2 <- lm(lm2.form, data = armd)           # The null model
+> (RLRTstat <-                                   # Compare to R16.7
++    -2 * as.numeric(logLik(vis.lm2, REML=TRUE) 
++    - logLik(fm16.1mer)))        # log-REML for M16.1 (alternative)
+[1] 249.97
+> 0.5 * pchisq(RLRTstat, 1, lower.tail = FALSE)  # p-value
+[1] 1.3211e-56
+> 
+> 
+> ###################################################
+> ### code chunk: R16.25b
+> ###################################################
+> require(RLRsim)
+Loading required package: RLRsim
+Loading required package: mgcv
+This is mgcv 1.7-13. For overview type 'help("mgcv-package")'.
+Warning message:
+package 'RLRsim' was built under R version 2.15.3 
+> exactRLRT(fm16.1mer) # \ref{M:sec:ARMDLMM:Rint} (alternative)
+
+	simulated finite sample distribution of RLRT.  (p-value
+	based on 10000 simulated values)
+
+data:  
+RLRT = 249.97, p-value < 2.2e-16
+
+> 
+> 
+> ###################################################
+> ### code chunk: R16.25c
+> ###################################################
+> SeedValue <- 1321719  # check it out!!
+> set.seed(SeedValue)
+> 
+> lm2sim <- simulate(vis.lm2, nsim = 100)  # y simulated from the null model 
+> 
+> RLRTstatSim <- apply(lm2sim, 
++   2,                                           # For each column
++   function(y){ 
++    dfAux  <- within(armd, visual <- y)         # Auxiliary data 
++    lm0    <- lm(formula(vis.lm2), data = dfAux)# The null model
++    llik0  <- as.numeric(logLik(lm0, REML=TRUE))# log-REML, the null
++    llikA  <- as.numeric(logLik(refit(fm16.1mer, y))) 
++    RLRTstat<- -2 * (llik0 - llikA)             # LR-test statistics              
++              })
+> mean(RLRTstat <= RLRTstatSim)       # Empirical p-value
+[1] 0
+> 
+> 
+> ###################################################
+> ### code chunk: R16.26a
+> ###################################################
+> fm16.2mer  <-                        # M16.7
++    lmer(visual ~ visual0 + time + treat.f + treat.f:time +   
++            (1|subject) + (0 + time|subject),         
++         data = armd)
+> summ <- summary(fm16.2mer)
+> coef(summ)                                     # t-Table
+                    Estimate Std. Error t value
+(Intercept)         5.349030   2.332568  2.2932
+visual0             0.898460   0.039317 22.8519
+time               -0.215370   0.032266 -6.6749
+treat.fActive      -2.313752   1.209754 -1.9126
+time:treat.fActive -0.055059   0.047090 -1.1692
+> unlist(VarCorr(fm16.2mer))           # D. Short printout
+  subject   subject 
+54.071157  0.079359 
+> sigma(fm16.2mer)                     # sigma 
+[1] 6.6834
+> 
+> 
+> ###################################################
+> ### code chunk: R16.26b
+> ###################################################
+> fm16.2aux  <-                                  # Model M16.7 with ...
++    update(fm16.2mer, . ~ . - treat.f:time)     #...interaction omitted
+> anova(fm16.2aux, fm16.2mer)
+Data: armd
+Models:
+fm16.2aux: visual ~ visual0 + time + treat.f + (1 | subject) + (0 + time | 
+fm16.2aux:     subject)
+fm16.2mer: visual ~ visual0 + time + treat.f + treat.f:time + (1 | subject) + 
+fm16.2mer:     (0 + time | subject)
+          Df  AIC  BIC logLik Chisq Chi Df Pr(>Chisq)
+fm16.2aux  7 6441 6474  -3213                        
+fm16.2mer  8 6441 6480  -3213  1.38      1       0.24
+> 
+> 
+> 
+> ###################################################
+> ### code chunk: R16.27a
+> ###################################################
+> RML0 <- logLik(fm16.1mer)            # log-REML, M16.1 (null)
+> RMLa <- logLik(fm16.2mer)            # log-REML, M16.7 (alternative)
+> (RLRTstat <- -2 * as.numeric(RML0 - RMLa))  
+[1] 140.83
+> .5 * pchisq(RLRTstat, 1, lower.tail = FALSE) +    # \zx{p}-value
++   .5 * pchisq(RLRTstat, 2, lower.tail = FALSE)     
+[1] 1.3971e-31
+> 
+> 
+> ###################################################
+> ### code chunk: R16.27b
+> ###################################################
+> require(RLRsim)
+> mAux  <- lmer(visual ~               # Auxiliary model with ...
++            visual0 + time + treat.f + treat.f:time +  
++            (0 + time| subject),        # ... random slopes only. 
++          data = armd)          
+> exactRLRT(m = mAux,                  # The auxiliary model
++           m0= fm16.1mer,             # M16.1 (null)
++           mA= fm16.2mer)             # M16.7 (alternative)
+
+	simulated finite sample distribution of RLRT.  (p-value
+	based on 10000 simulated values)
+
+data:  
+RLRT = 140.83, p-value < 2.2e-16
+
+> 
+> #### sessionInfo ###
+> 
+> sessionInfo()           # with packages attached
+R version 2.15.0 (2012-03-30)
+Platform: x86_64-pc-mingw32/x64 (64-bit)
+
+locale:
+[1] LC_COLLATE=C                          
+[2] LC_CTYPE=English_United States.1252   
+[3] LC_MONETARY=English_United States.1252
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.1252    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
+
+other attached packages:
+[1] RLRsim_2.0-12   mgcv_1.7-13     plyr_1.7.1     
+[4] lme4.0_0.9999-2 Matrix_1.0-6    lattice_0.20-6 
+
+loaded via a namespace (and not attached):
+[1] grid_2.15.0   nlme_3.1-103  reshape_0.8.4 stats4_2.15.0
+[5] tools_2.15.0 
+> 
+> detach(package:lme4.0)
+> detach(package:RLRsim)
+> 
+> 
+> proc.time()
+   user  system elapsed 
+  49.95    0.15   50.10 
