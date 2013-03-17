@@ -1,6 +1,6 @@
 Package: utilsag
-Version: 0.0.1
-Date: 2012-05-15
+Version: 0.0.2
+Date: 2013-03-15
 Author: Andrzej Galecki <agalecki@umich.edu>
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
 Title: Datasets and utility functions.

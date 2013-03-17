@@ -1,0 +1,18 @@
+armd                    Age-Related Macular Degeneration Data (867 x 8)
+armd.wide               ARMD Data  in Wide Format (240 x 10)
+armd0                   ARMD Data in Long Format (1107 x 8)
+fcat                    Flemish Community Attainment-Targets Study (4851 x 3)
+logLik1                 Contribution of One Subject to the Overall Likelihood
+logLik1.lme             Contribution of One Subject to the Overall Likelihood for lme Object
+missPat                 Extracts Missing Patterns for a Set of Vectors
+prt                     Progressive Resistance Training Data (2471 x 9)
+prt.fiber               Fiber Data from Progressive Resistance Training Study (2471 x 5)
+prt.subjects            Subject Data from Progressive Resistance Training Study (63 x 5)
+Pwr                     Calculates Power
+Pwr.lme                 Calculates Power for lme Object
+runScript               Runs Scripts from the Book
+sigma                   Extracts Scale Parameter 
+simulateY               Simulates Dependent Variable
+simulateY.lme           Simulates Dependent Variable from lme Object
+SIIdata                 Study of Instructional Improvement Project (1190 x 12)
+

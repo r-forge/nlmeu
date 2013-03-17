@@ -23,7 +23,7 @@ Type 'q()' to quit R.
 > ###################################################
 > options(width = 65, digits = 5, show.signif.stars = FALSE)
 > date()
-[1] "Wed Mar 06 18:52:39 2013"
+[1] "Fri Mar 08 18:54:57 2013"
 > 
 > sessionInfo()
 R version 2.15.0 (2012-03-30)
@@ -45,24 +45,21 @@ Loading required package: nlme
 > 
 > data(armd, package="nlmeU")
 > 
-> lm3.form   <-                           # (\ref{armd:eqn:lm4})
+> lm3.form   <-                           # (12.9)
 +      formula(visual ~ visual0 + time + treat.f) 
-> fm16.5  <-     #update(fm16.4,    # \ref{M:sec:ARMDLMM:D2C} \zx{\leftarrow} \ref{M:sec:ARMDLMM:D2B}           
+> fm16.5  <-     #update(fm16.4,          # M16.5 <- M16.4           
 +      lme (lm3.form, 
 +      random = list(subject = pdDiag(~time)),
-+      weights=varPower(form=~time), # 
-+      data=armd)            
-> fm16.5ml <- update(fm16.5, method= "ML")
++      weights = varPower(form = ~time), # 
++      data = armd)            
+> fm16.5ml <- update(fm16.5, method = "ML")
 > 
 > 
 > ###################################################
 > ### code chunk: R20.11
 > ###################################################
-> SeedValue <- 1238917                     # Seed value
-> set.seed(SeedValue)
-> 
 > library(nlmeU)
-> simY <- simulateY(fm16.5ml, nsim=1000)   # Simulated y from M16.1
+> simY <- simulateY(fm16.5ml, nsim = 1000, seed = 1238917)  # Simulated y from M16.1
 > auxDt <- subset(armd,                    # Auxiliary data
 +    select = c(subject, visual, visual0, time, treat.f))
 > simYsumm <- 
@@ -70,13 +67,13 @@ Loading required package: nlme
 +          MARGIN = 2,                     # Over columns
 +          FUN = function(y){    
 +             auxDt$visual <- y            # Dependent variable updated
-+             auxFit <-                    # Update \ref!M:sec:ARMDLMM:Rint? with new y
++             auxFit <-                    # Update M16.1 with new y
 +                update(fm16.5ml, data = auxDt)
 +             summ <- summary(auxFit)      # Summary
 +             beta <- fixef(summ)     
 +             list(beta = beta)
 + })
-> simYsumm[[1]]                            # \zx{\widehat{\vec{\beta}}} for the 1st simulation
+> simYsumm[[1]]                            # beta for the 1st simulation
 $beta
   (Intercept)       visual0          time treat.fActive 
       4.59395       0.90295      -0.24768      -3.94995 
@@ -91,7 +88,7 @@ $beta
 > rowMeans(betaE)                      # Empirical beta (see Panel R20.6b)
   (Intercept)       visual0          time treat.fActive 
       5.37646       0.90113      -0.24115      -2.66659 
-> cov(t(betaE))                   
+> cov(t(betaE))                        # Emoirical Var(beta)
               (Intercept)     visual0        time treat.fActive
 (Intercept)     4.7447722 -7.5371e-02 -3.5957e-03   -0.64417517
 visual0        -0.0753712  1.3785e-03 -1.6726e-05    0.00072322
@@ -115,11 +112,11 @@ attached base packages:
 [7] base     
 
 other attached packages:
-[1] nlmeU_0.30-7 nlme_3.1-103
+[1] nlmeU_0.30-8 nlme_3.1-103
 
 loaded via a namespace (and not attached):
 [1] grid_2.15.0    lattice_0.20-6 tools_2.15.0  
 > 
 > proc.time()
    user  system elapsed 
- 337.78    0.42  338.30 
+ 337.88    0.42  338.75 

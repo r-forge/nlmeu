@@ -29,8 +29,10 @@ The \code{prt.subjects} data frame has 63 rows and 5 columns
    }
 }}
 \details{
- ...
-}
+The working hypothesis was that a 12-week program of PRT would increase: (a) the power output
+of the overall musculature associated with movements of the ankles, knees, and hips; (b) the cross-sectional area and the force and power of permeabilized single fibers obtained from the vastus lateralis muscle; and (c) the ability of young and elderly men and women to safely arrest standardized falls. The training consisted of repeated leg extensions by shortening contractions of the leg extensor muscles
+against a resistance that was increased as the subject trained using a specially
+designed apparatus}
 \source{
   ???? Doe, A. B. and Doe, J. M. (xxxx), \emph{Title},
   Springer, New York.  (Appendix A.17)

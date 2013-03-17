@@ -125,7 +125,7 @@ subject.f <- factor(subject.c, levels = subject.c)
 myPanel <- function(x, y, ...){
    x1 <- as.numeric(x)
    panel.xyplot(x1, y, ...)
-   ltext(x1[outL], y[outL], subject.c[outL])  # Label outlying \zi!\mbox!LD??!i?'s
+   ltext(x1[outL], y[outL], subject.c[outL])  # Label outlying LDi
 }
 
 dtp <-                                        # Fig. 20.2

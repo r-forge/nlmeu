@@ -1,8 +1,4 @@
-## source ("D:/Dropbox/GaleckiPrivate/nlmeURforge/pkg/nlmeU/R/Pwr.R")
-
-
-
-Pwr.lme <- function (object, ..., 
+Pwr.lme <- function (object, ...,
     type = c("sequential", "marginal"), 
     Terms, L, verbose = FALSE, sigma, ddf= numeric(0), alpha=0.05,
     altB = NULL, tol = 1e-10) 
@@ -35,7 +31,7 @@ Pwr.lme <- function (object, ...,
 if (!Tmiss && Lmiss){          # IF 1  (Check this part)
 ##  Based on Terms argument L matrix is created (with colnames)
 ##  Colnames assigned
-.traceR(2,"IF 1 executed: Matrix L created from Terms argument" ,   funNm, msg = TRUE)
+.traceR(2,"IF 1 executed: Matrix L created from Terms argument" , funNm, msg = TRUE)
 cLnms <- fixefNms
 assign <- attr(object$fixDF, "assign")
 nTerms <- length(assign)
@@ -159,8 +155,6 @@ ret <- data.frame(x$numDF, ddf2, F0val, ncx, Power) #Fcrit omitted
 
     varNames <- c("numDF", "denDF","F-value", "nc", "Power")  # Fcrit omitted
           vcovb <- object$varFix 
-   #print("strx")
-   #print(str(x))
 
           if (!is.null(axL <- attr(x, "L"))) {  # L mtx specified
            .traceR(2, , funNm, "IF 5 executed")        
@@ -169,19 +163,14 @@ ret <- data.frame(x$numDF, ddf2, F0val, ncx, Power) #Fcrit omitted
                " represented by linear combination: \n")
          
           if (!Lmiss)  lab <- "Power calculations for a linear combination: \n"
-            # probe/modify L= attr(x,"L")
             dimL <- dim(L)
-            #print(str(L))
             if (is.null(dimL)) names(L) <- cLnms
             attr(ret,"L") <- L
           names(ret) <- varNames
           } else {   #  L not-specified. Effects tested one by one.
          .traceR(2,  ,"ELSE 5 executed", funNm)       
             # lab <- paste("Power calculations for effect(s):", Terms,"\n")  
-                   
-           # print("?2")
            dimnames(ret) <- list(rownames(x),varNames)  ## ???
-           #print("?2a")
          }
   ### Modify lab.
   ### if alpha= ne 0.05 then paste(lab, alpha=)
@@ -197,7 +186,7 @@ attr(ret,"varFixed")   <- vcovb
 attr(ret,"alpha") <- alpha
 attr(ret,"rt") <- rt
 
-class(ret)  <- c("Pwr","data.frame")
+class(ret)  <- c("Pwr.lme","data.frame")
 .traceR(1, , funNm, "Pwr.lme ENDS <=#######")
 ret
 }

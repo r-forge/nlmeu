@@ -85,8 +85,8 @@ mrgDt  <- merge(dtLong, dts, sort = FALSE) # Merged
 exmpDt <- 
    within(mrgDt, 
           {    
-           m0 <- 75 - 0.1 * time    # Under H0  Note: Compared to book 65 changed to 75 (See erratum)
-           mA <- 85 - 0.1 * time    # Under Ha. 
+           m0 <- 65 - 0.1 * time    # Under H0  
+           mA <- 75 - 0.1 * time    # Under Ha. 85 changed to 75
            mA <- ifelse(treat.f %in% "Active", mA, m0) 
           })
 
@@ -168,9 +168,7 @@ xyplot(Power ~ treat.fActive,                # Fig.20.6
 ###################################################
 ### code chunk: R20.18
 ###################################################
-SeedValue <- 8917437
-set.seed(SeedValue)
-simA <- simulateY(fmA, sigma = sgma, nsim = 1000) # Simulation
+simA <- simulateY(fmA, sigma = sgma, nsim = 1000, seed = 8917437) # Simulation
 dt <- exmpDt                                      # Working copy 
 simfmA <- 
    apply(simA,     
@@ -181,7 +179,6 @@ simfmA <-
             anova(auxFit)                         # ANOVA table
             })
 simfmA[[1]]                                       # First ANOVA 
-
 
 ###################################################
 ### code chunk: R20.19

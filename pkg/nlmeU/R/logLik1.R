@@ -66,7 +66,7 @@ logLik1.lme <- function(modfit, dt1, dtInit){
    
     if (!is.null(dtInit)){
         .traceR(222, "IF dtInit", funNm, msg = TRUE)
-        idxInit      <- c(1:nrow(dtInit))            # Indices for dtInit
+        idxInit      <- c(1:nrow(dtInit))           # Indices for dtInit
         vecR         <- vecR[-idxInit]
     }                                               # Diagonal of R_i matrix
     

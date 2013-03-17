@@ -13,11 +13,10 @@ simulateY(object, nsim, seed, ..., verbose, sigma)
  \item{seed}{integer scalar used to initiate random numbers generator.}
  \item{\dots}{some methods for this generic function may require additional arguments.}
  \item{verbose}{logical. If TRUE basic information about arguments is provided. By default set to FALSE.}
- \item{sigma}{numeric scalar. Allows to perform simulations based on alternative value of the scale parameter.}
+ \item{sigma}{numeric scalar. Allows to perform simulations employing alternative value of the scale parameter.}
 }
 \description{
-  This function is generic; method functions can be written to handle
-  specific classes of objects. 
+  This function is generic; method functions can be written to handle specific classes of objects. 
 }
 \value{
   numeric matrix. Number of columns determined by nsim argument. 
