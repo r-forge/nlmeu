@@ -31,7 +31,7 @@ detach(package:nlme)
 
 
 # R203b
-library(nlmeU)
+library(nlmeForTesting)
 methods(class= pdKronecker)
 (pdK <- pdKronecker(pdL1, data = dt))      # D1 @ D2
 
@@ -62,4 +62,4 @@ methods(class = pdKronecker)
 packageVersion("nlme")
 sessionInfo()
 detach(package:nlme)
-detach(package:nlmeU)
+

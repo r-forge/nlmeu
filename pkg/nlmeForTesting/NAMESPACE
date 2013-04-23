@@ -2,7 +2,7 @@
 useDynLib(nlme, .registration=TRUE)
 ## import(lattice)
 import(stats)
-import(nlmeU)
+## import(nlmeU)
 importFrom(graphics, pairs, plot)
 
 
@@ -26,7 +26,7 @@ export(ACF, allCoef, asOneFormula, asTable, augPred, balancedGrouped,
        splitFormula, varComb, varConstPower, VarCorr, varExp,
        varFixed, varFunc, varIdent, Variogram, varPower, varWeights)
 
-export(pdKronecker)
+export(pdKronecker, pdKroneckeR)
 
 # called directly via do.call
 export(anova.lme, nlsList.formula, plot.lme)
@@ -502,3 +502,12 @@ S3method(pdMatrix, pdKronecker)
 S3method(solve, pdKronecker)
 S3method(summary, pdKronecker)
 S3method(VarCorr, pdKronecker)
+
+########
+S3method(pdConstruct, pdKroneckeR)
+S3method(pdFactor, pdKroneckeR)
+S3method(pdMatrix, pdKroneckeR)
+S3method(solve, pdKroneckeR)
+
+# S3method(summary, pdKroneckeR)
+# S3method(VarCorr, pdKroneckeR)

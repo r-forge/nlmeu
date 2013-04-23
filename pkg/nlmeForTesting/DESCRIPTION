@@ -1,15 +1,15 @@
 Package: nlmeForTesting
-Version: 0.0007
+Version: 0.0008
 Date: $Date$
 Revision: $Revision$
 Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
 Title: Testing new features in nlme package.
-Description: Minor changes compared to original nlme package. Changes allow to run models with pdKronecker class defined in nlmeU package
+Description: Minor changes compared to original nlme package. Changes allow to run models with pdKronecker class
 Depends: graphics, stats, R (>= 2.14.2)
 LinkingTo: nlme
-Imports: lattice, nlmeU
-Suggests:  lattice, testthat
+Imports: lattice
+Suggests:  lattice, testthat, nlmeU
 License: GPL (version 2 or later)
 URL:  http://www-personal.umich.edu/~agalecki/
 LazyData: yes
