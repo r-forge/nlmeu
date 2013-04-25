@@ -45,8 +45,14 @@ function (fixed, data = sys.frame(sys.parent()), random = pdSymm(eval(as.call(fi
     keep.data = TRUE) 
 {
 ##  lme.formula() function created 
-    funNm <- "lme.formula.U"
-    .traceFunction(1, "lme.formula.U STARTS here ====", funNm, tags =c("1","msg"))
+    fnm <- "lme.formula.U"
+    
+       .traceRinit <- attr(options()$traceR, "init")
+    .traceR <-   if (is.null(.traceRinit))
+      function(...){} else .traceRinit(fnm) 
+      
+    .traceR(1, "model.matrix.reStruct.U STARTS", fnm, msg = TRUE)
+
     Call <- match.call()
     miss.data <- missing(data) || !is.data.frame(data)
     controlvals <- lmeControl()
@@ -66,9 +72,9 @@ function (fixed, data = sys.frame(sys.parent()), random = pdSymm(eval(as.call(fi
     method <- match.arg(method)
     REML <- method == "REML"
     reSt <- reStruct(random, REML = REML, data = NULL)
-    .traceFunction(110, reSt, funNm, tags = c("reSt"))
+    .traceR(110, reSt, fnm)
      groups <- getGroupsFormula(reSt)
-    .traceFunction(120, groups, funNm, tags = c("msg"))
+    .traceR(120, groups, fnm)
     if (is.null(groups)) {
         if (inherits(data, "groupedData")) {
             groups <- getGroupsFormula(data)
@@ -83,17 +89,17 @@ function (fixed, data = sys.frame(sys.parent()), random = pdSymm(eval(as.call(fi
                 for (i in 1:Q) randL[[i]] <- random
                 randL <- as.list(randL)
                 reSt <- reStruct(randL, REML = REML, data = NULL)
-                .traceFunction(120, reSt, funNm, tags = c("reSt"))
+                .traceR(120, reSt, fnm)
             }
             else {
                 names(reSt) <- namGrp
-                .traceFunction(130, reSt, funNm, tags = c("reSt"))
+                .traceR(130, reSt, fnm)
            }
         }
         else {
             groups <- ~1
             names(reSt) <- "1"
-            .traceFunction(140, reSt, funNm, tags = c("reSt"))
+            .traceR(140, reSt, fnm)
         }
     }
     if (!is.null(correlation)) {
@@ -137,7 +143,7 @@ function (fixed, data = sys.frame(sys.parent()), random = pdSymm(eval(as.call(fi
     }
     lmeSt <- lmeStruct(reStruct = reSt, corStruct = correlation, 
         varStruct = varFunc(weights))
-    .traceFunction(250, reSt, funNm, tags = c("reSt"))
+    .traceR(250, reSt, fnm)
     mfArgs <- list(formula = asOneFormula(formula(lmeSt), fixed, 
         groups), data = data, na.action = na.action)
     if (!missing(subset)) {
@@ -169,11 +175,11 @@ function (fixed, data = sys.frame(sys.parent()), random = pdSymm(eval(as.call(fi
     dataMix <- dataMix[ord, , drop = FALSE]
     revOrder <- match(origOrder, row.names(dataMix))
     N <- nrow(grps)
-    .traceFunction(300, reSt, funNm, tags = c("reSt"))
+    .traceR(300, reSt, fnm)
     Z <- model.matrix(reSt, dataMix)
     ncols <- attr(Z, "ncols")
     Names(lmeSt$reStruct) <- attr(Z, "nams")
-    .traceFunction(350, lmeSt$reStruct, funNm, tags = c("reSt"))
+    .traceR(350, lmeSt$reStruct, fnm)
     contr <- attr(Z, "contr")
     X <- model.frame(fixed, dataMix)
     Terms <- attr(X, "terms")
@@ -270,7 +276,7 @@ function (fixed, data = sys.frame(sys.parent()), random = pdSymm(eval(as.call(fi
     attr(Resid, "std") <- lmeFit$sigma/(varWeights(lmeSt)[revOrder])
     grps <- grps[revOrder, , drop = FALSE]
     lmeSt$reStruct <- solve(lmeSt$reStruct)
-    .traceFunction(400, lmeSt$reStruct, funNm, tags = c("reSt"))
+    .traceR(400, lmeSt$reStruct, fnm)
     dims <- attr(lmeSt, "conLin")$dims[c("N", "Q", "qvec", "ngrps", 
         "ncol")]
     if (controlvals$apVar) {
@@ -299,6 +305,6 @@ function (fixed, data = sys.frame(sys.parent()), random = pdSymm(eval(as.call(fi
     }
 
     class(estOut) <- "lme"
-    .traceFunction(1, "lme.formula.U ENDS here ====", funNm, tags="1")
+    .traceR(1, "lme.formula.U ENDS here ====", fnm, msg = TRUE)
     estOut
 }

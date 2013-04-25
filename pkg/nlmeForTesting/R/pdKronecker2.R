@@ -186,7 +186,7 @@ unlistFun <- function(namesList){
       }
   # print(allNames)
   allNames <- meltx(allNames)
-  print(allNames)
+  # print(allNames)
   allNames <- allNames[,"value"]
   allNames <- as.character(allNames)
   allNames
@@ -212,11 +212,11 @@ unlistFun <- function(namesList){
         stop("Cannot change the number of columns on an initialized object")
     }   
   if (is.null(vNames <- rownames(value))) {
-        vNames <- unlistFun(namesList)
+        vNames <- nlmeForTesting:::unlistFun(namesList)
         dimnames(value) <- list(vNames, vNames)
     }   else {
  
-       if (!(all(match(unlistFun(namesList), vNames, nomatch = 0)))) {
+       if (!(all(match(nlmeForTesting:::unlistFun(namesList), vNames, nomatch = 0)))) {
             stop("Names of object and value must match.")
         }
         attr(object, "Dimnames") <- list(vNames, vNames)

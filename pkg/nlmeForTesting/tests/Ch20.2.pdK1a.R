@@ -14,7 +14,7 @@ D1 %x% D2                # D1 @ D2
 
 # R20.2
 
-library(nlme)
+library(nlmeForTesting)
 (pdId <- pdIdent(as.matrix(1), form = ~1)) # Mandatory
 (pd1 <- pdLogChol(D1, form = ~f1-1))       # D1
 (pd2 <- pdLogChol(D2, form = ~f2-1))       # D2
@@ -27,11 +27,11 @@ pdL1 <-                                    # The main argument
 f1 <- gl(2, 1, labels = c("A","B")) 
 f2 <- gl(2, 1, labels = c("a","b"))
 (dt <- data.frame(f1, f2))
-detach(package:nlme)
+
 
 
 # R203b
-library(nlmeForTesting)
+
 methods(class= pdKronecker)
 (pdK <- pdKronecker(pdL1, data = dt))      # D1 @ D2
 
@@ -54,12 +54,12 @@ pdKterms <- terms(pdKform)                # Terms object
 labels(pdKterms)                          # Expanded formula
 attr(pdKterms, "intercept")               # Intercept omitted
 
-library(nlme)
+library(nlmeForTesting)
 (nms <- Names(pdK))
 dimnames(Dx) <- list(nms, nms)
 Dx
 methods(class = pdKronecker)   
-packageVersion("nlme")
+packageVersion("nlmeForTesting")
 sessionInfo()
-detach(package:nlme)
+detach(package:nlmeForTesting)
 

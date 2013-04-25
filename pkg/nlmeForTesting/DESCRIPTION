@@ -1,5 +1,5 @@
 Package: nlmeForTesting
-Version: 0.0008
+Version: 0.1
 Date: $Date$
 Revision: $Revision$
 Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski
@@ -9,7 +9,7 @@ Description: Minor changes compared to original nlme package. Changes allow to r
 Depends: graphics, stats, R (>= 2.14.2)
 LinkingTo: nlme
 Imports: lattice
-Suggests:  lattice, testthat, nlmeU
+Suggests:  lattice, testthat, nlmeU, reshape
 License: GPL (version 2 or later)
 URL:  http://www-personal.umich.edu/~agalecki/
 LazyData: yes

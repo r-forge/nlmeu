@@ -26,7 +26,7 @@ export(ACF, allCoef, asOneFormula, asTable, augPred, balancedGrouped,
        splitFormula, varComb, varConstPower, VarCorr, varExp,
        varFixed, varFunc, varIdent, Variogram, varPower, varWeights)
 
-export(pdKronecker, pdKroneckeR)
+export(pdKronecker) # pdKroneckeR
 
 # called directly via do.call
 export(anova.lme, nlsList.formula, plot.lme)
@@ -274,7 +274,7 @@ S3method(logLik, varComb)
 S3method(logLik, varFunc)
 S3method("matrix<-", pdBlocked)
 S3method("matrix<-", pdMat)
-S3method("matrix<-", reStruct)
+## S3method("matrix<-", reStruct)
 S3method(model.matrix, reStruct)
 S3method(Names, formula)
 S3method(Names, listForm)
@@ -503,11 +503,4 @@ S3method(solve, pdKronecker)
 S3method(summary, pdKronecker)
 S3method(VarCorr, pdKronecker)
 
-########
-S3method(pdConstruct, pdKroneckeR)
-S3method(pdFactor, pdKroneckeR)
-S3method(pdMatrix, pdKroneckeR)
-S3method(solve, pdKroneckeR)
 
-# S3method(summary, pdKroneckeR)
-# S3method(VarCorr, pdKroneckeR)
