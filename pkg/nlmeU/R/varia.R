@@ -1,7 +1,4 @@
 
-
-
-
 ## ->  sigma  generic function
 #' Extract scale parameter sigma from a model fit
 #'
@@ -26,8 +23,7 @@ sigma.default <- function(object, ...) object$sigma
 #'
 #' Extract pattern of missing data
 #'
-#' This function allows to compactly present pattern of missing data in a given
-#'  vector/matrix/data frame or combination of thereof.
+#' This function allows to compactly present pattern of missing data in a given vector/matrix/data frame or combination of thereof.
 #'
 #' @export
 #' @param \dots one or more vectors/matrices/data frames. They need to be compatible for columnwise binding.
@@ -81,7 +77,7 @@ missPat <- function(..., symbols = c("X","-"), collapse = "", missData = FALSE){
 #'
 #' @param script character string containing name of the script to be executed. By default is set to NA.
 #' @param package character string containing package name. By default nlmeU.
-#' @param subdir subdirectory containing scripts. By default: scriptsR15.0.
+#' @param subdir subdirectory containing scripts. By default: scriptsR2.15.0.
 #' @param echo logical. Used by source function. By default set to TRUE.
 #' @return Script is executed and results are printed.
 #' @author Andrzej Galecki and Tomasz Burzykowski
@@ -89,7 +85,8 @@ missPat <- function(..., symbols = c("X","-"), collapse = "", missData = FALSE){
 #' @examples runScript()
 #'
 
-runScript <- function(script= NA,  package = "nlmeU", subdir = "scriptsR15.0", echo = TRUE){
+runScript <- function(script= NA,  package = "nlmeU", subdir = "scriptsR2.15.0", 
+    echo = TRUE){
     scriptsDir <- system.file(subdir, package = package)
     scriptsList <- list.files(scriptsDir, pattern = "[[:alnum:]][.][R]$")
     scriptFile <- file.path(scriptsDir, script)
@@ -101,10 +98,13 @@ runScript <- function(script= NA,  package = "nlmeU", subdir = "scriptsR15.0", e
         else {
             errFun <- stop
             errMsg <- paste("Example", example, "does not exist. ")
-            
         }
-        errFun(errMsg, "Valid scripts in ", scriptsDir, " are: \n", paste("\"",scriptsList, 
+        errFun(errMsg, "Scripts in ", scriptsDir, " are: \n", paste("\"",scriptsList, 
             collapse = "\", \n", sep=""), "\"")
+        if (subdir == "scriptsR2.15.0")
+            cat ('\n Scripts employing lme4.0 package are stored in: \n',
+            file.path(scriptsDir,"lme4.0"), ' directory',
+            ' and can be found by issuing:\n   runScript(subdir = "scriptsR2.15.0/lme4.0") command \n')         
     }
     else {
         sourceText <- source(scriptFile, echo=echo)
