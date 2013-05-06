@@ -1,60 +1,15 @@
-
-####  Functions exported by nlme package
-# export(            
-#       ACF, allCoef, asOneFormula, asTable, augPred, balancedGrouped,
-#       "coef<-", "coefficients<-", collapse, compareFits,
-#       comparePred, corAR1, corARMA, corCAR1, corCompSymm,
-#       corExp, corFactor, corGaus, corIdent, corLin, corMatrix,
-#       corNatural, corRatio, corSpatial, corSpher, corSymm,
-#       "covariate<-", Dim, fdHess, fixed.effects, fixef, gapply,
-#       getCovariate, getCovariateFormula, getData, getGroups,
-#       getGroupsFormula, getResponse, getResponseFormula, getVarCov,
-#       gls, glsControl, glsStruct, gnls, gnlsControl, gnlsStruct,
-#       groupedData, gsummary, Initialize, intervals, isBalanced,
-#       isInitialized, LDEsysMat, lme, lmeControl, lmeScale, lmeStruct,
-#       lmList, logDet, "matrix<-", Names, "Names<-", needUpdate,
-#       nfGroupedData, nlme, nlmeControl, nlmeStruct, nlsList,
-#       nmGroupedData, pdBlocked, pdCompSymm, pdConstruct, pdDiag,
-#       pdFactor, pdIdent, pdLogChol, pdMat, pdMatrix, pdNatural,
-#       pdSymm, phenoModel, pooledSD, quinModel,
-#       random.effects, ranef, recalc, reStruct, simulate.lme,
-#       splitFormula, varComb, varConstPower, VarCorr, varExp,
-#       varFixed, varFunc, varIdent, Variogram, varPower, varWeights
-# )
-
-# called in nlme package directly via do.call
-# export(anova.lme, nlsList.formula, plot.lme)
-
-# needed as name stored in the call via match.call
-# export(lme.formula, lme.lmList, lmList.formula, nlme.formula,
-#      nlme.nlsList)
-### END of nlme exports
-
-importFrom(nlme, varPower, Initialize, varWeights)   # logLik1
-importFrom(nlme, getVarCov)                          # simulateY
-
-# Needed for pdKronecker
-#importFrom(nlme, "coef<-", corMatrix, "matrix<-",logDet)
-#importFrom(nlme, Names, "Names<-", pdConstruct, pdFactor, pdMatrix, VarCorr)
-#importFrom(nlme, Dim, getCovariateFormula, splitFormula, getResponseFormula, pdMat)
-#importFrom(nlme, isInitialized)
-
-# Needed for model.matrix.reStruct
-#importFrom(nlme, asOneFormula)
-
-export(missPat, runScript)
-
-# export(Names.pdKronecker)  # Not needed
-
-# generic functions defined in auxiliary.R
-export(logLik1,  Pwr, sigma, simulateY)
-
-
-# Methods
+export(logLik1)
+export(missPat)
+export(Pwr)
+export(runScript)
+export(sigma)
+export(simulateY)
+importFrom(nlme,getVarCov)
+importFrom(nlme,Initialize)
+importFrom(nlme,varPower)
+importFrom(nlme,varWeights)
 S3method(logLik1,lme)
+S3method(print,Pwr)
 S3method(Pwr,lme)
 S3method(sigma,default)
-S3method(simulateY, lme)
-S3method(print, Pwr)
-
-
+S3method(simulateY,lme)

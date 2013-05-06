@@ -15,7 +15,9 @@ detach(package:nlme)
 
 library(nlmeU)
 Pwr(fm16.5)                                # Default call 
-Pwr(fm16.5,  L = c("treat.fActive" = 1))   # The L argument
+res <- Pwr(fm16.5,  L = c("treat.fActive" = 1))   # The L argument
+library(testhat)
+expect_that(unlist(res["F-value"]), equals(c("F-value" = 5.534487163)))
 packageVersion("nlme")
 sessionInfo()
 detach(package:nlmeU)

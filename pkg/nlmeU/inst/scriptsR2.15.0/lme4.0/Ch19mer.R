@@ -1,6 +1,6 @@
 ###################################################
 ### code chunk: Chap19mer_init: Panels R19.1 - R19.7.
-### code for panels R19.8 - R19.13 is stored in Ch19.R
+### code for panels R19.8 - R19.13 is stored in ../Ch19.R
 ###################################################
 options(digits = 5, show.signif.stars = FALSE)
 

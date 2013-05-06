@@ -1,4 +1,26 @@
+## ->  simulateY  generic function
+#' Simulates values of the dependent variable based on a model fit
+#'
+#' This function is generic; method functions can be written to handle specific classes of objects.
+#'
+#' @param object an object with a model fit for which dependent variable is to be simulated.
+#' @param nsim number of simulations. nsim = 1 by default.
+#' @param seed integer scalar used to initiate random numbers generator.
+#' @param \dots some methods for this generic function may require additional arguments.
+#' @param verbose logical. If TRUE basic information about arguments is provided. By default set to FALSE.
+#' @param sigma numeric scalar. Allows to perform simulations employing alternative value of the scale parameter.
+#' @return numeric matrix. Number of columns determined by nsim argument.
+#' @author Andrzej Galecki and Tomasz Burzykowski
+#' @examples
+#'
+#'  ## simulateY (fm1)
+#'
+#' @export
+simulateY <- function(object, nsim = 1, seed = NULL, ..., verbose = FALSE, sigma) UseMethod("simulateY")
 
+
+
+#' @S3method simulateY lme
 simulateY.lme <- function (object, nsim = 1, seed = as.integer(runif(1, 0, .Machine$integer.max)), ...,
   verbose = FALSE, sigma) 
 {

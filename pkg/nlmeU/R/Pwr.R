@@ -1,3 +1,50 @@
+## -> Pwr function
+#' Calculates power based on a model fit
+#'
+#' This function is generic; method functions can be written to handle specific classes of objects.
+#'
+#' @export
+#' @param object an object containing the results returned by a model fitting function (e.g., \code{lme}).
+#' @param \dots some methods for this generic function may require additional arguments.
+#' @return numeric scalar value.
+#' @author Andrzej Galecki and Tomasz Burzykowski
+#' @seealso \code{\link{Pwr.lme}}
+#' @examples
+#'  \dontrun{
+#'   Pwr (fm1)
+#' }
+Pwr <-  function(object, ...) UseMethod("Pwr")
+
+
+## -> Pwr.lme function
+#' Performs power calculations
+#'
+#' This is method for \code{Pwr()} generic function. It works fine for an
+#' example given in the book. It may require additional testing, especially for
+#' post-hoc power analysis
+#'
+#' @method Pwr lme
+#' @param object an object containing \code{lme} fit, which provides information needed for power calculations
+#' @param \dots some additional arguments may be required.
+#' @param type an optional character string specifying the type of sum of squares to be used in F-tests 
+#'  needed for power calculations. Syntax is the same as for \code{anova.lme()} in \code{nlme} package.
+#' @param Terms an optional integer or character vector specifying which terms
+#'  in the model should be jointly tested to be zero using a Wald F-test. See
+#'  \code{anova.lme} in \code{nlme} package for details.
+#' @param L an optional numeric vector or array specifying linear combinations
+#'  of the coefficients in the model that should be tested to be zero. See
+#'  \code{anova.lme} in \code{nlme} package for details.
+#' @param verbose an optional logical value. See \code{anova.lme} in nlme package for details.
+#' @param sigma numeric scalar value.
+#' @param ddf numeric scalar value. Argument can be used to redefine default number of denominator degrees of freedom
+#' @param alpha numeric scalar value. By default 0.05.
+#' @param altB matrix/vector containing alternative values for beta parameters
+#' @param tol numeric scalar value.
+#' @return a data frame inheriting from class Pwr.lme
+#' @S3method Pwr lme
+#' @author Andrzej Galecki and Tomasz Burzykowski
+#' @seealso \code{\link{anova.lme}}
+#'
 Pwr.lme <- function (object, ...,
     type = c("sequential", "marginal"), 
     Terms, L, verbose = FALSE, sigma, ddf= numeric(0), alpha=0.05,
@@ -191,6 +238,7 @@ class(ret)  <- c("Pwr.lme","data.frame")
 ret
 }
 
+#' @S3method print Pwr
 print.Pwr <- function (x, verbose = attr(x, "verbose"), ...) 
 {
     if ((rt <- attr(x, "rt")) == 1) {

@@ -1,14 +1,31 @@
 Package: nlmeU
-Version: 0.50-0
+Version: 0.60-0
 Date: $Date$
 Revision: $Revision$
-Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski <tomasz.burzykowski@uhasselt.be>
+Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski
+    <tomasz.burzykowski@uhasselt.be>
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
-Title: Datasets and auxiliary functions for Galecki and Burzykowski book 2013. 
-Description: Datasets and auxiliary functions for Galecki and Burzykowski book 2013. Package under development.
-Depends: R (>= 2.14.2)
-Imports: nlme 
-Suggests: utilsag, reshape, WWGbook, lme4.0, lattice, ellipse
-License: GPL (version 2 or later)
-URL:  http://www-personal.umich.edu/~agalecki/
+Title: Datasets and auxiliary functions for Galecki and Burzykowski book 2013.
+Description: Datasets and auxiliary functions for Galecki and Burzykowski book
+    2013. Package under development.
+Depends:
+    R (>= 2.14.2)
+Imports:
+    nlme
+Suggests:
+    utilsag,
+    reshape,
+    WWGbook,
+    lme4.0,
+    lattice,
+    ellipse,
+    roxygen2
+License: GPL (>=2)
+URL: http://www-personal.umich.edu/~agalecki/
 LazyData: yes
+Collate:
+    'logLik1.R'
+    'nlmeU-package.R'
+    'Pwr.R'
+    'simulateY.R'
+    'varia.R'
