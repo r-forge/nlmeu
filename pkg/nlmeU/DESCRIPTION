@@ -1,5 +1,5 @@
 Package: nlmeU
-Version: 0.60-1
+Version: 0.60-10
 Date: $Date$
 Revision: $Revision$
 Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski
@@ -19,7 +19,7 @@ Suggests:
     lme4.0,
     lattice,
     ellipse,
-    roxygen2
+    roxygen2,
     testthat
 License: GPL (>=2)
 URL: http://www-personal.umich.edu/~agalecki/
