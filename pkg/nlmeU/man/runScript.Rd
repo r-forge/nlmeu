@@ -3,7 +3,7 @@
 \title{Executes scripts from GB book}
 \usage{
   runScript(script = NA, package = "nlmeU",
-    subdir = "scriptsR15.0", echo = TRUE)
+    subdir = "scriptsR2.15.0", echo = TRUE)
 }
 \arguments{
   \item{script}{character string containing name of the

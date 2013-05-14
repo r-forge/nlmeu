@@ -1,4 +1,5 @@
 date()
+library(testthat)
 ## See R20.14b
 data(armd, package = "nlmeU")
 

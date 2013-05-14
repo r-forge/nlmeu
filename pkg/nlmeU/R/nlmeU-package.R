@@ -10,7 +10,7 @@
 #' @title Datasets and auxiliary functions for Galecki and Burzykowski book 2013.
 #' @author \email{agalecki@@umich.edu}, \email{Tomasz Burzykowski <tomasz.burzykowski@@uhasselt.be>}
 #' @keywords package
-#' @seealso \code{\link{nlmeUpdK}}
+####->>>> @seealso \code{\link{nlmeUpdK}}
 NULL
 
 ##-->  namespace_roclet

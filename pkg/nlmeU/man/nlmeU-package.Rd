@@ -15,8 +15,5 @@
   \email{agalecki@umich.edu}, \email{Tomasz Burzykowski
   <tomasz.burzykowski@uhasselt.be>}
 }
-\seealso{
-  \code{\link{nlmeUpdK}}
-}
 \keyword{package}
 
