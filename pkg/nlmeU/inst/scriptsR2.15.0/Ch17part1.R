@@ -1,7 +1,7 @@
 date()
 packageVersion("nlmeU")
 message("Code for first part of Chapter 17 (from Panel R17.1 til R17.13) is executed below.") 
-message("Code for remaining panels pertaining to pdKronecker class is distributed with nlmeForTesting package (Apr.24, 2013)")
+message("Code for remaining panels pertaining to pdKronecker class is distributed with nlmeUpdK package (Jun.10, 2013)")
 
 ###################################################
 ### code chunk: Chap17init
