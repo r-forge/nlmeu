@@ -41,13 +41,12 @@ sigma.default <- function(object, ...) object$sigma
 #' missPat(dtf, symbols = c("?","+"))
 #'
 missPat <- function(..., symbols = c("X","-"), collapse = "", missData = FALSE){
-     funNm <- "missPat"
+     .functionLabel <- "missPat"                                # Function label (recommended)
      .traceRinit <- attr(options()$traceR, "init")
-     .traceR <-   if (is.null(.traceRinit))
-     function(...){} else .traceRinit(funNm) 
-     .traceR(1, "missPat STARTS", funNm, msg = TRUE)
+     .traceR <-  if (is.null(.traceRinit)) function(...){} else .traceRinit      
+      
+     .traceR(1, "-> missPat STARTS")
      args  <- as.list(substitute(list(...)))[-1]
-     .traceR(10, args, funNm)  
      argsL <- lapply(args, eval)
      dt <- data.frame(argsL)
      nms <- lapply(args, FUN= function(el){
@@ -62,11 +61,10 @@ missPat <- function(..., symbols = c("X","-"), collapse = "", missData = FALSE){
      cx2 <- symbols[2]
      miss.frame <- as.data.frame(ifelse(is.na(dt), cx1, cx2))
      names(miss.frame) <- unlist(nms)
-     .traceR(12, head(miss.frame),  funNm) 
      res <- apply(miss.frame, 1, paste, collapse = collapse)
      attr(res, "cnames") <- unlist(nms)
      if (missData) attr(res, "missData") <- miss.frame
-     .traceR(1, "missPat ENDS", funNm, msg = TRUE)
+     .traceR(1, "missPat ENDS <-")
      res
 }
 

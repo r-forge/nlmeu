@@ -51,46 +51,39 @@ logLik1 <-  function(modfit, dt1, dtInit) UseMethod("logLik1")
 #' 
 logLik1.lme <- function(modfit, dt1, dtInit){
 
-   funNm <-  "logLik1.lme"
+   .functionLabel <- "logLik1.lme"                                # Function label (recommended)
    .traceRinit <- attr(options()$traceR, "init")
-   .traceR <-   if (is.null(.traceRinit))
-      function(...){} else .traceRinit(funNm) 
+   .traceR <-  if (is.null(.traceRinit)) function(...){} else .traceRinit      
+
    if (missing(dtInit)) dtInit <- NULL
-   .traceR(1, "logLik1.lme STARTS   <=####", funNm, msg = TRUE)
-  
+   .traceR(1, lbl = "-> logLik1.lme STARTS")
     m            <- modfit$modelStruct                 # Model structure
     sigma        <- modfit$sigma                       # sigma
-    .traceR(511, sigma, funNm, "sigma from model fit")
-   
-    .traceR(2, "D matrix" , funNm, msg = TRUE)
  
     D            <- as.matrix(m$reStruct[[1]])         # "subject"
-    .traceR(520, D, funNm)
     D            <- D  * sigma^2                       # Matrix D 
-    .traceR(525, D, funNm)
-   
-    .traceR(3, "Process $weights component =====", funNm, msg = TRUE)
     
     clw  <- modfit$call$weights
-    vecR <- rep(sigma, nrow(dt1))                      
+    vecR <- rep(sigma, nrow(dt1))
+    
+    
+    .traceR(10, lbl = "if len.clw before")
     if (length(clw)){
-    .traceR(3, "Length of clw object greater than 0 =====", funNm, msg = TRUE)
-    .traceR(530, clw, funNm)
+    .traceR(101, lbl = "if.clw", store = FALSE)
     
-    .traceR(535, clw, funNm, "clw object before if.inherits")
+    .traceR(102,  lbl = "clw before if.inherits")
     if (inherits(eval(clw), "formula")) clw <- call("varFixed", clw) 
-    .traceR(540, clw, funNm, "clw object after if.inherits")
+    .traceR(103, lbl = "clw after if.inherits")
     clwl  <-  as.list(clw) 
-    .traceR(212, clwl, funNm)
- 
-    
+    .traceR(104, lbl = "clwl as list")
+     
     varFun <- as.character(clwl[[1]])                  # VarFun="varPower"
     varSt <- m$varStruct
     vf.coef      <- coef(varSt,                        # Variance function ...
                          unconstrained=FALSE)          # coef. extracted
  
     names(vf.coef) <- NULL
-    .traceR(222, vf.coef, funNm)
+    .traceR(105, lbl = "vf.coef")
  
     ## varFun <- "varPower"
     #args   <- list(form = ~time)  ### <----
@@ -98,25 +91,29 @@ logLik1.lme <- function(modfit, dt1, dtInit){
     args    <- c(args, value = vf.coef) # Replace value? In some cases?
     vf      <- do.call(varFun, as.list(args))
     
-    .traceR(2, "IF dtInit is not NULL  =====",  funNm, msg = TRUE)
+    .traceR(106, lbl = "if !is.null(dtInit): before")
     if (!is.null(dtInit)){
+       .traceR(1061, lbl = "if !is.null(dtInit): executed", store = FALSE)
         dfAug    <- rbind(dtInit,dt1)
         vf.x     <- Initialize(vf, data=dfAug)}      # ... initialized
+    .traceR(107, lbl = "if is.null(dtInit): before")     
     if (is.null(dtInit)) vf.x    <- Initialize(vf, data=dt1)
+
 
     vecR     <- sigma/varWeights(vf.x)              # AugDiagonal of R_i
     zz      <- sum(log(varWeights(vf.x)))           # Works fine. Work here if dtInit ne NULL
+    .traceR(108, lbl = "zz")     
     }
-    
+    .traceR(10, lbl = "if len.clw after")                      
+   
     
    
     if (!is.null(dtInit)){
-        .traceR(222, "IF dtInit", funNm, msg = TRUE)
+        .traceR(222, "IF dtInit", store = FALSE)
         idxInit      <- c(1:nrow(dtInit))           # Indices for dtInit
         vecR         <- vecR[-idxInit]
     }                                               # Diagonal of R_i matrix
     
-    .traceR(2, "Wrap-up  =====", funNm, msg = TRUE)
 
     ## return(zz)  # Continue to work here
     vecR2        <- vecR^2
@@ -132,6 +129,6 @@ logLik1.lme <- function(modfit, dt1, dtInit){
     n            <- nrow(dt1)                 # No. of obs for subject
     lLik         <- n*log(2*pi) + log(det(V)) + 
                     t(r) %*% solve(V) %*% r
-    .traceR(1, "logLik1.lme ENDS   <=######", funNm, msg = TRUE)               
+    .traceR(1, lbl = "logLik1.lme ENDS <-")               
     return(-0.5 * as.numeric(lLik))
 }
