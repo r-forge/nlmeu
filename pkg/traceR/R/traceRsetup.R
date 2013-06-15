@@ -36,5 +36,5 @@ traceRsetup<- function(
  cat("- .traceRmap initiated \n") 
  names(traceR) <- nmsdots
  
- traceR
+ invisible(traceR)
 }
