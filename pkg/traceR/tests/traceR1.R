@@ -45,8 +45,7 @@ TracedFunction1(1)
 
 library(SOAR)
 
-traceR <- traceRsetup()
-options(traceR = traceR)
+traceRsetup()
 TracedFunction1(1)
 TracedFunction2(1)
 .traceRmap
@@ -58,8 +57,7 @@ traceRcleanup()
 
 ## Ex3: Modify default options
 ## Selected id, prefix for object names in .R_Cache, filter for objects to be saved
-traceR <- traceRsetup(defaultOptions = list(id = c(1, 2, 70), prefix = "z", xin = c("x","y","mtx")))
-options(traceR = traceR)
+traceRsetup(defaultOptions = list(id = c(1, 2, 70), prefix = "z", xin = c("x","y","mtx")))
 TracedFunction1(1)
 TracedFunction2(1)
 .traceRmap
@@ -67,14 +65,13 @@ traceRcleanup()
 
 
 ## Ex4: Modify function specific options
- traceR <- traceRsetup(
+traceRsetup(
   TF1 = list(id = c(1, 2), xin = "x"),
   TF2 = list(id = c(1, 70), xin = c("x","y"), xout ="zz1"),
   TF3 = list(),    # TF3 will be skipped
   defaultOptions = list(id = c(1, 2, 80), prefix = "z", xin = c("x","y","mtx"))
 )
 
-options(traceR = traceR)
 TracedFunction1(1)
 TracedFunction2(1)
 .traceRmap

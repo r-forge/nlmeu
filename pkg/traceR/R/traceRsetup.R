@@ -35,6 +35,6 @@ traceRsetup<- function(
  if (is.null(tt))  assign(".traceRmap", data.frame(character(0)), envir = .GlobalEnv)
  cat("- .traceRmap initiated \n") 
  names(traceR) <- nmsdots
- 
+ options(traceR = traceR)
  invisible(traceR)
 }
