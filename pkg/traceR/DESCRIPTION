@@ -1,12 +1,12 @@
 Package: traceR
-Version: 0.0.2
+Version: 0.0.3
 Date: $DATE$
-Revision: $Revision$
 Author: Andrzej Galecki <agalecki@umich.edu>
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
 Title: Utility package to trace execution of R functions
 Description: Utility package to trace execution of R functions. It can be used to debug R functions
-Depends: SOAR, R (>= 2.15.2)
+Depends: R (>= 2.15.2)
+Imports: SOAR
 Suggests: reshape
 License: GPL (version 2 or later)
 URL:  http://www-personal.umich.edu/~agalecki/
