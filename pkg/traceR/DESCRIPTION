@@ -8,6 +8,6 @@ Description: Utility package to trace execution of R functions. It can be used t
 Depends: R (>= 2.15.2)
 Imports: SOAR
 Suggests: reshape
-License: GPL (version 2 or later)
+License: GPL (>=2)
 URL:  http://www-personal.umich.edu/~agalecki/
 LazyData: yes
