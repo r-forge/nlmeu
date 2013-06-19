@@ -56,8 +56,8 @@ Pwr.lme <- function (object, ...,
 #   3. Alternative altB name
 
    .functionLabel <- "Pwr.lme"                                # Function label (recommended)
-   .traceRinit <- attr(options()$traceR, "init")
-   .traceR <-  if (is.null(.traceRinit)) function(...){} else .traceRinit      
+   .traceR <- attr(options()$traceR, "fun")
+   .traceR <-  if (is.null(.traceR)) function(...){} else .traceR      
    
   .traceR(1, lbl = "-> Pwr.lme starts")
    if (!inherits(object, "lme")) {

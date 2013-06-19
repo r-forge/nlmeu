@@ -42,8 +42,8 @@ sigma.default <- function(object, ...) object$sigma
 #'
 missPat <- function(..., symbols = c("X","-"), collapse = "", missData = FALSE){
      .functionLabel <- "missPat"                                # Function label (recommended)
-     .traceRinit <- attr(options()$traceR, "init")
-     .traceR <-  if (is.null(.traceRinit)) function(...){} else .traceRinit      
+     .traceR <- attr(options()$traceR, "fun")
+     .traceR <-  if (is.null(.traceR)) function(...){} else .traceR      
       
      .traceR(1, "-> missPat STARTS")
      args  <- as.list(substitute(list(...)))[-1]

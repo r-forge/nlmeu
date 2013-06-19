@@ -1,7 +1,6 @@
 Package: nlmeU
-Version: 0.60-12
+Version: 0.60-14
 Date: $Date$
-Revision: $Revision$
 Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski
     <tomasz.burzykowski@uhasselt.be>
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
@@ -13,14 +12,14 @@ Depends:
 Imports:
     nlme
 Suggests:
-    utilsag,
     reshape,
     WWGbook,
     lme4.0,
     lattice,
     ellipse,
     roxygen2,
-    testthat
+    testthat,
+    traceR
 License: GPL (>=2)
 URL: http://www-personal.umich.edu/~agalecki/
 LazyData: yes

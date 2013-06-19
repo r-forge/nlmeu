@@ -52,11 +52,12 @@ logLik1 <-  function(modfit, dt1, dtInit) UseMethod("logLik1")
 logLik1.lme <- function(modfit, dt1, dtInit){
 
    .functionLabel <- "logLik1.lme"                                # Function label (recommended)
-   .traceRinit <- attr(options()$traceR, "init")
-   .traceR <-  if (is.null(.traceRinit)) function(...){} else .traceRinit      
+   .traceR <- attr(options()$traceR, "fun")
+   .traceR <-  if (is.null(.traceR)) function(...){} else .traceR      
 
-   if (missing(dtInit)) dtInit <- NULL
    .traceR(1, lbl = "-> logLik1.lme STARTS")
+   if (missing(dtInit)) dtInit <- NULL
+ 
     m            <- modfit$modelStruct                 # Model structure
     sigma        <- modfit$sigma                       # sigma
  
