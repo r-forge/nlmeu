@@ -22,20 +22,21 @@
 # KroneckAux
 # pdConstruct.pdKronecker
 
+
+
 pdKronecker <- function (value = numeric(0), 
    form = NULL, nam = NULL, data = sys.frame(sys.parent())) 
 {
-    funNm <- "pdKronecker"
 
-   .traceRinit <- attr(options()$traceR, "init")
-   .traceR <-   if (is.null(.traceRinit))
-      function(...){} else .traceRinit(funNm) 
+   .functionLabel <- "pdKronecker"                 # Function label (recommended)
+   .traceR <- attr(options()$traceR, "fun")
+   .traceR <-  if (is.null(.traceR)) function(...){} else .traceR      
 
-   .traceR(1, "pdKronecker STARTS here", funNm, msg = TRUE)
+   .traceR(1, lbl = "pdKronecker STARTS")
     
     object <- numeric(0)
     class(object) <- c("pdKronecker", "pdMat")
-    .traceR(1, "pdKronecker ENDS here", funNm, msg = TRUE)
+    .traceR(1, lbl = "pdKronecker ENDS", store = FALSE)
     pdConstruct(object, value, form, nam, data)
 }
 
@@ -86,18 +87,13 @@ function (object,
     pdClass = sapply(object,FUN=function(el) class(el)[1]) , ...) 
 {
 
-    funNm <- "pdConstruct.pdKronecker"
 
-   .traceRinit <- attr(options()$traceR, "init")
-   .traceR <-   if (is.null(.traceRinit))
-      function(...){} else .traceRinit(funNm) 
+   .functionLabel <- "pdConstruct.pdKronecker"                 # Function label (recommended)
+   .traceR <- attr(options()$traceR, "fun")
+   .traceR <-  if (is.null(.traceR)) function(...){} else .traceR      
 
-   .traceR(101, str(object), funNm, msg ="str(object)")
-   .traceR(102, if (is.matrix(value)) value else str(value), funNm, msg = "mtx or str(value)")
-   .traceR(111, form, funNm, msg = "form argument") 
-   .traceR(112, nam, funNm,  msg = "nam argument")
-   .traceR(113, dim(data), funNm,  msg = "data argument")
-
+   .traceR(101)
+ 
     nmsObject<- attr(object,"Xnames")    # Nov20, 2008
 
     if (inherits(value, "pdMat")) {
@@ -110,21 +106,18 @@ function (object,
                 pdClass <- unlist(lapply(value, data.class))
         }
         if (isInitialized(value)) {
-            .traceR(9001, "pdConstruct.pdKronecker EXIT1", funNm, msg = TRUE)
             retx <- pdConstruct(object, as.matrix(value), form, 
                 nam, data, pdClass)
-            .traceR(900, coef(retx), funNm, msg = "coef(retx) EXIT1")  
+            .traceR(9001, lbl = "EXIT9001")  
             return(retx)
-        }
-        else {
-            .traceR(9001, "pdConstruct.pdKronecker EXIT2", funNm, msg = TRUE)
+        } else {
             retx <- pdConstruct(object, form = form, nam = nam, 
                 data = data, pdClass = pdClass)
-            .traceR(900, str(retx), funNm, msg = "str(retx) EXIT2")  
+            .traceR(9002, lbl = "EXIT9002")  
             return(retx)
         }
     }
-    .traceR(9002, "AFTER if value inherits pdMat", funNm, msg = TRUE)
+    .traceR(102, store = FALSE)
    
     if (!is.null(form)) {
         if (data.class(form) != "list") {
@@ -166,10 +159,9 @@ function (object,
     }
 
     nB <- max(c(nF, nN, nP))
-    .traceR(9002,"oVal created", funNm, msg=TRUE)
     
     oVal <- value
-    .traceR(9002, oVal, funNm)
+    .traceR(103)
     
     if (length(value) == 0 || is.matrix(value) || is.numeric(value)) {
         if (nB == 1) {
@@ -192,7 +184,7 @@ function (object,
    if (nP == 1) {
         pdClass <- rep(pdClass, nB)
     }
-   .traceR(9002,"object initiated" , funNm, msg= TRUE)
+   .traceR(104)
     
     object <- vector("list", nB)
     namInterc <- rep(FALSE, nB)
@@ -249,8 +241,9 @@ function (object,
         }
         object[[i]] <- pdMat(value[[i]], form[[i]], nam[[i]], 
             data, pdClass[i])
+        .traceR(9010, lbl = paste("nB=", i))    
     }
-    .traceR(9002,"End of nB loop" , funNm, msg = TRUE)
+    .traceR(106, lbl = "End of nB loop")
     
     names(object) <- nmsObject   # added Nov.20, 2008
     if (!all(unlist(lapply(object, inherits, "pdMat")))) {
@@ -265,9 +258,7 @@ function (object,
  
     }
 ### Inserted Ends
-   .traceR(101, "Before namesList" , funNm, msg=TRUE)
-    namesList <- lapply(object, Names)
-    .traceR(101,"After namesList" , funNm, msg = TRUE)  
+    namesList <- lapply(object, Names)  
 
     lNam <- unlist(lapply(namesList, length))
     if (!is.null(namCoef[[1]])) {
@@ -297,11 +288,10 @@ function (object,
         if (length(oVal) && (is.matrix(oVal) || is.numeric(oVal))) {
             stop("Must give names when initializing from matrix or parameter")
         }
-        .traceR(9001,"pdConstruct.pdKronecker EXIT3" , funNm, msg = TRUE)
-       .traceR(900, str(object), funNm, msg = "coef(object) EXIT3")  
+  
+       .traceR(900, lbl = "coef(object) EXIT3")  
         return(object)
-    }
-    else {
+    } else {
         if (!all(lNam)) {
             stop("All elements must have names, when any has names.")
         }
@@ -341,12 +331,10 @@ function (object,
         }
         
         
-        names(object) <- nmsObject  # Added Nov.20, 2008
-        .traceR(900, str(object), funNm, msg = "coef(object) EXIT4")   
-        .traceR(9001,"pdConstruct.pdKronecker EXIT4" , funNm, msg=TRUE)
+        names(object) <- nmsObject  # Added Nov.20, 2008  
+        .traceR(9001,lbl = "EXIT9001")
         return(object)
     }
 }
-
 
 

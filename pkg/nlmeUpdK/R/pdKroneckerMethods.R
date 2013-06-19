@@ -272,30 +272,24 @@ Names.pdKronecker <- function (object, asList = FALSE, ...)
 "Names<-.pdKronecker" <- function (object, ..., value) 
 {
     
-    funNm <-  "Names<-.pdKronecker"
-   .traceRinit <- attr(options()$traceR, "init")
-   .traceR <-   if (is.null(.traceRinit))
-      function(...){} else .traceRinit(funNm) 
-    .traceR(210,"Names<-.pdKronecker starts here   <=####" , funNm, msg=TRUE)
-    .traceR(220, value, funNm)
+   .functionLabel <- "Names<-.pdKronecker"                 # Function label (recommended)
+   .traceR <- attr(options()$traceR, "fun")
+   .traceR <-  if (is.null(.traceR)) function(...){} else .traceR      
 
+    .traceR(210, lbl = "-> Names<-.pdKronecker starts")
     
     tmp <- Names(object)
-    .traceR(221, tmp, funNm)
-    .traceR(222, "before if", funNm, msg = TRUE)
-   
+  
     if (!is.null(Names(object))) { 
-    .traceR(230, str(object), funNm)
-     .traceR(240, "-> Before NextMethod", funNm, msg = TRUE)
       clss <- class(object)   # Used instead 
       class(object) <- "pdMat"
       Names(object) <-  value
       class(object) <-  clss
-      .traceR(210,"Names<-.pdKronecker EXIT1" , funNm, msg = TRUE)
+      .traceR(211, lbl = "Names<-.pdKronecker EXIT1")
       object
       }
     else {
-     .traceR(210, , funNm, "Names<-.pdKronecker EXIT2")
+     .traceR(212, lbl = "Names<-.pdKronecker EXIT2")
         object
     }
 }

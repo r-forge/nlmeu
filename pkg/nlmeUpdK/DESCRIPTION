@@ -1,7 +1,6 @@
 Package: nlmeUpdK
-Version: 0.3-0
+Version: 0.3-1
 Date: $Date$
-Revision: $Revision$
 Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
 Title: New pdMat class: pdKronecker (prototype version described in Galecki,
