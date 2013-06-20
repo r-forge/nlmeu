@@ -1,0 +1,200 @@
+library(testthat)
+
+Check_pdK <- function(pdK){
+  expect_that(pdK, is_a("pdKroneckeR"))
+  expect_that(pdK, is_a("pdMat"))
+  pdB <- attr(pdK,"pdB")
+  
+## coef
+  expect_that(isInitialized(pdK), equals(isInitialized(pdB)))
+  
+  lenB <- length(pdB)
+
+  if (lenB){
+   expect_that(lenB == 1, equals(FALSE))                     # More than one block
+   coef0 <- lapply(pdB, coef)                                # Check first coefs to be zero
+   coef.0 <- coef0[-1]
+   coef.0 <- lapply(coef.0, function(el) if (length(el)) el[1] else 0)  
+   coef.0 <- abs(unlist(coef.0))
+   if (length(coef.0)) expect_that(max(coef.0), equals(0))          # First 
+  }
+  
+## form
+  formK <- formula(pdK)
+  logi <- !is.null(formula(pdK)) && is.null(formula(pdB))
+  expect_that(logi, equals(FALSE))
+
+## Names
+  Nmsx <- nlmeForTesting:::xNames(pdK)
+  NmsB <- nlmeForTesting:::xNames(attr(pdK,"pdB"))
+  expect_that(as.character(NmsB), equals(as.character(Nmsx)))
+  NmsK <- attr(pdK, "Dimnames")[[2]]
+  #print(NmsK)
+  #print(Nmsx)
+  NmsK <- gsub(".",":", NmsK, fixed =TRUE)
+  ord <- match(Nmsx, NmsK)                                # Almost match
+
+  
+  if (length(ord)) expect_that(Nmsx[ord], equals(NmsK)) 
+
+}
+
+
+
+##--------------------
+D0 <- as.matrix(1)
+
+D1 <- c(3, 9,
+        9,30)
+dim(D1) <- c(2,2)
+
+D2 <- c(2, 4,  0,
+        4, 10, 0,
+        0, 0 , 1)
+
+dim(D2) <- c(3,3)
+
+D3 <- diag(2)
+
+Dx <- D0 %x% D1 %x% D2 %x% D3
+
+
+library(nlmeForTesting)
+pd0f <- pdIdent(~1)
+pd1f <- pdLogChol(~f1 -1)
+pd2f <- pdLogChol(~f2 -1)
+pd3f <- pdIdent(~ f3 -1)
+
+pdBf <- pdBlocked(list(pd0f, pd1f, pd2f, pd3f))
+
+
+pd0ni <- pdIdent(2*D0, nam="x")
+pd1ni <- pdLogChol(D1, nam= c("A","B"))
+pd2ni <- pdLogChol(D2, nam= c("a1", "a2", "a3"))
+pd3ni <- pdIdent(D3,   nam= c("X1", "X2"))
+
+f1 <- factor(c("A","B","A"))
+f2 <- factor(c("a1","a2","a3"))
+f3 <- factor(c("X1","X2","X1"))
+
+
+
+
+pdBni <- pdBlocked(list(pd0ni, pd1ni, pd2ni, pd3ni))
+
+frmL  <- list(~1, ~f1-1, ~f2-1)
+namL  <- list(c("X"), c("f1A","f1B"), c("f2a", "f2b","f3b"), c("X1","X2"))
+mtxL  <- list(D0, D1,D2,D3)
+
+
+
+pdL1f <- list(pd0f = pd0f, pd1f = pd1f, pd2f= pd2f, pd3f= pd3f)      # Uninitialized pdMat list with formulas 
+pdL1ni <- list(pd0ni, pd1ni, pd2ni, pd3ni)  # Initialized pdMat list with names 
+
+### pdKronecker calls ###
+
+# pf0 <- pdKroneckeR(frmL)  # List of formulas. DO NOT USE IT as argument
+
+frmx <- ~f3:f2:f1 -1
+ 
+
+
+nmsx <- c("f1A:f2a1:f3X1", "f1A:f2a1:f3X2", "f1A:f2a2:f3X1", "f1A:f2a2:f3X2",
+          "f1A:f2a3:f3X1", "f1A:f2a3:f3X2", "f1B:f2a1:f3X1", "f1B:f2a1:f3X2",
+          "f1B:f2a2:f3X1", "f1B:f2a2:f3X2", "f1B:f2a3:f3X1", "f1B:f2a3:f3X2")
+                    
+
+nmsa <- c("A:a1:X1", "A:a1:X2", "A:a2:X1", "A:a2:X2", "A:a3:X1", "A:a3:X2", 
+          "B:a1:X1", "B:a1:X2", "B:a2:X1", "B:a2:X2", "B:a3:X1", "B:a3:X2")
+          
+
+coefx <- c(1.2424533249e+00, -1.6653345369e-15,  3.0000000000e+00,  3.3306690739e-16, -3.4657359028e-01,  2.0000000000e+00,
+            0.0000000000e+00, 0.0000000000e+00)
+
+
+
+dt <- data.frame(f1, f2, f3)
+X <- model.matrix(frmx, data= dt)   # Model matrix for f1, f2 and ff3
+
+colX <- colnames(X)
+
+colX2 <- gsub(":", ".", colX, fixed = TRUE)   # Names in model.matrix replaced with . (dots)
+
+colnames(X) <- colX2
+dt2 <- cbind(dt,X)
+cfrmK <- paste(colX2, collapse = " + ")
+frmk <-  as.formula(paste("~ -1 + ", cfrmK))
+
+          
+X2 <- model.matrix(frmk, data= dt2)         
+
+
+
+           
+
+
+      
+          
+##
+#  
+pL1f <- pdKroneckeR(pdL1f)                       # value = list of pdMat with formulae (only)
+Check_pdK(pL1f)
+expect_that(coef(pL1f),  equals(numeric(0)))
+expect_that(formula(pL1f),  equals(frmx))
+expect_that(as.character(Names(pL1f)),  equals(character(0)))
+
+pL1fdt <- pdKroneckeR(pL1f, data=dt)                       # value = list of pdMat with formulae (only)
+Check_pdK(pL1fdt)
+expect_that(Names(pL1fdt), equals(nmsx))
+
+
+pL1f2 <- pdKroneckeR(pL1f, form = ~form)
+Check_pdK(pL1f2)
+
+
+
+pL1ni <- pdKroneckeR(pdL1ni)                     # value = list of initialized pdMat with Names (No Formulae)
+Check_pdK(pL1ni)                                 # Initialized pdKron (no formulae)
+expect_that(coef(pL1ni),  equals(coefx))
+expect_that(formula(pL1ni),  equals(NULL))
+expect_that(Names(pL1ni),  equals(gsub(":",".", nmsa, fixed = TRUE)))  # Dots instead of colon in Names
+
+pL1nidt <-  pdKroneckeR(pL1ni, data = dt)        #  Check here: names reversed in Dimnames
+Check_pdK(pL1nidt)
+expect_that(pL1nidt, equals(pL1ni))
+
+
+
+pL1f3 <- pdKroneckeR(pL1f, form = frmk)   #, nam = colX2)           # formula NOT updated in pdK.
+Check_pdK(pL1f3)
+
+pL1f3dt <- pdKroneckeR(pL1f3, data = dt2)                      # no form , no nam 
+Check_pdK(pL1f3dt)
+
+
+
+
+pL1fx <- pdKroneckeR(pdL1f, frmk)             # Attempt to update pdK formula 
+Check_pdK(pL1fx)
+expect_that(coef(pL1fx),  equals(numeric(0)))
+expect_that(formula(pL1fx),  equals(frmk))    ## !!! Check here. Formula??
+expect_that(Names(pL1f),  equals(NULL))
+
+pL1fx <- pdKroneckeR(pL1f, frmk)              ## formula in pdK updated with frmk
+Check_pdK(pL1fx)
+expect_that(coef(pL1fx),  equals(numeric(0)))
+expect_that(formula(pL1fx),  equals(frmk)) 
+expect_that(Names(pL1fx),  equals(NULL))
+
+
+
+
+
+
+
+
+
+
+
+
+

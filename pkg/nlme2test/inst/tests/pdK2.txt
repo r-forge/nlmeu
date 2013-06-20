@@ -1,0 +1,82 @@
+pL2fx <- pdKroneckeR(pL1fx, data=dt)   # frmK should not be over written
+Check_pdK(pL2fx)
+
+
+pL1fdt <- pdKroneckeR(pdL1f, data = dt)       # list of pdMat with formulae (only) updated with Names
+Check_pdK(pL1fdt)
+expect_that(coef(pL1fdt),  equals(numeric(0)))
+expect_that(formula(pL1fdt),  equals(frmx))
+expect_that(Names(pL1fdt),  equals(nmsx))
+
+pL1fdt <- pdKroneckeR(pL1f, data = dt)        # pdKRon object updated  with Names using data
+Check_pdK(pL1fdt)
+expect_that(coef(pL1fdt),  equals(numeric(0)))
+expect_that(formula(pL1fdt),  equals(frmx))
+expect_that(Names(pL1fdt),  equals(nmsx))
+
+
+
+###  pL1fdt -> p1fdtx
+
+p1fdtx <- pdConstruct(pL1fdt, Dx)
+Check_pdK(p1fdtx)
+expect_that(formula(p1fdtx), equals(frmx))
+expect_that(Names(p1fdtx), equals(nmsx))
+
+
+## pL1f contains left formula: f3:f2:f1 and pdB right formula
+## Names are updated based on data=dt 
+pL1fdt <- pdKroneckeR(pL1f, data=dt)   
+Check_pdK(pL1fdt)
+expect_that(coef(pL1fdt),  equals(numeric(0)))
+expect_that(formula(pL1fdt),  equals(frmx))
+expect_that(Names(pL1fdt),  equals(nmsxl))
+
+
+
+print("===========>>>>>> pL2f")
+pL2f <- pdKroneckeR(pL1f, form = frmxl)       # left formula
+expect_that(coef(pL2f),  equals(numeric(0)))
+expect_that(formula(pL2f),  equals(frmxl))
+expect_that(Names(pL2f),  equals(NULL))
+
+
+pL2fdt <- pdConstruct(pL2f, data=dt)               # Check this out
+expect_that(coef(pL2fdt),  equals(numeric(0)))
+expect_that(formula(pL2fdt),  equals(frmxl))
+
+
+
+expect_that(Names(pL2fdt),  equals(nmsa))          # May be new order implied by frmxl
+
+
+
+
+
+
+pdFac1 <- pdFactor(p1fdtx)
+expect_that(pdFac1, equals(as.vector(chol(Dx))))
+
+
+
+
+
+
+
+reStruct(pL2fdt)
+
+print("pdL1ni")
+pL1ni<- pdKroneckeR(pdL1ni)        # value = named list of initialized pdMat
+
+print("pdBf")
+pBf <-  pdKroneckeR(pdBf)          # value = pdBlocked uninitialized (OK)
+
+print("pdBni")
+pBni <- pdKroneckeR(pdBni)         # pdKenv has names, but it is not initialized
+
+print("pdBni, pBf")
+pBnif <- pdConstruct(pBf, pBni)
+
+cfx <- coef(pBnif)
+cfx[1] <- 0.1
+pBnif2 <- pdConstruct(pBnif, cfx)
