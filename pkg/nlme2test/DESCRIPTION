@@ -1,0 +1,24 @@
+Package: nlme2test
+Version: 0.3
+Date: $Date$
+Revision: $Revision$
+Author: XYZ
+Maintainer: Andrzej Galecki <agalecki@umich.edu>
+Title: Testing pdKroneckeR class in nlme package.
+Description: Testing pdKroneckeR class
+Depends:
+    graphics,
+    stats,
+    R (>= 3.0.0)
+Imports:
+    lattice    
+LinkingTo: nlme
+Suggests:
+    testthat,
+    nlmeU,
+    reshape,
+    Hmisc,
+    MASS
+License: GPL (>=2)
+URL: http://www-personal.umich.edu/~agalecki/
+LazyData: yes
