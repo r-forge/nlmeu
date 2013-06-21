@@ -1,7 +1,6 @@
 Package: nlme2test
-Version: 0.3
+Version: 0.31
 Date: $Date$
-Revision: $Revision$
 Author: XYZ
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
 Title: Testing pdKroneckeR class in nlme package.
