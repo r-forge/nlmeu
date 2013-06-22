@@ -40,7 +40,7 @@ fNames <- function(fname){
 }
 
 .traceRdump <- function(id, lbl = character(0), store = TRUE){
-  ## .traceRfunctionEnv <- new.env()
+  .traceRfunctionEnv <- new.env()
   .traceRfunctionEnv <- parent.frame()
   fn <- exists(".functionLabel", envir = .traceRfunctionEnv)
   fname <- if (fn) eval(expression(.functionLabel), envir = .traceRfunctionEnv) else "."
