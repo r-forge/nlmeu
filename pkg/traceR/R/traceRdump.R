@@ -6,47 +6,37 @@ fOpts <- function(fname, tracef, attrs){
   ids <- tracef[["id"]]
   if (is.null(ids)) ids <- attrs[["id"]]
   
-  xin <- tracef[["xin"]]
-  if (is.null(xin)) xin <- attrs[["xin"]]
+  modifyEnv <- tracef[["modifyEnv"]]
+  if (is.null(modifyEnv)) modifyEnv <- attrs[["modifyEnv"]]
  
-  xout <- tracef[["xout"]]
-  if (is.null(xout)) xout <- attrs[["xout"]]
-  
   asList <- tracef[["asList"]]
   if (is.null(asList)) asList <- attrs[["asList"]]
  
-  list(ids = ids, fun = fun, xin = xin, xout = xout, asList = asList)
+  list(ids = ids, fun = fun, modifyEnv = modifyEnv, asList = asList)
 }
 
 fNames <- function(fname){
 
   cnms <- if (nrow(.traceRmap)) as.character(.traceRmap[nrow(.traceRmap), c("fTree")]) else  character(0)
 
-  ## cat("-1.cnms \n")
-  ## print(cnms)
+ 
   cNms <- if (length(cnms)) unlist(strsplit(cnms, "->", fixed = TRUE))  else character(0)
-  ## cat("--1.cNms \n")
-  ## print(cNms)
 
   mtch <- match(fname, rev(cNms))
   mtch <- length(cNms) + 1 - mtch
   if (is.na(mtch)) mtch <- 0
-  ## cat("-mtch")
-  ## print(mtch)
   cNms <- if (mtch)  cNms[1:mtch]  else c(cNms, fname)
-  ## cat("--2.cNms \n")
-  ## print(cNms)
   paste(cNms, collapse = "->")
 }
 
-.traceRdump <- function(id, lbl = character(0), store = TRUE){
+.traceRdump <- function(id, lbl = character(0), store = TRUE, first = FALSE, auto = FALSE){
   .traceRfunctionEnv <- new.env()
   .traceRfunctionEnv <- parent.frame()
   fn <- exists(".functionLabel", envir = .traceRfunctionEnv)
   fname <- if (fn) eval(expression(.functionLabel), envir = .traceRfunctionEnv) else "."
 
   traceR <- options()$traceR
-  tracef <- traceR[[fname]]  # hlf
+  tracef <- traceR[[fname]]
   attrs <- attributes(traceR)
 
   fopts <- fOpts(fname, tracef, attrs)
@@ -60,11 +50,20 @@ fNames <- function(fname){
 
   recno <- nrow(.traceRmap) + 1
   lbl <- if (length(lbl)) lbl else ""
+  
 
   Nms <- ls(.traceRfunctionEnv)
-  nms <- setdiff(Nms, fopts$xout)
-  nms <- if (is.null(fopts$xin)) nms else intersect(nms, fopts$xin)
+  if (!is.null(fopts$modifyEnv)){
+    modifyEnv <- fopts$modifyEnv
+    res <- new.env()
+    res <- modifyEnv(.traceRfunctionEnv)
+    .traceRfunctionEnv <- res
+  }
+  nms <- ls(.traceRfunctionEnv)
 
+  .envInfo <- list(recno = recno, msg = paste("Env created by .traceRdump"))
+  assign(".envInfo", .envInfo, .traceRfunctionEnv)
+  
   elist <- if (fopts$asList) {
      if (length(nms)) mget(nms, .traceRfunctionEnv) else list()
   } else {
@@ -76,8 +75,9 @@ fNames <- function(fname){
     assign(xname, elist)
     Store(list = xname)
   }
+  
   tmp <- data.frame(recno = recno,  fLbl = fname, id = id, idLbl =lbl, 
-  fTree = fNms, res = xname, nObj = length(nms), nObjAll = length(Nms), store = store, stringsAsFactors = FALSE)
+  fTree = fNms, env = xname, nObj = length(nms), nObjAll = length(Nms), store = store, 
+   first = first, auto= auto, stringsAsFactors = FALSE)
   assign(".traceRmap", rbind(.traceRmap, tmp), envir= .GlobalEnv)
 }
-

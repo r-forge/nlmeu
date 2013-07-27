@@ -7,9 +7,7 @@ function (x, subset, select, drop = FALSE, ...)
    .functionLabel <- "sdf"                                # Function label (recommended)
    .traceR <- attr(options()$traceR, "fun")
    .traceR <-  if (is.null(.traceR)) function(...){} else .traceR      
-
-
-    .traceR(1, lbl = "->START")
+   .traceR(1, lbl = "->START")
  
     if (missing(subset)) {
         .traceR(11, store= FALSE)
@@ -38,13 +36,32 @@ function (x, subset, select, drop = FALSE, ...)
 }
 
 library(traceR)
-library(SOAR)
-traceRsetup(defaultOptions = list(asList = FALSE))
+library(testthat)
+traceR.on()
 res <- subset.data.frameU(airquality, Temp > 80, select = c(Ozone, Temp))
-r_1
-ls(r_5)
-traceRcleanup()
+.traceRmap
+ls(e_1)
+dim(e_1$x)
+err1 <- "object 'Ozone' not found"
+expect_that(e_1$select, throws_error(err1))
+delayedAssign("val", substitute(select), eval.env = e_1)
+val 
 
+ls(e_5)
+summary(e_5$r)
+e_5$vars
 
+q()
 
+traceR.optim()
+.traceRmap
+names(l_1)
+l_1$select
+names(d_5)
+str(d_5)
+
+traceR.off()
+Remove(list = Objects())
+detach(package:traceR)
+detach(package:SOAR)
 

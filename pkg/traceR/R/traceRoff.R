@@ -1,4 +1,4 @@
-traceRcleanup <- function(){
+traceR.off <- function(){
 
  if (exists(".traceRmap", envir = .GlobalEnv)){
    res  <- .traceRmap$res

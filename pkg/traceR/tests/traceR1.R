@@ -23,8 +23,6 @@ TracedFunction2 <- function(x){
 }
 
 
-
-
 TracedFunction <- function(x){
    .functionLabel <- "TF"                               # Function label (recommended)
    .traceR <-  attr(options()$traceR, "fun")
@@ -55,51 +53,47 @@ TracedFunction1(1)
 
 ## Ex2: Uniform trace for all functions
 
-library(SOAR)
+# library(SOAR)
 
-traceRsetup()
+traceR.on()
 TracedFunction(1)
 TracedFunction1(1)
 .traceRmap
 getwd()
 Objects()
-traceRcleanup()
+traceR.off()
 
 
 
 ## Ex3: Modify default options
-## Selected id, prefix for object names in .R_Cache, filter for objects to be saved
-traceRsetup(defaultOptions = list(id = c(1, 2, 70), prefix = "z", xin = c("x","y","mtx")))
+## Selected id, prefix for object names in .R_Cache, function to select 
+
+fenv1 <- function(env){
+    e <- new.env()
+    nms <- ls(env)
+    if ("zz1" %in% nms) rm("zz1", envir = env) # Object zz1 removed
+    e <- env
+    return(e)
+}
+
+
+traceR.on(defaultOptions = list(id = c(1, 2, 70), prefix = "z", modifyEnv = fenv1))
 TracedFunction(1)
 .traceRmap
-traceRcleanup()
+traceR.off()
 
 
 ## Ex4: Modify function specific options
-traceRsetup(
-  TF  = list(id = c(1, 70), xin = c("x","y"), xout ="zz1"),
-  TF1 = list(id = c(1, 2), xin = "x"),
-  # TF2 = list(),    # TF2 will not be traced
-  defaultOptions = list(id = c(1, 2, 80), prefix = "z", xin = c("x","y","mtx"), asList = FALSE)
+traceR.on(
+  TF  = list(id = c(1, 70) ),
+  TF1 = list(id = c(1, 2) ),
+  TF2 = list(),                # TF2 will not be traced
+  defaultOptions = list(id = c(1, 2, 80), prefix = "z" , asList = FALSE)
 )
 TracedFunction(1)
-.traceRmap
-traceRead()
-traceRcleanup()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+traceR.report()
+traceR.off()
+Remove(list = Objects())
+detach(package:traceR)
+detach(package:SOAR)
 
