@@ -55,7 +55,7 @@ Pwr.lme <- function (object, ...,
 #   2. adjustSigma set to FALSE. (Try to explore adjustSigma argument if missing(sigma) 
 #   3. Alternative altB name
 
-   .functionLabel <- "Pwr.lme"                                # Function label (recommended)
+   .functionLabel <- "Pwr.lme"                                # Function label
    .traceR <- attr(options()$traceR, "fun")
    .traceR <-  if (is.null(.traceR)) function(...){} else .traceR      
    
