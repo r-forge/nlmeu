@@ -25,10 +25,9 @@ simulateY.lme <- function (object, nsim = 1, seed = as.integer(runif(1, 0, .Mach
   verbose = FALSE, sigma) 
 {
 # Data with one level of grouping only.
-   .functionLabel <- "simulY.lme"                                # Function label (recommended)
-   .traceR <- attr(options()$traceR, "fun")
-   .traceR <-  if (is.null(.traceR)) function(...){} else .traceR      
-     
+   .functionName <- "simulateY.lme"
+   .traceR <- if (is.null(options()$traceR)) function(...){} else options()$.traceR      
+
   .traceR(1, lbl = "-> simulateY.lme STARTS")
 
 if (verbose) print(paste("nsim = ", nsim ,", seed = ", seed, sep = ""))
@@ -93,9 +92,8 @@ sigmaTolme <- function(object, value){
  ### Use this function only with Pwr(), because it  corrupts lme.object
   funNm <- "sigmaTolme"
  
-  .functionLabel <- "simgmaTolme"                                # Function label (recommended)
-   .traceRinit <- attr(options()$traceR, "init")
-   .traceR <-  if (is.null(.traceRinit)) function(...){} else .traceRinit      
+  .functionName <- "simgmaTolme"                                # Function name
+  .traceR <- if (is.null(options()$traceR)) function(...){} else options()$.traceR 
 
   .traceR(1, lbl = "-> sigmaTolme STARTS")
   sigma0 <- object$sigma 

@@ -28,7 +28,7 @@ sigma.default <- function(object, ...) object$sigma
 #' @export
 #' @param \dots one or more vectors/matrices/data frames. They need to be compatible for columnwise binding.
 #' @param symbols vector containing two single characters used to indicate NA and remaining values. By defualt it has values: \code{X} and \code{-}.
-#' @param collapse an optional character string. It is used in the internal call \code{paste()} function to separate the results. Rarely used. By default set to NULL
+#' @param collapse an optional character string. It is used in the internal call to \code{paste()} function to separate the results. Rarely used. By default set to NULL.
 #' @param missData logical. If \code{TRUE} data frame with pattern of missing values is saved in \code{missData} attribute of the vector returned by this function.
 #' @return character vector with as many elements as length of vectors(s)/number of rows in matrices and/or data frames in \code{\dots{}} argument(s).
 #'   Attribute \code{cnames} contains names of vectors/columns/variables. 
@@ -41,10 +41,9 @@ sigma.default <- function(object, ...) object$sigma
 #' missPat(dtf, symbols = c("?","+"))
 #'
 missPat <- function(..., symbols = c("X","-"), collapse = "", missData = FALSE){
-     .functionLabel <- "missPat"                                # Function label (recommended)
-     .traceR <- attr(options()$traceR, "fun")
-     .traceR <-  if (is.null(.traceR)) function(...){} else .traceR      
-      
+     .functionName <- "missPat"                                # Function name (recommended)
+     .traceR <- if (is.null(options()$traceR)) function(...){} else options()$.traceR       
+
      .traceR(1, "-> missPat STARTS")
      args  <- as.list(substitute(list(...)))[-1]
      argsL <- lapply(args, eval)

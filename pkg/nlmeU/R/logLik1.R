@@ -14,7 +14,8 @@
 #'   logLik(fm1 <- lme(distance ~ age, data = Orthodont)) # random is ~ age
 #'   dt1 <- subset(Orthodont, Subject == "M01")
 #'   logLik1(fm1, dt1)
-#' @references ???
+#' @references 
+#'   Galecki, A., and Burzykowski, T. (2013) ``Linear Mixed-Effects Models: Step-by-Step Approach'', Springer     
 #' @export
 logLik1 <-  function(modfit, dt1, dtInit) UseMethod("logLik1")
 
@@ -51,9 +52,8 @@ logLik1 <-  function(modfit, dt1, dtInit) UseMethod("logLik1")
 #' 
 logLik1.lme <- function(modfit, dt1, dtInit){
 
-   .functionLabel <- "logLik1.lme"                                # Function label (recommended)
-   .traceR <- attr(options()$traceR, "fun")
-   .traceR <-  if (is.null(.traceR)) function(...){} else .traceR      
+   .functionName <- "logLik1.lme"                     # Function name
+   .traceR <- if (is.null(options()$traceR)) function(...){} else options()$.traceR       
 
    .traceR(1, lbl = "-> logLik1.lme STARTS")
    if (missing(dtInit)) dtInit <- NULL

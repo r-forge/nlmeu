@@ -3,16 +3,19 @@ July 2013:
 1. nlmeU package (under development) contains datasets, scripts and functions used in [1].
 
 2. nlmeUpdK is a companion package to nlmeU and contains scripts and functions used in [1]. 
-    pertaining to a new pdKronecker class inheriting from pdMat (see Sections 17.6-17.8 and 20.2)
+    pertaining to a new pdKronecker class inheriting from pdMat (see Sections 17.6-17.8 and 20.2).
+    This package is available from http://www-personal.umich.edu/~agalecki/.
 
 3. To install packages needed to run scripts from the book, please use the following instructions:
 
-    pckgs <- c("nlmeU", "nlmeUpdK", "plyr", "reshape", "RLRsim", "WWGbook", "ellipse")
+    pckgs <- c("nlmeU", "plyr", "reshape", "RLRsim", "WWGbook", "ellipse")
     install.packages(pckgs)
 
-4. To install lme4.0 package use: 
+4. To install lme4.0 and nlmeUpdK packages use: 
 
     install.packages("lme4.0", repos = "http://R-Forge.R-project.org")
+    install.packages("nlmeUpdK", repos = "http://R-Forge.R-project.org")
+
 
 5. To obtain list of scripts available in nlmeU package, use the following instructions:
 

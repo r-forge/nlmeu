@@ -55,11 +55,10 @@ Pwr.lme <- function (object, ...,
 #   2. adjustSigma set to FALSE. (Try to explore adjustSigma argument if missing(sigma) 
 #   3. Alternative altB name
 
-   .functionLabel <- "Pwr.lme"                                # Function label
-   .traceR <- attr(options()$traceR, "fun")
-   .traceR <-  if (is.null(.traceR)) function(...){} else .traceR      
-   
-  .traceR(1, lbl = "-> Pwr.lme starts")
+   .functionName <- "Pwr.lme"                                # Function name
+   .traceR <- if (is.null(options()$traceR)) function(...){} else options()$.traceR    
+
+   .traceR(1, lbl = "-> Pwr.lme starts")
    if (!inherits(object, "lme")) {
             stop("Object must inherit from class \"lme\" ")
 }
