@@ -1,12 +1,12 @@
 Package: nlmeU
-Version: 0.70-03
+Version: 0.70-3
 Date: $Date$
 Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski
     <tomasz.burzykowski@uhasselt.be>
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
-Title: Datasets and auxiliary functions for Galecki and Burzykowski book 2013.
-Description: Datasets and auxiliary functions for Galecki and Burzykowski book
-    2013. Package under development.
+Title: nlmeU: Datasets and utility functions enhancing functionality of nlme package.
+Description: nlmeU: Datasets and utility  functions enhancing functionality of nlme package. Datasets, functions and scripts are described in book titled 'Linear Mixed-Effects Models:
+ A Step-by-Step Approach' by Galecki and Burzykowski (2013). Package is under development.
 Depends:
     R (>= 2.14.2)
 Imports:
