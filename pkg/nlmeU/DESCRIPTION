@@ -4,7 +4,7 @@ Date: $Date$
 Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski
     <tomasz.burzykowski@uhasselt.be>
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
-Title: nlmeU: Datasets and utility functions enhancing functionality of nlme package.
+Title: Datasets and utility functions enhancing functionality of nlme package.
 Description: nlmeU: Datasets and utility  functions enhancing functionality of nlme package. Datasets, functions and scripts are described in book titled 'Linear Mixed-Effects Models:
  A Step-by-Step Approach' by Galecki and Burzykowski (2013). Package is under development.
 Depends:
@@ -14,7 +14,6 @@ Imports:
 Suggests:
     reshape,
     WWGbook,
-    lme4.0,
     lattice,
     ellipse,
     roxygen2,

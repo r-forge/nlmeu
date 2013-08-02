@@ -1,6 +1,7 @@
-July 2013:
+August 2013:
 
-1. nlmeU package (under development) contains datasets, scripts and functions used in [1].
+1. nlmeU package (under development) contains datasets, scripts and utility functions enhancing functionality of nlme
+  package. nlmeU package is described in [1].
 
 2. nlmeUpdK is a companion package to nlmeU and contains scripts and functions used in [1]. 
     pertaining to a new pdKronecker class inheriting from pdMat (see Sections 17.6-17.8 and 20.2).
