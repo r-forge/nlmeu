@@ -45,30 +45,30 @@ MODIFYns <-
   ## env:  579 components
   vnm <- deparse(substitute(value))
   ###cat(paste("{", nm, "} <- {", vnm, "} \n", sep=""))
-  .traceR(111, pkgnm, fnm)
+  .traceR(111, pkgnm, fnm, msg =TRUE)
   ns  <- loadNamespace(pkgnm)  # "nlme"
   nsF <- as.character(capture.output(ns))
-  .traceR(115, nsF, fnm) 
+  .traceR(115, nsF, fnm, msg=TRUE) 
   env <- environment(fun)
   envF <- as.character(capture.output(env))
-  .traceR(121, envF, fnm)  
+  .traceR(121, envF, fnm, msg=TRUE)  
   unlockBinding(nm, env)
-  .traceR(125, "Binding unlocked", fnm) 
+  .traceR(125, "Binding unlocked", fnm, msg =TRUE) 
   environment(nm) <- environment(value) <- env
   .traceR(130, "New values for env(nm), env(value)" , fnm, msg = TRUE) 
   assign(nm, value, envir = env)
   
-  .traceR(135, "Assigned", fnm)
+  .traceR(135, "Assigned", fnm, msg =TRUE)
   assignInNamespace(nm, value, ns= ns, envir = env) 
   .traceR(140, "done assignInNamespace", fnm, msg = TRUE)
   lockBinding(nm, env) 
  }
-  nms <- names(modifyList)
-  .traceR(1, "MODIFYns called from modifyPackageNamespace ENDS here", fnm, msg = TRUE)
+ # nms <- names(modifyList)
+ # .traceR(1, "MODIFYns called from modifyPackageNamespace ENDS here", fnm, msg = TRUE)
 
-  sapply(as.list(1:length(modifyList)), MODIFYns)
+ # sapply(as.list(1:length(modifyList)), MODIFYns)
 
-  # print(tail(as.list(ns)[[nm]]))  
+ # print(tail(as.list(ns)[[nm]]))  
 
 }
 

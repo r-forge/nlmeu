@@ -19,6 +19,7 @@ data.frame(n, nmiss, mean, median = med, std, sem, min = min., max = max.)
 univariateStats(BOD, univNum)
 
 
+
 ## 2. User defined function processing character variables
 
 univChar <- function(x){  # For character factor vars

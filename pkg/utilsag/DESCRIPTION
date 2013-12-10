@@ -1,10 +1,11 @@
 Package: utilsag
-Version: 0.0.2
-Date: 2013-03-15
+Version: 0.0.3
+Date: $DATE$
+Revision: $Revision$
 Author: Andrzej Galecki <agalecki@umich.edu>
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
 Title: Datasets and utility functions.
-Description: 
+Description: Datasets and utilty functions 
 Depends: reshape, R (>= 2.10.1)
 Imports: stringr, lattice
 Suggests: 

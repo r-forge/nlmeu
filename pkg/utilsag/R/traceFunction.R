@@ -3,7 +3,7 @@
 ## See tests/traceR.R for examples
 ##
    
-traceRinit <- function(flbl){      # Function label/name
+utraceRinit <- function(flbl){      # Function label/name
    hl <-  options()$traceR         # List
    htrace <- hl[[flbl]]            # Trace function
    if (is.null(htrace)) htrace <- attr(hl, "default")
@@ -11,12 +11,12 @@ traceRinit <- function(flbl){      # Function label/name
    if (is.null(htrace) ) function(...){} else htrace
  }
 
-traceRdefault<- function(...){}
+# traceRdefault <- function(...){}
         
 ## Auxiliary functions
 
 traceRinfoAux <- function(
- id,  # id Not used by this function
+ id,                 # id Not used by this function
  flbl, msg, lbl 
 ){ 
  tt <- paste(flbl, lbl,  sep = "_") 
@@ -38,24 +38,24 @@ sel <- if(is.null(opt)) xand else xor
 return(sel)
 }
 
-## Main traceR functions: Need to have: id, object, flbl, msg, lbl arguments.
+## Exported traceR functions: Need to have: id, object, flbl, msg, lbl arguments.
 
 traceRprint1 <- function(id, object = NULL, flbl, 
- msg = paste("Trace ", lbl, " executed", sep = ""),
- lbl = as.character(id)){ 
+  msg = paste("Trace ", lbl, " executed", sep = ""), lbl = as.character(id)){ 
+ ## utraceRprint1 called  from utraceRprint
 
-if (!is.character(msg) && msg) {   # If msg is TRUE then message extracted from object argument
+if (!is.character(msg) && msg) {   # If msg is TRUE then message extracted from character string stored in object argument 
   msg <- object 
   object <- NULL
 }
 
 ## All traces will be printed
-info <- utilsag:::traceRinfoAux(id, flbl, msg, lbl)
+info <- traceRinfoAux(id, flbl, msg, lbl)  # :::
 cat(info)
 if (!is.null(object)) print(object)
 }
 
-traceRprint <- function(id, object = NULL, flbl, 
+utraceRprint <- function(id, object = NULL, flbl, 
  msg = paste("Trace ", lbl, " executed", sep = ""), 
  lbl = as.character(id)){ 
 
@@ -64,7 +64,7 @@ if (!is.character(msg) && msg) {   # If msg is TRUE then message taken from obje
   object <- NULL
 }
 
-sel <- utilsag:::traceRselect(id, lbl, flbl)
+sel <- traceRselect(id, lbl, flbl)            # Checks whether id was selected 
 if (sel ) traceRprint1(id, object, flbl, msg, lbl)
 }
 
@@ -82,18 +82,19 @@ if (mode(object) == "NULL") {   # For example objects returned by str()
  
 }
 names(objL) <- paste(flbl, lbl, sep = ":") 
+
 assign(".traceRlist", c(.traceRlist, objL), envir =.GlobalEnv) 
 }
  
 
-traceRlist <- function(id, 
+utraceRlist <- function(id, 
 object = NULL, 
 flbl,
 msg = character(0),
 lbl = as.character(id)    
  ){
 ## .traceRlist <- list()
-sel <- utilsag:::traceRselect(id, lbl, flbl)
+sel <- traceRselect(id, lbl, flbl)  # :::
 if (sel ) traceRlist1(id, object, flbl, msg, lbl)
 }
 
