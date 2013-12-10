@@ -1,13 +1,13 @@
 ### Modify NAMESPACE in nlme package (i.e. replace model.matrix.reStruct with model.matrix.reStruct.U)
 
-fun <- nlmeUpdKronecker:::model.matrix.reStruct.U
+fun <- nlmeUpdK:::model.matrix.reStruct.U
 environment(fun) <- .GlobalEnv
 environment(fun)
 
 
 library(nlme)
-require(R.utils)
-reassignInPackage("model.matrix.reStruct", "nlme", fun)
+## require(R.utils)
+R.utils:::reassignInPackage("model.matrix.reStruct", "nlme", fun)
 #require(testthat)
 #as.character(body(getS3method("model.matrix","reStruct")))[2]
 #testhat(
@@ -17,7 +17,7 @@ reassignInPackage("model.matrix.reStruct", "nlme", fun)
 ###################################################
 options(digits = 5, show.signif.stars = FALSE)
 
-library(nlmeUpdKronecker)  #  including pdKronecker class
+library(nlmeUpdK)  #  including pdKronecker class
 library(lattice)
 library(reshape)
 sessionInfo()

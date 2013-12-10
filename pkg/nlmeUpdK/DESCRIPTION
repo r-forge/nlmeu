@@ -1,10 +1,10 @@
 Package: nlmeUpdK
-Version: 0.3-1
+Version: 0.3-11
 Date: $Date$
 Author: Andrzej Galecki <agalecki@umich.edu>, Tomasz Burzykowski
 Maintainer: Andrzej Galecki <agalecki@umich.edu>
 Title: New pdMat class: pdKronecker (prototype version described in Galecki,
-    Burzykowski (2012) book)
+    Burzykowski (2013) book)
 Description: New pdMat class: pdKronecker. NOTE: This class is NOT fully
     compatible with nlme, but returns valid results when used with lme()
     function

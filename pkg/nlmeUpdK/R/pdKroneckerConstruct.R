@@ -2,19 +2,19 @@
 ###
 ### Copyright 2011  Andrzej Galecki <agalecki@umich.edu>,
 ###                 Tomasz Burzykowski
+###
+###  This program is free software; you can redistribute it and/or modify
+###  it under the terms of the GNU General Public License as published by
+###  the Free Software Foundation; either version 2 of the License, or
+###  (at your option) any later version.
 #
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
+###  This program is distributed in the hope that it will be useful,
+###  but WITHOUT ANY WARRANTY; without even the implied warranty of
+###  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+###  GNU General Public License for more details.
 #
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  A copy of the GNU General Public License is available at
-#  http://www.r-project.org/Licenses/
+###  A copy of the GNU General Public License is available at
+###  http://www.r-project.org/Licenses/
 #
 
 
@@ -22,6 +22,21 @@
 # KroneckAux
 # pdConstruct.pdKronecker
 
+## -> pdKronecker function
+#' Positive-Definite Kronecker product Matrix
+#'
+#' This function is a constructor for the pdKronecker class, representing a positive-definite matrix based Kronecker product 
+#' of the underlying positive-definite matrices representing internally individual pdMat objects. 
+#'
+#' @param value a list with elements to be pdMat objects. First element is of \code{pdIdent} class and represents scale multiplier.  
+#' @param form character string containing package name. By default nlmeU.
+#' @param nam subdirectory containing scripts. By default: scriptsR2.15.0.
+#' @param data Used by source function. By default set to TRUE.
+#' @return a pdKronecker object representing a positive-definite Kronecker product matrix, also inheriting from class pdMat.
+#' @author Andrzej Galecki and Tomasz Burzykowski
+#' @export
+#' @examples runScript()
+#'
 
 
 pdKronecker <- function (value = numeric(0), 

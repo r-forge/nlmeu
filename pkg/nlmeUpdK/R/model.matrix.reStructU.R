@@ -1,3 +1,23 @@
+## -> model.matrix.reStruct.U function
+#' This function is used to replace \code{\link{model.matrix.reStruct}} function in namespace of nlme package 
+#'
+#' This function is used to replace \code{\link{model.matrix.reStruct}} function in namespace of nlme package 
+#'
+#' @export
+#' @param object an object inheriting from class \code{reStruct}, representing a random effects structure and consisting of a list of pdMat objects.
+#' @param data a data frame in which to evaluate the variables defined in \code{formula(object)}.
+#' @param contrast an optional named list specifying the contrasts to be used for representing the \code{factor} variables in data.
+#'  The components names should match the names of the variables in data for which the contrasts are to be specified. The components of this list
+#'  will be used as the contrasts attribute of the corresponding factor. If missing, the default contrast specification is used.
+#' 
+#' @return a matrix obtained by binding together, column-wise, the model matrices for each element of formula(object)..
+#' @author Based on documentation for \code{model.matrix.reStruct} in \code{nlme} package by Jose Pinheiro and Douglas Bates.
+##' @seealso \code{\link{model.matrix}}
+##' @examples
+##'  \dontrun{
+##'   Pwr (fm1)
+#' }
+
 model.matrix.reStruct.U<-
 function (object, data, contrast = NULL, ...) 
 {

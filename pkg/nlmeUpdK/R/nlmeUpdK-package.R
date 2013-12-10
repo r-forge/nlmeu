@@ -1,3 +1,20 @@
+### See: https://ebi-forecast.igb.illinois.edu/redmine/projects/pecan-1-2-5/wiki/Roxygen2
+### See: https://github.com/yihui/roxygen2
+#' Companion package to nlmeU. 
+#' 
+#' Companion package to nlmeU. It contains auxiliary functions pertaining to pdKronecker class introduced in Galecki and Burzykowski book (2013). 
+#' Package under development.
+#' 
+#' @name nlmeUpdK-package
+#' @aliases nlmeUpdK
+#' @docType package
+#' @title Auxiliary functions pertaining to pdKronecker class for Galecki and Burzykowski book 2013.
+#' @author \email{agalecki@@umich.edu}, \email{Tomasz Burzykowski <tomasz.burzykowski@@uhasselt.be>}
+#' @keywords package
+#' @seealso \code{\link{package:nlmeU}}
+NULL
+
+
 #' @importFrom nlme "coef<-" "matrix<-" "Names<-" corMatrix isInitialized logDet Names pdConstruct
 #' @importFrom nlme pdFactor pdMatrix VarCorr
 
